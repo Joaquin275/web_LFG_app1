@@ -3,7 +3,31 @@ from .models import Cliente, Empresa, Plato, DisponibilidadPlato, CarritoItem, R
 from .forms import DisponibilidadPlatoForm, CarritoItemForm
 import pandas as pd
 from django.http import HttpResponse
+from django.urls import path
+from django.shortcuts import render
+from django.db.models import Count, Sum
+from django.utils import timezone
+from datetime import timedelta
 
+# Vista personalizada para el dashboard
+def dashboard_view(request):
+    return render(request, 'admin/dashboard.html')
+
+# Personalizar el AdminSite
+class FamiliaGastroAdminSite(admin.AdminSite):
+    site_header = "Familia Gastro - Administración"
+    site_title = "Familia Gastro Admin"
+    index_title = "Panel de Control"
+    
+    def get_urls(self):
+        urls = super().get_urls()
+        custom_urls = [
+            path('dashboard/', self.admin_view(dashboard_view), name='dashboard'),
+        ]
+        return custom_urls + urls
+
+# Crear instancia personalizada del admin
+admin_site = FamiliaGastroAdminSite(name='familia_gastro_admin')
 class DisponibilidadPlatoAdmin(admin.ModelAdmin):
     form = DisponibilidadPlatoForm
     list_display = ('plato', 'display_dias_semana')
