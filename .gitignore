@@ -1,0 +1,26 @@
+@"
+# Entorno virtual
+venv/
+.venv/
+
+# Base de datos
+*.sqlite3
+*.db
+
+# Archivos de entorno
+.env
+.env.local
+
+# Django
+__pycache__/
+*.pyc
+media/
+staticfiles/
+
+# IDE
+.vscode/
+.idea/
+
+# OneDrive
+*.tmp
+"@ > .gitignore

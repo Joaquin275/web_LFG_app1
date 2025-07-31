@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terminar registro</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css">
+    <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const esParticularCheckbox = document.getElementById("id_es_particular");
+        const empresaField = document.getElementById("empresa-field");
+        const direccionField = document.getElementById("direccion-field");
+
+        function toggleFields() {
+            if (esParticularCheckbox.checked) {
+                empresaField.style.display = "none";
+                direccionField.style.display = "block";
+            } else {
+                empresaField.style.display = "block";
+                direccionField.style.display = "none";
+            }
+        }
+
+        if (esParticularCheckbox) {
+            esParticularCheckbox.addEventListener("change", toggleFields);
+            toggleFields(); // Ejecutar al inicio
+        }
+    });
+    </script>
+</head>
+<body class="bg-light">
+
+<main class="container d-flex align-items-center justify-content-center min-vh-100">
+    <div class="card shadow p-4" style="max-width: 450px; width: 100%;">
+        <div class="text-center mb-4">
+            <img src="/static/img/logo.flg.png" alt="foody logo" width="150">
+            <h3 class="fw-bold text-danger mt-3">Terminar registro</h3>
+        </div>
+
+        <form method="POST">
+            {% csrf_token %}
+
+            <div class="mb-3">
+                {{ form.Nombre_Completo.label_tag }}
+                {{ form.Nombre_Completo }}
+            </div>
+
+            <div class="form-check mb-3">
+                {{ form.es_particular }}
+                {{ form.es_particular.label_tag }}
+            </div>
+
+            <div class="mb-3" id="empresa-field">
+                {{ form.empresa.label_tag }}
+                {{ form.empresa }}
+            </div>
+
+            <div class="mb-3" id="direccion-field">
+                {{ form.direccion_particular.label_tag }}
+                {{ form.direccion_particular }}
+            </div>
+
+            <div class="mb-3">
+                {{ form.celular.label_tag }}
+                {{ form.celular }}
+            </div>
+
+            <div class="mb-3">
+                {{ form.dni.label_tag }}
+                {{ form.dni }}
+            </div>
+
+            <div class="mb-3">
+                {{ form.correo.label_tag }}
+                {{ form.correo }}
+            </div>
+
+            {% if error %}
+                <div class="alert alert-danger mt-3">{{ error }}</div>
+            {% endif %}
+
+            <div class="d-grid mt-3">
+                <button type="submit" class="btn btn-danger">Guardar</button>
+            </div>
+        </form>
+    </div>
+</main>
+
+</body>
+</html>

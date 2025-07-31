@@ -1,0 +1,25 @@
+<div class="d-flex flex-column align-items-center justify-content-center" style="min-height: 60vh;">
+  <div class="spinner-border text-danger mb-3" role="status">
+    <span class="visually-hidden">Cargando...</span>
+  </div>
+  <h4 class="text-danger">Redirigiendo al pago seguro...</h4>
+  <p class="text-muted">Por favor, espera un momento.</p>
+</div>
+<form method="post" action="https://secure.paycomet.com/gateway/" id="paycometForm">
+  <input type="hidden" name="MERCHANT_MERCHANTCODE" value="{{ MERCHANT_MERCHANTCODE }}">
+  <input type="hidden" name="MERCHANT_TERMINAL" value="{{ MERCHANT_TERMINAL }}">
+  <input type="hidden" name="MERCHANT_ORDER" value="{{ MERCHANT_ORDER }}">
+  <input type="hidden" name="MERCHANT_AMOUNT" value="{{ MERCHANT_AMOUNT }}">
+  <input type="hidden" name="MERCHANT_CURRENCY" value="{{ MERCHANT_CURRENCY }}">
+  <input type="hidden" name="MERCHANT_SIGNATURE" value="{{ MERCHANT_SIGNATURE }}">
+  <input type="hidden" name="URLOK" value="{{ URLOK }}">
+  <input type="hidden" name="URLKO" value="{{ URLKO }}">
+  <input type="hidden" name="LANGUAGE" value="{{ LANGUAGE }}">
+  <noscript>
+    <input type="submit" value="Pagar ahora">
+  </noscript>
+</form>
+<script>
+  // Enviar automáticamente el formulario
+  document.getElementById('paycometForm').submit();
+</script>

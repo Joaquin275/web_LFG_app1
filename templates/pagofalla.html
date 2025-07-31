@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}Pago Fallido | Fábrica de Sabores{% endblock %}
+{% block content %}
+<div class="container py-5 text-center">
+    <div class="alert alert-danger" role="alert">
+        <h1 class="display-5">❌ El pago no se completó</h1>
+        <p class="lead">Parece que hubo un problema con la transacción. Puedes intentarlo de nuevo.</p>
+    </div>
+    <a href="{% url 'pago' %}" class="btn btn-warning mt-4">Revisar pedido</a>
+    <a href="{% url 'main' %}" class="btn btn-secondary mt-2">Volver al inicio</a>
+</div>
+{% endblock %}

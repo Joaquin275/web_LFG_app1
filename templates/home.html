@@ -1,0 +1,104 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Familia</title>
+    <link rel="icon" type="image/png" href="{% static 'img/logo.flg.png' %}">
+    <link rel="stylesheet" href="{% static 'estilo.css' %}">
+</head>
+<body>
+    <nav>
+        <div class="logo">
+            <img src="../static/img/logo.flg.png" alt="la Familia">
+        </div>
+        <div class="auth-buttons">
+            <a href="signin/" class="login-btn">Ingresa</a>
+            <a href="singup/" class="signup-btn">Registrarte</a>
+        </div>
+    </nav>
+    
+    <section class="hero">
+        <h1>Descubre el sabor del bienestar</h1>
+        <p>Almuerza saludable, fácil y a un precio justo</p>
+        <a href="signin/" class="cta-button">Prueba un plato</a>
+    </section>
+ 
+<section class="how-it-works">
+    <div class="section-header">
+        <h2>Cómo funciona</h2>
+    </div>
+
+<div class="steps-container">
+    <div class="step">
+        <div class="step-icon">
+            <img src="../static/img/tutorial-step-1.png" alt="Elegir">
+        </div>
+        <h3>Elige en 1 minuto</h3>
+        <p>Pide solo un plato o programa toda tu semana. Hay opciones para todos.</p>
+    </div>
+    
+    <div class="step">
+        <div class="step-icon">
+            <img src="../static/img/tutorial-step-3.png" alt="Entrega">
+        </div>
+        <h3>Recibe tu almuerzo</h3>
+        <p>Lo cocinamos a diario y te lo entregamos en bici entre 9:00 a.m y 12:30 m.</p>
+    </div>
+    
+    <div class="step">
+        <div class="step-icon">
+            <img src="../static/img/tutorial-step-2.png" alt="Disfrutar">
+        </div>
+        <h3>Disfruta</h3>
+        <p>Nuestros platos son diseñados por chefs y aprobados por nutricionistas. Caliéntalos en horno microondas.</p>
+    </div>
+    
+    <div class="step">
+        <div class="step-icon">
+            <img src="../static/img/tutorial-step-4.png" alt="Repetir">
+        </div>
+        <h3>Repite</h3>
+        <p>Nuestro empaque biodegradable es amigable con el medio ambiente.</p>
+    </div>
+</div>
+    
+   
+<div class="cta-section" style="background-image: url('../static/img/footer-dsk.png');">
+    <div class="cta-overlay"></div>
+    <p>Conoce todos los productos que tenemos para ti</p>
+    <a href="menu.html" class="cta-button">Ver menú</a>
+</div>
+</section>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+  const planPersonalizado = document.getElementById('planPersonalizado');
+  const montoPersonalizado = document.getElementById('montoPersonalizado');
+  const allPlanOptions = document.querySelectorAll('.opcion-plan input[type="radio"]');
+  
+  // Habilitar/deshabilitar campo personalizado
+  planPersonalizado.addEventListener('change', function() {
+    if (this.checked) {
+      montoPersonalizado.focus();
+    }
+  });
+  
+  // Validar campo personalizado cuando se selecciona
+  montoPersonalizado.addEventListener('focus', function() {
+    planPersonalizado.checked = true;
+  });
+  
+  // Resetear campo personalizado si se selecciona otra opción
+  allPlanOptions.forEach(option => {
+    option.addEventListener('change', function() {
+      if (this.value !== 'personalizado') {
+        montoPersonalizado.value = '';
+      }
+    });
+  });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}Pago Exitoso | Fábrica de Sabores{% endblock %}
+{% block content %}
+<div class="container py-5 text-center">
+    <div class="alert alert-success" role="alert">
+        <h1 class="display-5">✅ ¡Pago realizado con éxito!</h1>
+        <p class="lead">Gracias por tu compra. Hemos recibido tu pago correctamente.</p>
+    </div>
+    <a href="{% url 'main' %}" class="btn btn-primary mt-4">Volver al inicio</a>
+</div>
+{% endblock %}

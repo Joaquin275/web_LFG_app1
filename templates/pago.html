@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}Confirmación de Pedido | Fábrica de Sabores{% endblock %}
+{% block content %}
+<div class="container py-5">
+    <h1 class="mb-4 fw-bold text-danger">Revisa tu pedido</h1>
+    <!-- Mensajes de error o estado -->
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+            </div>
+        {% endfor %}
+    {% endif %}
+    <div class="card p-4 shadow">
+        <h4>Recibo #{{ recibo.id }}</h4>
+        <p><strong>Usuario:</strong> {{ recibo.usuario.username }}</p>
+        <p><strong>Fecha:</strong> {{ recibo.fecha_compra }}</p>
+        {% if recibo.empresa %}
+            <p><strong>Empresa:</strong> {{ recibo.empresa.nombre }}</p>
+        {% endif %}
+        <h5 class="mt-3">Detalles:</h5>
+        <ul class="list-group mb-3">
+            {% for item in items %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    {{ item.cantidad }} x {{ item.plato.nombre }}
+                    <span>€{{ item.subtotal }}</span>
+                </li>
+            {% endfor %}
+        </ul>
+        <h4 class="text-end">Total: €{{ recibo.total }}</h4>
+        <!-- Botón para iniciar pago por terminal -->
+        {% if not recibo.pagado %}
+            <form method="post" action="{% url 'procesar_pago' %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-success w-100 mt-3">
+                    Pagar ahora con tarjeta
+                </button>
+            </form>
+        {% endif %}
+    </div>
+    {% if recibo.pagado %}
+        <div class="alert alert-success mt-3">
+            Este recibo ya ha sido pagado el {{ recibo.fecha_pago }}.
+        </div>
+    {% else %}
+        <div class="alert alert-warning mt-3">
+            Este pedido aún no ha sido pagado.
+        </div>
+    {% endif %}
+    <a href="{% url 'main' %}" class="btn btn-secondary mt-3">Volver al inicio</a>
+</div>
+{% endblock %}
