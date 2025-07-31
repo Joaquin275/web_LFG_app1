@@ -3,484 +3,604 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Menú Semanal</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Menú Semanal | Familia Gastro</title>
   <link rel="icon" type="image/png" href="{% static 'img/logo.flg.png' %}">
-  <link rel="stylesheet" href="{% static '/styles.css' %}">
+  
+  <!-- Fuentes modernas -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700&display=swap" rel="stylesheet">
   <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+  <link rel="stylesheet" href="{% static 'styles.css' %}">
+  
+  <style>
+    body { padding-top: 80px; }
+    
+    .hero-section {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 4rem 0;
+      margin-bottom: 3rem;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .hero-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E") repeat;
+      animation: float 20s ease-in-out infinite;
+    }
+    
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-20px); }
+    }
+    
+    .section-title {
+      position: relative;
+      display: inline-block;
+      margin-bottom: 3rem;
+    }
+    
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 0;
+      width: 60px;
+      height: 4px;
+      background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+      border-radius: 2px;
+    }
+    
+    .platos-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 2rem;
+      margin-bottom: 3rem;
+    }
+    
+    .empty-state {
+      text-align: center;
+      padding: 4rem 2rem;
+      color: var(--medium-gray);
+    }
+    
+    .empty-state i {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+      opacity: 0.5;
+    }
+    
+    .stats-bar {
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(10px);
+      padding: 1rem;
+      border-radius: var(--border-radius);
+      margin-bottom: 2rem;
+      box-shadow: var(--shadow-light);
+    }
+    
+    .loading-skeleton {
+      background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+      background-size: 200% 100%;
+      animation: loading 1.5s infinite;
+    }
+  </style>
 </head>
-<body style="padding-top: 60px;"> 
-<!-- NAV -->
-<nav class="navbar navbar-expand-lg navbar-light navbar-custom shadow-sm fixed-top transition-navbar">
-  <div class="container-fluid">
-    <a class="navbar-brand d-flex align-items-center gap-2 text-decoration-none" href="/" style="color: #b71c1c;">
-  <i class='bx bx-arrow-back' style='font-size: 1.5rem; color: #b71c1c;'></i>
-  <img src="{% static 'img/imagen1-removebg-preview.png' %}" alt="el logo" style="height: 50px;">
-</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav ms-auto">
-        <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}">Salir</a></li>
-      </ul>
-    </div>
-  </div>
-</nav>
 
-<!-- MAIN -->
-<div class="main-wrapper mt-5 mb-4">
-  <div class="d-flex align-items-center gap-3">
-    <i class='bx bx-restaurant icono-menu'></i>
-    <h1 class="titulo-principal">Crea el menú de la semana</h1>
-  </div>
-</div>
-<!-- Filtros -->
-<div class="flex gap-2 my-4">
-  {% for codigo, nombre in grupos.items %}
-    <a href="?dia={{ dia_actual }}&grupo={{ codigo }}"
-       class="px-4 py-2 rounded-full border {% if grupo_actual == codigo %}bg-purple-600 text-white{% else %}bg-gray-100 text-black{% endif %}">
-      {{ nombre }}
-    </a>
-  {% endfor %}
-</div>
-<!-- Grupos de platos -->
-<div class="main-wrapper">
-  {% for grupo, items in platos_por_grupo.items %}
-    <div class="grupo-platos" data-familia="{{ grupo|slugify }}">
-      <h4><span class="familia-plato">{{ grupo }}</span></h4>
-      <div class="row row-cols-1 row-cols-md-3 row-cols-xl-4 g-4">
-        {% for plato in items %}
-          <div class="col">
-            <div class="card h-100">
-              <img src="{{ plato.imagen.url }}" class="card-img-top" alt="{{ plato.nombre }}">
-              <div class="card-body">
-                <h5 class="card-title">{{ plato.nombre }}</h5>
-                <p class="card-text">{{ plato.descripcion }}</p>
-                <strong>{{ plato.precio }} €</strong>
+<body>
+  <!-- NAVBAR MODERNA -->
+  <nav class="navbar navbar-expand-lg navbar-custom fixed-top transition-navbar">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="/">
+        <i class='bx bx-arrow-back' style='font-size: 1.5rem;'></i>
+        <img src="{% static 'img/imagen1-removebg-preview.png' %}" alt="Familia Gastro">
+        <span>Familia Gastro</span>
+      </a>
+      
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto align-items-center">
+          <li class="nav-item">
+            <span class="nav-link">¡Hola, {{ user.username }}!</span>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'logout' %}">
+              <i class='bx bx-log-out'></i> Salir
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO SECTION -->
+  <section class="hero-section">
+    <div class="container text-center">
+      <h1 class="display-4 fw-bold mb-3 fade-in-up">
+        <i class='bx bx-restaurant'></i>
+        Crea tu menú semanal
+      </h1>
+      <p class="lead mb-4 fade-in-up" style="animation-delay: 0.2s;">
+        Selecciona tus platos favoritos para cada día de la semana
+      </p>
+      <div class="stats-bar fade-in-up" style="animation-delay: 0.4s;">
+        <div class="row text-center">
+          <div class="col-md-4">
+            <h5 class="mb-1">{{ disponibles|length }}</h5>
+            <small>Platos disponibles hoy</small>
+          </div>
+          <div class="col-md-4">
+            <h5 class="mb-1">{{ carrito_items|length }}</h5>
+            <small>En tu carrito</small>
+          </div>
+          <div class="col-md-4">
+            <h5 class="mb-1">€{{ total_carrito|floatformat:2 }}</h5>
+            <small>Total</small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FILTRO DE DÍAS -->
+  <section class="sticky-top dias-scroll-wrapper" style="top: 80px; z-index: 1020;">
+    <div class="container-fluid">
+      <div class="dias-scroll">
+        {% for codigo, nombre in dias_semana.items %}
+          <form method="get" action="{% url 'main' %}" class="d-inline">
+            <input type="hidden" name="dia" value="{{ codigo }}">
+            {% if grupo_actual %}
+              <input type="hidden" name="grupo" value="{{ grupo_actual }}">
+            {% endif %}
+            <button type="submit" class="btn btn-outline-primary {% if dia_actual == codigo %}active{% endif %}">
+              <i class='bx bx-calendar'></i>
+              {{ nombre }}
+            </button>
+          </form>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTENIDO PRINCIPAL -->
+  <div class="container my-5">
+    
+    <!-- TÍTULO DE SECCIÓN -->
+    <h2 class="section-title text-gradient">
+      Platos disponibles el {{ dia_actual_nombre }}
+    </h2>
+
+    <!-- FILTROS DE GRUPO -->
+    {% if grupos %}
+    <div class="mb-4">
+      <div class="d-flex flex-wrap gap-2">
+        <a href="?dia={{ dia_actual }}" 
+           class="btn btn-sm {% if not grupo_actual %}btn-primary{% else %}btn-outline-primary{% endif %}">
+          <i class='bx bx-grid-alt'></i> Todos
+        </a>
+        {% for grupo in grupos %}
+          <a href="?dia={{ dia_actual }}&grupo={{ grupo }}" 
+             class="btn btn-sm {% if grupo_actual == grupo %}btn-primary{% else %}btn-outline-primary{% endif %}">
+            {{ grupo }}
+          </a>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+
+    <!-- GRID DE PLATOS -->
+    {% if disponibles %}
+      <div class="platos-grid">
+        {% for disp in disponibles %}
+          <div class="col fade-in-up" style="animation-delay: {{ forloop.counter0|floatformat:1|add:'0.1' }}s">
+            <div class="card h-100 clickable-card hover-lift"
+                 data-nombre="{{ disp.plato.nombre|escapejs }}"
+                 data-descripcion="{{ disp.plato.descripcion|escapejs }}"
+                 data-precio="{{ disp.plato.precio }}"
+                 {% if disp.plato.imagen %}data-imagen="{{ disp.plato.imagen.url }}"{% endif %}
+                 data-grupo="{{ disp.plato.get_grupo_display|escapejs }}"
+                 data-kilogramos="{{ disp.plato.kilogramos }}"
+                 data-vida-util="{{ disp.plato.vida_util|escapejs }}"
+                 data-calorias="{{ disp.plato.calorias|default:'' }}"
+                 data-proteinas="{{ disp.plato.proteinas|default:'' }}"
+                 data-grasa="{{ disp.plato.grasa|default:'' }}"
+                 data-carbohidratos="{{ disp.plato.carbohidratos|default:'' }}"
+                 data-sodio="{{ disp.plato.sodio|default:'' }}"
+                 data-ingredientes="{{ disp.plato.ingredientes|escapejs }}"
+                 data-alergenos="{{ disp.plato.alergenos|escapejs }}"
+                 style="cursor: pointer;">
+              
+              <!-- Badge de estado -->
+              {% if disp.plato.estado != "COMUN" %}
+                <div class="estado-badge {{ disp.plato.estado|lower|cut:' ' }}">
+                  {{ disp.plato.get_estado_display }}
+                </div>
+              {% endif %}
+              
+              <!-- Imagen del plato -->
+              {% if disp.plato.imagen %}
+                <img src="{{ disp.plato.imagen.url }}" class="card-img-top" alt="{{ disp.plato.nombre }}">
+              {% else %}
+                <div class="card-img-top d-flex align-items-center justify-content-center bg-light">
+                  <i class='bx bx-dish' style="font-size: 3rem; color: var(--medium-gray);"></i>
+                </div>
+              {% endif %}
+              
+              <!-- Contenido de la card -->
+              <div class="card-body d-flex flex-column">
+                <h5 class="card-title">{{ disp.plato.nombre }}</h5>
+                <p class="card-text flex-grow-1">{{ disp.plato.descripcion|truncatechars:100 }}</p>
+                
+                <!-- Información adicional -->
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                  <div class="precio">{{ disp.plato.precio }}</div>
+                  <div class="text-muted small">
+                    <i class='bx bx-weight'></i> {{ disp.plato.kilogramos }}g
+                  </div>
+                </div>
+                
+                <!-- Formulario de agregar al carrito -->
+                <form method="post" action="" class="mt-auto">
+                  {% csrf_token %}
+                  <input type="hidden" name="plato_id" value="{{ disp.plato.id }}">
+                  <input type="hidden" name="dia_semana" value="{{ dia_actual }}">
+                  
+                  <div class="d-flex align-items-center gap-2 mb-3">
+                    <label class="form-label mb-0 fw-semibold small">Cantidad:</label>
+                    <input type="number" name="cantidad" value="1" min="1" max="10" 
+                           class="form-control cantidad-input-custom">
+                  </div>
+                  
+                  <button type="submit" class="btn btn-primary w-100">
+                    <i class='bx bx-cart-add'></i>
+                    Agregar al carrito
+                  </button>
+                </form>
               </div>
             </div>
           </div>
         {% endfor %}
       </div>
-    </div>
-  {% endfor %}
-</div>
-
-<section class="sticky-top dias-scroll-wrapper" style="top: 70px; z-index: 1020; background-color: white;">
-  <div class="container-fluid py-2 px-2 shadow-sm transition">
-    <div class="dias-scroll d-flex overflow-auto gap-2">
-      {% for codigo, nombre in dias_semana.items %}
-        <form method="get" action="{% url 'main' %}">
-          <input type="hidden" name="dia" value="{{ codigo }}">
-          <button type="submit" class="btn btn-outline-danger {% if dia_actual == codigo %}active{% endif %}">
-            {{ nombre }}
-          </button>
-        </form>
-      {% endfor %}
-    </div>
-  </div>
-</section>
-
-<h2 class="mb-4 fw-bold text-success">Platos disponibles el {{ dia_actual_nombre }}</h2>
-{% if disponibles %}
-  <div class="row row-cols-1 row-cols-md-3 row-cols-xl-4 g-4 mb-5">
-    {% for disp in disponibles %}
-      <div class="col">
-    <div class="card d-flex flex-column h-100 shadow-sm clickable-card position-relative"
-     data-nombre="{{ disp.plato.nombre|escapejs }}"
-     data-descripcion="{{ disp.plato.descripcion|escapejs }}"
-     data-precio="{{ disp.plato.precio }}"
-     {% if disp.plato.imagen %}
-       data-imagen="{{ disp.plato.imagen.url }}"
-     {% else %}
-       data-imagen=""
-     {% endif %}
-     data-grupo="{{ disp.plato.get_grupo_display|escapejs }}"
-     data-kilogramos="{{ disp.plato.kilogramos }}"
-     data-vida-util="{{ disp.plato.vida_util|escapejs }}"
-     data-calorias="{{ disp.plato.calorias|default:'' }}"
-     data-proteinas="{{ disp.plato.proteinas|default:'' }}"
-     data-grasa="{{ disp.plato.grasa|default:'' }}"
-     data-carbohidratos="{{ disp.plato.carbohidratos|default:'' }}"
-     data-sodio="{{ disp.plato.sodio|default:'' }}"
-     data-ingredientes="{{ disp.plato.ingredientes|escapejs }}"
-     data-alergenos="{{ disp.plato.alergenos|escapejs }}"
-     style="cursor: pointer;"
-      >
-  {% if disp.plato.estado != "COMUN" %}
-  <div class="position-absolute top-0 start-0 m-2">
-    <span class="badge estado-badge {{ disp.plato.estado|lower }}">
-      {{ disp.plato.get_estado_display }}
-    </span>
-  </div>
-{% endif %}
-{% if disp.plato.imagen %}
-  <img src="{{ disp.plato.imagen.url }}" class="card-img-top" alt="{{ disp.plato.nombre }}">
-{% endif %}
-<div class="card-body">
-  <h5 class="card-title">{{ disp.plato.nombre }}</h5>
-  <p class="card-text text-muted">{{ disp.plato.descripcion }}</p>
-  <p class="fw-bold precio">Precio: {{ disp.plato.precio }}€</p>
-  <form method="post" action="">
-    {% csrf_token %}
-    <input type="hidden" name="plato_id" value="{{ disp.plato.id }}">
-    <input type="hidden" name="dia_semana" value="{{ dia_actual }}">
-    <div class="mb-3 d-flex align-items-center gap-2">
-     <label class="form-label mb-0 fw-semibold" style="min-width: 75px; color: #444;">Cantidad:</label>
-     <input type="number" name="cantidad" value="1" min="1" class="form-control cantidad-input-custom">
-    </div>
-    <button type="submit" class="btn btn-outline-primary w-100">Agregar al carrito 🛒</button>
-  </form>
-</div>
-</div>
+    {% else %}
+      <!-- Estado vacío -->
+      <div class="empty-state">
+        <i class='bx bx-dish'></i>
+        <h4>No hay platos disponibles</h4>
+        <p>No tenemos platos disponibles para el {{ dia_actual_nombre }}.</p>
+        <p>Prueba seleccionando otro día de la semana.</p>
       </div>
-    {% endfor %}
+    {% endif %}
   </div>
-{% else %}
-  <p class="text-muted">No hay platos disponibles para este día.</p>
-{% endif %}
-<!-- BOTÓN FLOTANTE DEL CARRITO -->
-{% if carrito_items %}
-  <button class="btn btn-carrito" data-bs-toggle="modal" data-bs-target="#carritoModal" title="Ver carrito">
-    🛒
-  </button>
-{% endif %}
-<!-- MODAL DEL CARRITO -->
-{% if carrito_items %}
-<div class="modal fade" id="carritoModal" tabindex="-1" aria-labelledby="carritoModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg modal-dialog-scrollable">
-    <div class="modal-content">
-      <div class="modal-header bg-light">
-        <h5 class="modal-title" id="carritoModalLabel">Tu carrito 🛒</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-      </div>
-      <div class="modal-body">
-        <ul class="list-group mb-3">
-          {% for item in carrito_items %}
-            <li class="list-group-item d-flex justify-content-between align-items-center">
-              <div>
-                {{ item.cantidad }}× {{ item.plato.nombre }} ({{ item.get_dia_semana_display }})<br>
-                <small class="text-muted">Subtotal: {{ item.subtotal }}€</small>
+
+  <!-- BOTÓN FLOTANTE DEL CARRITO -->
+  {% if carrito_items %}
+    <button class="btn-carrito" data-bs-toggle="modal" data-bs-target="#carritoModal" 
+            title="Ver carrito ({{ carrito_items|length }} items)">
+      <i class='bx bx-cart'></i>
+      <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning text-dark">
+        {{ carrito_items|length }}
+      </span>
+    </button>
+  {% endif %}
+
+  <!-- MODAL DEL CARRITO MEJORADO -->
+  {% if carrito_items %}
+  <div class="modal fade" id="carritoModal" tabindex="-1" aria-labelledby="carritoModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="carritoModalLabel">
+            <i class='bx bx-cart'></i>
+            Tu carrito de compras
+          </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        
+        <div class="modal-body">
+          <div class="row g-3">
+            {% for item in carrito_items %}
+              <div class="col-12">
+                <div class="card">
+                  <div class="card-body">
+                    <div class="row align-items-center">
+                      <div class="col-md-6">
+                        <h6 class="mb-1">{{ item.plato.nombre }}</h6>
+                        <small class="text-muted">
+                          <i class='bx bx-calendar'></i> {{ item.get_dia_semana_display }}
+                        </small>
+                      </div>
+                      <div class="col-md-3 text-center">
+                        <span class="badge bg-primary rounded-pill">
+                          {{ item.cantidad }}x
+                        </span>
+                      </div>
+                      <div class="col-md-2 text-end">
+                        <strong>€{{ item.subtotal|floatformat:2 }}</strong>
+                      </div>
+                      <div class="col-md-1">
+                        <form action="{% url 'eliminar_item' item.id %}" method="post" class="d-inline">
+                          {% csrf_token %}
+                          <button type="submit" class="btn btn-sm btn-outline-danger" 
+                                  title="Eliminar item">
+                            <i class='bx bx-trash'></i>
+                          </button>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
-              <form action="{% url 'eliminar_item' item.id %}" method="post" class="ms-3">
-                {% csrf_token %}
-                <button type="submit" class="btn btn-sm btn-outline-danger">Eliminar</button>
-              </form>
-            </li>
-          {% endfor %}
-        </ul>
-        <p class="fs-5"><strong>Total: {{ total_carrito }}€</strong></p>
-      </div>
-      <div class="modal-footer">
-        <form action="{% url 'procesar_pago' %}" method="post" class="ms-auto">
-          {% csrf_token %}
-          <button type="submit" class="btn btn-success">Pagar</button>
-        </form>
-      </div>
-    </div>
-  </div>
-</div>
-{% endif %}
-
-<!-- MODAL DETALLE PLATO MEJORADO -->
-<div class="modal fade" id="infoPlatoModal" tabindex="-1" aria-labelledby="infoPlatoModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-lg">
-    <div class="modal-content rounded-4 shadow-lg animate__animated animate__fadeInDown">
-      <div class="modal-header border-0 pb-0">
-        <h5 class="modal-title fw-bold fs-3" id="infoPlatoModalLabel" style="color: #D72638;">Nombre Plato</h5>
-        <button type="button" class="btn-close btn-lg" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-      </div>
-      <div class="modal-body">
-        <div class="row g-4">
-          <div class="col-md-5 text-center">
-            <img id="infoPlatoImagen" src="" alt="" class="img-fluid rounded-3 shadow" style="max-height: 260px; transition: transform .3s;">
+            {% endfor %}
           </div>
-          <div class="col-md-7">
-            <ul class="nav nav-tabs mb-3" id="platoTabs" role="tablist">
-              <li class="nav-item" role="presentation">
-                <button class="nav-link active" id="desc-tab" data-bs-toggle="tab" data-bs-target="#desc" type="button" role="tab">Descripción</button>
-              </li>
-              <li class="nav-item" role="presentation">
-                <button class="nav-link" id="nutri-tab" data-bs-toggle="tab" data-bs-target="#nutri" type="button" role="tab">Nutricional</button>
-              </li>
-              <li class="nav-item" role="presentation">
-                <button class="nav-link" id="ing-tab" data-bs-toggle="tab" data-bs-target="#ing" type="button" role="tab">Ingredientes</button>
-              </li>
-              <li class="nav-item" role="presentation">
-                <button class="nav-link" id="aler-tab" data-bs-toggle="tab" data-bs-target="#aler" type="button" role="tab">Alérgenos</button>
-              </li>
-            </ul>
-            <div class="tab-content" id="platoTabsContent">
-              <div class="tab-pane fade show active" id="desc" role="tabpanel">
-                <p id="infoPlatoDescripcion" class="fs-5"></p>
-                <p class="fw-bold fs-4" style="color: #D72638;">€<span id="infoPlatoPrecio"></span></p>
-              </div>
-              <div class="tab-pane fade" id="nutri" role="tabpanel">
-                <ul class="list-group list-group-flush">
-                  <li class="list-group-item">Calorías: <span id="infoPlatoCalorias"></span> kcal</li>
-                  <li class="list-group-item">Proteínas: <span id="infoPlatoProteinas"></span> g</li>
-                  <li class="list-group-item">Grasa: <span id="infoPlatoGrasa"></span> g</li>
-                  <li class="list-group-item">Carbohidratos: <span id="infoPlatoCarbohidratos"></span> g</li>
-                  <li class="list-group-item">Sodio: <span id="infoPlatoSodio"></span> mg</li>
-                </ul>
-              </div>
-              <div class="tab-pane fade" id="ing" role="tabpanel">
-                <p id="infoPlatoIngredientes"></p>
-              </div>
-              <div class="tab-pane fade" id="aler" role="tabpanel">
-                <p id="infoPlatoAlergenos"></p>
+          
+          <!-- Resumen del pedido -->
+          <div class="card mt-3 bg-light">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Total del pedido:</h5>
+                <h4 class="mb-0 text-primary">€{{ total_carrito|floatformat:2 }}</h4>
               </div>
             </div>
-            <div class="mt-3">
-              <span class="badge bg-secondary me-2">Grupo: <span id="infoPlatoGrupo"></span></span>
-              <span class="badge bg-secondary me-2">Peso: <span id="infoPlatoKg"></span> g</span>
-              <span class="badge bg-secondary">Vida útil: <span id="infoPlatoVidaUtil"></span></span>
+          </div>
+        </div>
+        
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+            Seguir comprando
+          </button>
+          <form action="{% url 'procesar_pago' %}" method="post" class="d-inline">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-success btn-lg">
+              <i class='bx bx-credit-card'></i>
+              Proceder al pago
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+
+  <!-- MODAL DETALLE PLATO MEJORADO -->
+  <div class="modal fade" id="infoPlatoModal" tabindex="-1" aria-labelledby="infoPlatoModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="infoPlatoModalLabel">Información del plato</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        
+        <div class="modal-body">
+          <div class="row g-4">
+            <div class="col-md-5">
+              <img id="infoPlatoImagen" src="" alt="" class="img-fluid rounded shadow">
+            </div>
+            
+            <div class="col-md-7">
+              <!-- Tabs de información -->
+              <ul class="nav nav-pills mb-3" id="platoTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link active" id="desc-tab" data-bs-toggle="pill" 
+                          data-bs-target="#desc" type="button" role="tab">
+                    <i class='bx bx-info-circle'></i> Descripción
+                  </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link" id="nutri-tab" data-bs-toggle="pill" 
+                          data-bs-target="#nutri" type="button" role="tab">
+                    <i class='bx bx-health'></i> Nutricional
+                  </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link" id="ing-tab" data-bs-toggle="pill" 
+                          data-bs-target="#ing" type="button" role="tab">
+                    <i class='bx bx-list-ul'></i> Ingredientes
+                  </button>
+                </li>
+              </ul>
+              
+              <!-- Contenido de tabs -->
+              <div class="tab-content" id="platoTabsContent">
+                <div class="tab-pane fade show active" id="desc" role="tabpanel">
+                  <p id="infoPlatoDescripcion" class="mb-3"></p>
+                  <div class="d-flex justify-content-between align-items-center">
+                    <div class="precio" id="infoPlatoPrecio"></div>
+                    <div class="text-muted">
+                      <small><i class='bx bx-weight'></i> <span id="infoPlatoKg"></span>g</small>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="tab-pane fade" id="nutri" role="tabpanel">
+                  <div class="row g-3">
+                    <div class="col-6">
+                      <div class="card text-center">
+                        <div class="card-body py-2">
+                          <h6 class="card-title mb-1">Calorías</h6>
+                          <p class="card-text"><span id="infoPlatoCalorias">-</span> kcal</p>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-6">
+                      <div class="card text-center">
+                        <div class="card-body py-2">
+                          <h6 class="card-title mb-1">Proteínas</h6>
+                          <p class="card-text"><span id="infoPlatoProteinas">-</span> g</p>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-6">
+                      <div class="card text-center">
+                        <div class="card-body py-2">
+                          <h6 class="card-title mb-1">Grasas</h6>
+                          <p class="card-text"><span id="infoPlatoGrasa">-</span> g</p>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-6">
+                      <div class="card text-center">
+                        <div class="card-body py-2">
+                          <h6 class="card-title mb-1">Carbohidratos</h6>
+                          <p class="card-text"><span id="infoPlatoCarbohidratos">-</span> g</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="tab-pane fade" id="ing" role="tabpanel">
+                  <div class="mb-3">
+                    <h6><i class='bx bx-list-ul'></i> Ingredientes:</h6>
+                    <p id="infoPlatoIngredientes" class="text-muted"></p>
+                  </div>
+                  <div>
+                    <h6><i class='bx bx-error'></i> Alérgenos:</h6>
+                    <p id="infoPlatoAlergenos" class="text-muted"></p>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Información adicional -->
+              <div class="mt-3">
+                <div class="d-flex flex-wrap gap-2">
+                  <span class="badge bg-secondary">
+                    <i class='bx bx-category'></i> <span id="infoPlatoGrupo"></span>
+                  </span>
+                  <span class="badge bg-info">
+                    <i class='bx bx-time'></i> <span id="infoPlatoVidaUtil"></span>
+                  </span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-</div>
-<style>
-#infoPlatoImagen:hover {
-  transform: scale(1.07);
-  box-shadow: 0 8px 24px rgba(215,38,56,0.15);
-}
-.animate__animated.animate__fadeInDown {
-  animation-duration: 0.5s;
-}
-</style>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-    // Agregar clase "active" visualmente sin necesidad de recargar (solo estético, no funcional para backend)
-    document.querySelectorAll('.capsula-btn').forEach(btn => {
-        btn.addEventListener('click', function() {
-            document.querySelectorAll('.capsula-btn').forEach(b => b.classList.remove('active'));
-            this.classList.add('active');
-        });
-    });
-</script>
+  <!-- SCRIPTS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      // Efecto navbar shrink
+      window.addEventListener('scroll', function () {
+        const navbar = document.querySelector('.transition-navbar');
+        if (window.scrollY > 10) {
+          navbar.classList.add('navbar-shrink');
+        } else {
+          navbar.classList.remove('navbar-shrink');
+        }
+      });
 
-<script>
-  document.addEventListener('DOMContentLoaded', function () {
-    const botones = document.querySelectorAll('.btn-familia');
-    const grupos = document.querySelectorAll('.grupo-platos');
-
-    botones.forEach(boton => {
-      boton.addEventListener('click', () => {
-        botones.forEach(b => b.classList.remove('active'));
-        boton.classList.add('active');
-
-        const familia = boton.dataset.familia;
-
-        grupos.forEach(grupo => {
-          if (familia === 'todos' || grupo.dataset.familia === familia) {
-            grupo.style.display = 'block';
+      // Modal de información del plato
+      const cards = document.querySelectorAll('.clickable-card');
+      const modal = new bootstrap.Modal(document.getElementById('infoPlatoModal'));
+      
+      cards.forEach(card => {
+        card.addEventListener('click', function (event) {
+          if (event.target.closest('form')) return;
+          
+          // Obtener datos del plato
+          const data = {
+            nombre: this.getAttribute('data-nombre'),
+            descripcion: this.getAttribute('data-descripcion'),
+            precio: this.getAttribute('data-precio'),
+            imagen: this.getAttribute('data-imagen'),
+            grupo: this.getAttribute('data-grupo'),
+            kilogramos: this.getAttribute('data-kilogramos'),
+            vida_util: this.getAttribute('data-vida-util'),
+            calorias: this.getAttribute('data-calorias'),
+            proteinas: this.getAttribute('data-proteinas'),
+            grasa: this.getAttribute('data-grasa'),
+            carbohidratos: this.getAttribute('data-carbohidratos'),
+            sodio: this.getAttribute('data-sodio'),
+            ingredientes: this.getAttribute('data-ingredientes'),
+            alergenos: this.getAttribute('data-alergenos')
+          };
+          
+          // Llenar modal
+          document.getElementById('infoPlatoModalLabel').textContent = data.nombre;
+          document.getElementById('infoPlatoDescripcion').textContent = data.descripcion || "Sin descripción disponible";
+          document.getElementById('infoPlatoPrecio').textContent = data.precio;
+          document.getElementById('infoPlatoGrupo').textContent = data.grupo || "-";
+          document.getElementById('infoPlatoKg').textContent = data.kilogramos || "-";
+          document.getElementById('infoPlatoVidaUtil').textContent = data.vida_util || "-";
+          document.getElementById('infoPlatoCalorias').textContent = data.calorias || "-";
+          document.getElementById('infoPlatoProteinas').textContent = data.proteinas || "-";
+          document.getElementById('infoPlatoGrasa').textContent = data.grasa || "-";
+          document.getElementById('infoPlatoCarbohidratos').textContent = data.carbohidratos || "-";
+          document.getElementById('infoPlatoIngredientes').textContent = data.ingredientes || "No disponible";
+          document.getElementById('infoPlatoAlergenos').textContent = data.alergenos || "No disponible";
+          
+          const imagen = document.getElementById('infoPlatoImagen');
+          if (data.imagen) {
+            imagen.src = data.imagen;
+            imagen.style.display = 'block';
           } else {
-            grupo.style.display = 'none';
+            imagen.style.display = 'none';
+          }
+          
+          // Resetear tabs
+          document.querySelector('#platoTabs .nav-link.active').classList.remove('active');
+          document.querySelector('#platoTabsContent .tab-pane.show.active').classList.remove('show', 'active');
+          document.getElementById('desc-tab').classList.add('active');
+          document.getElementById('desc').classList.add('show', 'active');
+          
+          modal.show();
+        });
+      });
+
+      // Animación de elementos al hacer scroll
+      const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+      };
+
+      const observer = new IntersectionObserver(function(entries) {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('fade-in-up');
           }
         });
+      }, observerOptions);
+
+      // Observar cards que no tienen animación inicial
+      document.querySelectorAll('.card:not(.fade-in-up)').forEach(card => {
+        observer.observe(card);
+      });
+
+      // Feedback visual al agregar al carrito
+      document.querySelectorAll('form[method="post"]').forEach(form => {
+        form.addEventListener('submit', function(e) {
+          const btn = this.querySelector('button[type="submit"]');
+          const originalText = btn.innerHTML;
+          
+          btn.innerHTML = '<i class="bx bx-check"></i> ¡Agregado!';
+          btn.classList.add('btn-success');
+          btn.disabled = true;
+          
+          setTimeout(() => {
+            btn.innerHTML = originalText;
+            btn.classList.remove('btn-success');
+            btn.disabled = false;
+          }, 1500);
+        });
       });
     });
-  });
-</script>
-
-<script>
-  document.addEventListener('DOMContentLoaded', function () {
-    const cards = document.querySelectorAll('.clickable-card');
-    const modal = new bootstrap.Modal(document.getElementById('infoPlatoModal'));
-    cards.forEach(card => {
-      card.addEventListener('click', function (event) {
-        if (event.target.closest('form')) return;
-        // Leer info desde atributos data
-        const nombre = this.getAttribute('data-nombre');
-        const descripcion = this.getAttribute('data-descripcion');
-        const precio = this.getAttribute('data-precio');
-        const imagen = this.getAttribute('data-imagen');
-        const grupo = this.getAttribute('data-grupo');
-        const kilogramos = this.getAttribute('data-kilogramos');
-        const vida_util = this.getAttribute('data-vida-util');
-        const calorias = this.getAttribute('data-calorias');
-        const proteinas = this.getAttribute('data-proteinas');
-        const grasa = this.getAttribute('data-grasa');
-        const carbohidratos = this.getAttribute('data-carbohidratos');
-        const sodio = this.getAttribute('data-sodio');
-        const ingredientes = this.getAttribute('data-ingredientes');
-        const alergenos = this.getAttribute('data-alergenos');
-        // Setear contenido modal
-        document.getElementById('infoPlatoModalLabel').textContent = nombre;
-        document.getElementById('infoPlatoDescripcion').textContent = descripcion || "Sin descripción disponible";
-        document.getElementById('infoPlatoPrecio').textContent = precio;
-        document.getElementById('infoPlatoImagen').src = imagen || "";
-        document.getElementById('infoPlatoImagen').style.display = imagen ? 'block' : 'none';
-        document.getElementById('infoPlatoGrupo').textContent = grupo || "-";
-        document.getElementById('infoPlatoKg').textContent = kilogramos || "-";
-        document.getElementById('infoPlatoVidaUtil').textContent = vida_util || "-";
-        document.getElementById('infoPlatoCalorias').textContent = calorias || "-";
-        document.getElementById('infoPlatoProteinas').textContent = proteinas || "-";
-        document.getElementById('infoPlatoGrasa').textContent = grasa || "-";
-        document.getElementById('infoPlatoCarbohidratos').textContent = carbohidratos || "-";
-        document.getElementById('infoPlatoSodio').textContent = sodio || "-";
-        document.getElementById('infoPlatoIngredientes').textContent = ingredientes || "No disponible";
-        document.getElementById('infoPlatoAlergenos').textContent = alergenos || "No disponible";
-        // Reiniciar tabs al abrir
-        document.querySelector('#platoTabs .nav-link.active').classList.remove('active');
-        document.querySelector('#platoTabsContent .tab-pane.show.active').classList.remove('show','active');
-        document.getElementById('desc-tab').classList.add('active');
-        document.getElementById('desc').classList.add('show','active');
-        modal.show();
-      });
-    });
-  });
-</script>
-
-<script>
-  window.addEventListener('scroll', function () {
-    const navbar = document.querySelector('.transition-navbar');
-    if (window.scrollY > 10) {
-      navbar.classList.add('navbar-shrink');
-    } else {
-      navbar.classList.remove('navbar-shrink');
-    }
-  });
-
-   window.addEventListener('scroll', function () {
-    const nav = document.getElementById('mainNav');
-    if (window.scrollY > 50) {
-      nav.classList.add('shrink');
-    } else {
-      nav.classList.remove('shrink');
-    }
-  });
-</script>
-
-<div class="container py-4">
-  <div class="row mb-4">
-    <div class="col-12 col-md-6 mx-auto">
-      <input type="text" id="filtro-platos" class="form-control form-control-lg" placeholder="Buscar plato...">
-    </div>
-  </div>
-  {% for grupo, items in platos_por_grupo.items %}
-    <h3 class="mt-4 mb-2" style="color: #D72638;">{{ grupo }}</h3>
-    <div class="row g-4" id="platos-lista">
-      {% for plato in items %}
-      <div class="col-12 col-md-6 col-lg-4">
-        <div class="card h-100 shadow-lg border-0 rounded-4 position-relative plato-card">
-          {% if plato.estado != "COMUN" %}
-            <span class="badge position-absolute top-0 end-0 m-2 bg-danger fs-6 animate__animated animate__bounceIn">
-              {{ plato.get_estado_display }}
-            </span>
-          {% endif %}
-          <div class="favorito-btn position-absolute top-0 start-0 m-2" title="Agregar a favoritos">
-            <i class="bx bx-heart"></i>
-          </div>
-          <img src="{{ plato.imagen.url }}" class="card-img-top img-fluid rounded-top" alt="{{ plato.nombre }}" style="height: 220px; object-fit: cover; transition: transform .3s;">
-          <div class="card-body d-flex flex-column">
-            <h5 class="card-title fw-bold text-truncate" title="{{ plato.nombre }}">{{ plato.nombre }}</h5>
-            <p class="card-text text-muted text-truncate" title="{{ plato.descripcion }}">{{ plato.descripcion }}</p>
-            <div class="d-flex justify-content-between align-items-center mt-auto">
-              <span class="fw-bold fs-4" style="color: #D72638;">€{{ plato.precio }}</span>
-              <form method="post" action="" class="agregar-form">
-                {% csrf_token %}
-                <input type="hidden" name="plato_id" value="{{ plato.id }}">
-                <input type="hidden" name="dia_semana" value="{{ dia_actual }}">
-                <input type="number" name="cantidad" value="1" min="1" class="form-control d-inline-block" style="width: 70px;">
-                <button type="submit" class="btn btn-danger ms-2 agregar-btn" style="background: #D72638; border: none;">
-                  <i class="bx bx-cart-add"></i> Agregar
-                </button>
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
-      {% endfor %}
-    </div>
-  {% endfor %}
-</div>
-<style>
-.plato-card {
-  transition: box-shadow .3s, transform .3s;
-}
-.plato-card:hover {
-  box-shadow: 0 8px 32px rgba(215,38,56,0.15);
-  transform: translateY(-6px) scale(1.02);
-}
-.card-img-top:hover {
-  transform: scale(1.05);
-}
-.favorito-btn {
-  cursor: pointer;
-  color: #D72638;
-  font-size: 1.7rem;
-  z-index: 2;
-  transition: color .2s;
-}
-.favorito-btn.active, .favorito-btn:hover {
-  color: #b71c1c;
-}
-.agregar-btn:active {
-  transform: scale(0.95);
-  background: #b71c1c;
-}
-.text-truncate {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-</style>
-<script>
-// Favoritos visual
-setTimeout(() => {
-  document.querySelectorAll('.favorito-btn').forEach(btn => {
-    btn.addEventListener('click', function(e) {
-      e.stopPropagation();
-      this.classList.toggle('active');
-      const icon = this.querySelector('i');
-      icon.classList.toggle('bxs-heart');
-      icon.classList.toggle('bx-heart');
-    });
-  });
-
-  // Animación al agregar al carrito
-  document.querySelectorAll('.agregar-form').forEach(form => {
-    form.addEventListener('submit', function(e) {
-      const btn = this.querySelector('.agregar-btn');
-      btn.innerHTML = '<i class="bx bx-check"></i> ¡Agregado!';
-      btn.classList.add('btn-success');
-      setTimeout(() => {
-        btn.innerHTML = '<i class="bx bx-cart-add"></i> Agregar';
-        btn.classList.remove('btn-success');
-      }, 1200);
-    });
-  });
-
-  // Filtro rápido
-  const filtro = document.getElementById('filtro-platos');
-  if (filtro) {
-    filtro.addEventListener('input', function() {
-      const val = this.value.toLowerCase();
-      document.querySelectorAll('.plato-card').forEach(card => {
-        const nombre = card.querySelector('.card-title').textContent.toLowerCase();
-        card.parentElement.style.display = nombre.includes(val) ? '' : 'none';
-      });
-    });
-  }
-
-  // Tooltip para nombre y descripción
-  document.querySelectorAll('.card-title, .card-text').forEach(el => {
-    el.addEventListener('mouseenter', function() {
-      if (this.offsetWidth < this.scrollWidth) {
-        this.setAttribute('data-bs-toggle', 'tooltip');
-        new bootstrap.Tooltip(this);
-      }
-    });
-  });
-}, 500);
-</script>
-
+  </script>
 </body>
 </html>

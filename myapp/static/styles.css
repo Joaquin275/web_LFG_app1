@@ -1,412 +1,563 @@
-/* Variables */
+/* Variables CSS modernas */
 :root {
-  --rojo-empresa: #D72638;
-  --rojo-claro: #F75C5E;
-  --gris-claro: #ffffff;
-  --fondo-gris: #f9f9f9;
+  --primary-color: #D72638;
+  --primary-dark: #b71c1c;
+  --primary-light: #ff5252;
+  --secondary-color: #2c3e50;
+  --accent-color: #f39c12;
+  --success-color: #27ae60;
+  --warning-color: #f39c12;
+  --danger-color: #e74c3c;
+  --light-gray: #f8f9fa;
+  --medium-gray: #6c757d;
+  --dark-gray: #343a40;
+  --white: #ffffff;
+  --shadow-light: 0 2px 10px rgba(0,0,0,0.1);
+  --shadow-medium: 0 4px 20px rgba(0,0,0,0.15);
+  --shadow-heavy: 0 8px 30px rgba(0,0,0,0.2);
+  --border-radius: 12px;
+  --border-radius-lg: 20px;
+  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-secondary: 'Poppins', sans-serif;
 }
 
-/* Reset general */
+/* Reset y base mejorados */
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
-html, body {
-  width: 100%;
-  overflow-x: hidden;
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
 }
+
 body {
-  font-family: 'Nunito', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: var(--gris-claro);
-  color: black;
+  font-family: var(--font-primary);
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  color: var(--dark-gray);
+  line-height: 1.6;
+  overflow-x: hidden;
+  min-height: 100vh;
 }
 
-/* Contenedor principal */
-.container {
-  max-width: 600px;
-  margin: 80px auto;
-  background: white;
-  padding: 40px 1rem;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  text-align: center;
-  width: 100%;
+/* Tipografía moderna */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-secondary);
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 1rem;
+  color: var(--secondary-color);
 }
 
-/* Botones generales */
-.button {
-  display: inline-block;
-  margin: 20px 10px 0;
-  padding: 10px 20px;
-  background-color: #2ecc71;
-  color: white;
-  text-decoration: none;
-  border-radius: 6px;
-  transition: background 0.3s;
-}
-.button:hover {
-  background-color: #27ae60;
+h1 { font-size: clamp(2rem, 5vw, 3.5rem); }
+h2 { font-size: clamp(1.75rem, 4vw, 2.5rem); }
+h3 { font-size: clamp(1.5rem, 3vw, 2rem); }
+h4 { font-size: clamp(1.25rem, 2.5vw, 1.75rem); }
+
+p {
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+  line-height: 1.7;
 }
 
-/* Navbar */
+/* Navbar moderna con glassmorphism */
 .navbar-custom {
-  background-color: white;
-  padding: 1rem;
-}
-.transition-navbar {
-  transition: all 0.3s ease;
-  padding-top: 1rem;
-  padding-bottom: 1rem;
-}
-.navbar-shrink {
-  padding-top: 0.3rem !important;
-  padding-bottom: 0.3rem !important;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: var(--shadow-light);
+  transition: var(--transition);
 }
 
-/* Botones principales */
-.btn-primary, .btn-outline-primary {
-  background-color: var(--rojo-empresa);
-  border-color: var(--rojo-empresa);
-}
-.btn-outline-primary {
-  background-color: transparent;
-  color: var(--rojo-empresa);
-}
-.btn-outline-primary:hover {
-  background-color: var(--rojo-empresa);
-  color: white;
-}
-
-/* Botones cápsula */
-.btn-familia {
-  padding: 0.6rem 1.4rem;
-  border: 2px solid #b71c1c;
-  background-color: white;
-  color: #b71c1c;
-  border-radius: 2rem;
-  font-weight: bold;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-.btn-familia:hover {
-  background-color: #d32f2f;
-  color: white;
-}
-.btn-familia.active {
-  background-color: #b71c1c;
-  color: white;
-}
-
-/* Cards */
-.card {
-  border-radius: 16px;
-  padding: 1rem;
-}
-.card-body {
-  padding: 1.25rem;
-}
-.card-img-top {
-  width: 100%;
-  height: auto;
-  aspect-ratio: 4/3;
-  object-fit: cover;
-  max-height: 240px;
-  border-top-left-radius: 16px;
-  border-top-right-radius: 16px;
-}
-.card:hover {
-  box-shadow: 0 8px 24px rgba(0,0,0,0.1);
-  transform: translateY(-2px);
-  transition: all 0.3s ease;
-}
-.card h5 {
-  font-size: 1.25rem;
-  color: var(--rojo-empresa);
-  font-weight: 700;
-}
-
-/* Carrito */
-.btn-carrito {
-  position: fixed;
-  bottom: 24px;
-  right: 24px;
-  background-color: var(--rojo-empresa);
-  color: white;
-  border-radius: 50%;
-  width: 60px;
-  height: 60px;
-  font-size: 24px;
-  border: none;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-  transition: background-color 0.3s ease, transform 0.2s ease;
-  z-index: 1050;
-}
-.btn-carrito:hover {
-  background-color: var(--rojo-claro);
-  transform: scale(1.05);
-}
-
-/* Filtros cápsula */
-.grupo-btn {
-  border-radius: 20px;
-  padding: 8px 16px;
-  margin: 5px;
-  border: 2px solid var(--rojo-empresa);
-  background-color: white;
-  color: var(--rojo-empresa);
-  font-weight: 500;
-  transition: all 0.2s ease-in-out;
-}
-.grupo-btn.activo,
-.grupo-btn:hover {
-  background-color: var(--rojo-empresa);
-  color: white;
-}
-
-/* Wrapper general */
-.main-wrapper {
-  max-width: 1200px;
-  margin: auto;
-  padding: 0 1rem;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-/* Contenedor de platos */
-.platos-container {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-start;
-  gap: 1rem;
-}
-
-/* Tarjetas de platos */
-.plato-card {
-  border: 1px solid #ddd;
-  border-radius: 12px;
-  padding: 15px;
-  margin: 10px;
-  text-align: center;
-  background-color: #fff;
-  box-shadow: 0 0 8px rgba(0,0,0,0.05);
-  flex: 1 1 calc(50% - 20px);
-  max-width: calc(50% - 20px);
-}
-.plato-card img {
-  max-width: 100%;
-  height: auto;
-  border-radius: 10px;
-}
-
-/* Botón añadir */
-.btn-añadir {
-  background-color: var(--rojo-empresa);
-  color: white;
-  border: 2px solid var(--rojo-empresa);
-  border-radius: 10px;
-  padding: 6px 12px;
-  margin-top: 10px;
-  transition: all 0.2s ease;
-  width: 100%;
-}
-.btn-añadir:hover {
-  background-color: white;
-  color: var(--rojo-empresa);
-}
-
-/* Input cantidad */
-.cantidad-input-custom {
-  width: 64px;
-  height: 36px;
-  padding: 4px 10px;
-  font-size: 1rem;
-  font-weight: 600;
-  text-align: center;
-  border: 2px solid var(--rojo-claro);
-  border-radius: 12px;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
-}
-.cantidad-input-custom:focus {
-  border-color: var(--rojo-claro);
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(211, 47, 47, 0.2);
-}
-
-/* Botón comprar */
-.btn-comprar {
-  background-color: var(--rojo-empresa);
-  color: #fff;
-  padding: 10px 24px;
-  border: none;
-  border-radius: 30px;
-  font-size: 1rem;
-  font-weight: bold;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-.btn-comprar:hover {
-  background-color: var(--rojo-claro);
-}
-
-/* Modal plato */
-#infoPlatoModal .modal-dialog {
-  max-width: 480px;
-  margin: 1.5rem auto;
-  width: 90%;
-}
-#infoPlatoModal .modal-content {
-  border-radius: 18px;
-  background: #fff;
-  padding: 1rem 1rem 1.5rem;
-}
-#infoPlatoModal .modal-header {
-  background: none;
-  border-bottom: none;
-  padding-bottom: 0;
-  justify-content: space-between;
-}
-#infoPlatoModalLabel {
-  font-size: 1.5rem;
+.navbar-brand {
+  font-family: var(--font-secondary);
   font-weight: 800;
-  color: #222;
-  text-align: left;
-  margin-bottom: 0.25rem;
-}
-#infoPlatoImagen {
-  border-radius: 12px;
-  max-height: 220px;
-  object-fit: cover;
-  margin: 1rem 0;
-}
-#infoPlatoDescripcion {
-  font-size: 1rem;
-  color: #666;
-  text-align: left;
-  margin-bottom: 1rem;
-}
-#infoPlatoModal .modal-body .info-box {
-  background: #f8f8f8;
-  border-radius: 12px;
-  padding: 1rem;
-  margin-bottom: 1rem;
-  box-shadow: inset 0 0 6px rgba(0,0,0,0.05);
-}
-#infoPlatoModal .modal-body .info-box h6 {
-  color: var(--rojo-empresa);
-  font-weight: 700;
-  font-size: 1rem;
-  margin-bottom: 0.5rem;
-}
-#infoPlatoModal .modal-body .info-box p {
-  font-size: 0.95rem;
-  color: #444;
-  margin-bottom: 0.25rem;
-}
-#infoPlatoModal .btn-close {
-  margin-left: auto;
-  filter: brightness(120%);
-  color: #333;
+  font-size: 1.5rem;
+  color: var(--primary-color) !important;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
 }
 
-/* Scroll días */
-.dias-scroll-wrapper {
-  background-color: white;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-  border-bottom: 1px solid #eee;
+.navbar-brand img {
+  height: 48px;
+  transition: var(--transition);
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
 }
-.dias-scroll {
-  overflow-x: auto;
-  white-space: nowrap;
-  scrollbar-width: thin;
+
+.navbar-brand:hover img {
+  transform: scale(1.05) rotate(2deg);
+}
+
+.navbar-shrink {
+  padding-top: 0.5rem !important;
+  padding-bottom: 0.5rem !important;
+  background: rgba(255, 255, 255, 0.98);
+  box-shadow: var(--shadow-medium);
+}
+
+/* Botones modernos con micro-interacciones */
+.btn {
+  font-family: var(--font-primary);
+  font-weight: 600;
+  border-radius: var(--border-radius);
+  padding: 0.75rem 1.5rem;
+  border: none;
+  transition: var(--transition);
+  position: relative;
+  overflow: hidden;
+  text-transform: none;
+  letter-spacing: 0.025em;
+}
+
+.btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  transition: left 0.5s;
+}
+
+.btn:hover::before {
+  left: 100%;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+  color: white;
+  box-shadow: 0 4px 15px rgba(215, 38, 56, 0.3);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(215, 38, 56, 0.4);
+  background: linear-gradient(135deg, var(--primary-light), var(--primary-color));
+}
+
+.btn-outline-primary {
+  border: 2px solid var(--primary-color);
+  color: var(--primary-color);
+  background: transparent;
+}
+
+.btn-outline-primary:hover {
+  background: var(--primary-color);
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-medium);
+}
+
+/* Cards modernas con efectos avanzados */
+.card {
+  border: none;
+  border-radius: var(--border-radius-lg);
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
+  box-shadow: var(--shadow-light);
+  transition: var(--transition);
+  overflow: hidden;
+  position: relative;
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--primary-color), var(--accent-color), var(--success-color));
+  opacity: 0;
+  transition: var(--transition);
+}
+
+.card:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: var(--shadow-heavy);
+}
+
+.card:hover::before {
+  opacity: 1;
+}
+
+.card-img-top {
+  height: 240px;
+  object-fit: cover;
+  transition: var(--transition);
+  border-radius: var(--border-radius) var(--border-radius) 0 0;
+}
+
+.card:hover .card-img-top {
+  transform: scale(1.1);
+}
+
+.card-body {
+  padding: 1.5rem;
+  position: relative;
+  z-index: 2;
+}
+
+.card-title {
+  font-family: var(--font-secondary);
+  font-weight: 700;
+  color: var(--secondary-color);
+  margin-bottom: 0.75rem;
+  font-size: 1.25rem;
+}
+
+.card-text {
+  color: var(--medium-gray);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin-bottom: 1rem;
+}
+
+/* Precio destacado */
+.precio {
+  font-family: var(--font-secondary);
+  font-weight: 800;
+  font-size: 1.5rem;
+  color: var(--primary-color);
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.precio::before {
+  content: '€';
+  font-size: 1.2rem;
+  opacity: 0.7;
+}
+
+/* Estados de platos con animaciones */
+.estado-badge {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
   padding: 0.5rem 1rem;
-  gap: 1rem;
+  border-radius: 50px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: white;
+  z-index: 3;
+  animation: pulse 2s infinite;
 }
+
+.estado-badge.nuevo {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+}
+
+.estado-badge.descuento {
+  background: linear-gradient(135deg, #f093fb, #f5576c);
+}
+
+.estado-badge.plato-de-la-semana {
+  background: linear-gradient(135deg, #4facfe, #00f2fe);
+}
+
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7); }
+  70% { box-shadow: 0 0 0 10px rgba(255, 255, 255, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0); }
+}
+
+/* Filtros de días modernos */
+.dias-scroll-wrapper {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(0,0,0,0.1);
+  box-shadow: var(--shadow-light);
+}
+
+.dias-scroll {
+  display: flex;
+  gap: 1rem;
+  padding: 1rem;
+  overflow-x: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--primary-color) transparent;
+}
+
 .dias-scroll::-webkit-scrollbar {
   height: 6px;
 }
+
+.dias-scroll::-webkit-scrollbar-track {
+  background: rgba(0,0,0,0.1);
+  border-radius: 3px;
+}
+
 .dias-scroll::-webkit-scrollbar-thumb {
-  background: var(--rojo-empresa);
-  border-radius: 5px;
+  background: var(--primary-color);
+  border-radius: 3px;
 }
+
+.dias-scroll .btn {
+  white-space: nowrap;
+  min-width: 120px;
+  border-radius: 50px;
+  font-weight: 600;
+  position: relative;
+}
+
 .dias-scroll .btn.active {
-  background-color: var(--rojo-empresa);
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
   color: white;
+  box-shadow: 0 4px 15px rgba(215, 38, 56, 0.3);
 }
 
-/* Badges estado */
-.estado-badge {
-  padding: 0.4rem 0.7rem;
-  font-size: 0.75rem;
-  border-radius: 1rem;
+/* Carrito flotante mejorado */
+.btn-carrito {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+  color: white;
+  border: none;
+  font-size: 1.5rem;
+  box-shadow: 0 8px 25px rgba(215, 38, 56, 0.4);
+  transition: var(--transition);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-carrito:hover {
+  transform: scale(1.1) rotate(5deg);
+  box-shadow: 0 12px 35px rgba(215, 38, 56, 0.5);
+}
+
+.btn-carrito::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: inherit;
+  animation: ripple 1.5s infinite;
+}
+
+@keyframes ripple {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1.4);
+    opacity: 0;
+  }
+}
+
+/* Modal mejorado */
+.modal-content {
+  border: none;
+  border-radius: var(--border-radius-lg);
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  box-shadow: var(--shadow-heavy);
+}
+
+.modal-header {
+  border-bottom: 1px solid rgba(0,0,0,0.1);
+  padding: 1.5rem;
+}
+
+.modal-title {
+  font-family: var(--font-secondary);
   font-weight: 700;
-  color: white;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
-}
-.estado-badge.nuevo,
-.estado-badge.Plato\ de\ la\ semana {
-  background: linear-gradient(135deg, #1e90ff, #0066cc);
-  animation: pulse-blue 2s infinite;
-}
-.estado-badge.descuento {
-  background: linear-gradient(135deg, #ff4d4d, #cc0000);
-  animation: pulse-red 2s infinite;
-}
-@keyframes pulse-blue {
-  0% { box-shadow: 0 0 0 0 rgba(30, 144, 255, 0.7); }
-  70% { box-shadow: 0 0 0 10px rgba(30, 144, 255, 0); }
-  100% { box-shadow: 0 0 0 0 rgba(30, 144, 255, 0); }
-}
-@keyframes pulse-red {
-  0% { box-shadow: 0 0 0 0 rgba(255, 77, 77, 0.7); }
-  70% { box-shadow: 0 0 0 10px rgba(255, 77, 77, 0); }
-  100% { box-shadow: 0 0 0 0 rgba(255, 77, 77, 0); }
+  color: var(--primary-color);
 }
 
-/* Responsive */
+.modal-body {
+  padding: 1.5rem;
+}
+
+/* Inputs modernos */
+.form-control {
+  border: 2px solid rgba(0,0,0,0.1);
+  border-radius: var(--border-radius);
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  transition: var(--transition);
+  background: rgba(255, 255, 255, 0.9);
+}
+
+.form-control:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(215, 38, 56, 0.1);
+  background: white;
+}
+
+.cantidad-input-custom {
+  width: 80px;
+  text-align: center;
+  font-weight: 700;
+  border: 2px solid var(--primary-color);
+  border-radius: var(--border-radius);
+}
+
+/* Animaciones de entrada */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.fade-in-up {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+.fade-in-left {
+  animation: fadeInLeft 0.6s ease-out;
+}
+
+/* Responsive mejorado */
 @media (max-width: 768px) {
-  .plato-card {
-    flex: 1 1 calc(50% - 16px);
-    max-width: calc(50% - 16px);
+  :root {
+    --border-radius: 8px;
+    --border-radius-lg: 16px;
   }
-  .titulo-principal {
-    font-size: 1.8rem;
+  
+  .card {
+    margin-bottom: 1.5rem;
   }
-  .btn-comprar, .btn-añadir {
-    font-size: 0.95rem;
-    padding: 8px 18px;
-  }
-  .cantidad-input-custom {
-    width: 52px;
-    height: 34px;
-    font-size: 0.9rem;
-  }
+  
   .btn-carrito {
-    width: 50px;
-    height: 50px;
-    font-size: 20px;
-    bottom: 16px;
-    right: 16px;
+    width: 60px;
+    height: 60px;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    font-size: 1.25rem;
   }
+  
+  .navbar-brand {
+    font-size: 1.25rem;
+  }
+  
   .navbar-brand img {
-    height: 45px;
+    height: 40px;
+  }
+  
+  h1 { font-size: 2rem; }
+  h2 { font-size: 1.75rem; }
+  
+  .card-img-top {
+    height: 200px;
+  }
+  
+  .modal-dialog {
+    margin: 1rem;
   }
 }
 
 @media (max-width: 480px) {
-  .plato-card {
-    flex: 1 1 100%;
-    max-width: 100%;
+  .container {
+    padding-left: 1rem;
+    padding-right: 1rem;
   }
-  .titulo-principal {
-    font-size: 1.6rem;
+  
+  .btn {
+    padding: 0.6rem 1.2rem;
+    font-size: 0.9rem;
   }
-  .btn-carrito {
-    width: 44px;
-    height: 44px;
-    font-size: 18px;
+  
+  .card-body {
+    padding: 1rem;
   }
+  
+  .precio {
+    font-size: 1.25rem;
+  }
+}
+
+/* Efectos de carga */
+.loading {
+  position: relative;
+  overflow: hidden;
+}
+
+.loading::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+  animation: loading 1.5s infinite;
+}
+
+@keyframes loading {
+  0% { left: -100%; }
+  100% { left: 100%; }
+}
+
+/* Utilidades */
+.text-gradient {
+  background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.glass {
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.hover-lift {
+  transition: var(--transition);
+}
+
+.hover-lift:hover {
+  transform: translateY(-5px);
+}
+
+/* Scrollbar personalizado */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(0,0,0,0.1);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--primary-color);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary-dark);
 }
