@@ -21,7 +21,9 @@ from myapp import views
 from django.conf import settings
 from django.conf.urls.static import static
 from rest_framework.routers import DefaultRouter
-from myapp.api_views import PlatoViewSet, ClienteViewSet, CarritoViewSet, ReciboViewSet, DashboardViewSet
+from myapp.api_views import (PlatoViewSet, ClienteViewSet, CarritoViewSet, ReciboViewSet, DashboardViewSet,
+                            dashboard_estadisticas, dashboard_ventas_mensuales, production_dashboard_stats, 
+                            inventory_alerts, production_efficiency_chart, inventory_rotation_chart)
 
 # Router para la API
 router = DefaultRouter()
@@ -35,6 +37,17 @@ urlpatterns = [
     path(settings.ADMIN_URL, admin.site.urls),
     path('api/', include(router.urls)),
     path('api-auth/', include('rest_framework.urls')),
+    
+    # Dashboard API endpoints
+    path('api/dashboard/estadisticas/', dashboard_estadisticas, name='dashboard_estadisticas'),
+    path('api/dashboard/ventas_mensuales/', dashboard_ventas_mensuales, name='dashboard_ventas_mensuales'),
+    
+    # Production Dashboard API endpoints
+    path('api/production/dashboard/stats/', production_dashboard_stats, name='production_dashboard_stats'),
+    path('api/production/inventory/alerts/', inventory_alerts, name='inventory_alerts'),
+    path('api/production/efficiency/chart/', production_efficiency_chart, name='production_efficiency_chart'),
+    path('api/production/inventory/rotation/', inventory_rotation_chart, name='inventory_rotation_chart'),
+    
     path('', views.helloword, name='home'),
     path('singup/', views.register),
     path('main/', views.main, name='main'),  # ✅ Esta es la buena

@@ -1,0 +1,475 @@
+{% extends "admin/base_site.html" %}
+{% load static %}
+
+{% block title %}Dashboard de Producción - Familia Gastro{% endblock %}
+
+{% block extrahead %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+<style>
+    .production-card {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border: none;
+        border-radius: 15px;
+        color: white;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .production-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .production-card.warning {
+        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    }
+    
+    .production-card.success {
+        background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+    }
+    
+    .production-card.info {
+        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    }
+    
+    .stat-icon {
+        font-size: 2.5rem;
+        opacity: 0.8;
+    }
+    
+    .chart-container {
+        background: white;
+        border-radius: 15px;
+        padding: 25px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        margin-bottom: 25px;
+        border: 1px solid #e3e6f0;
+    }
+    
+    .dashboard-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 40px 0;
+        margin-bottom: 30px;
+        border-radius: 0 0 25px 25px;
+    }
+    
+    .alert-card {
+        border-left: 4px solid #dc3545;
+        background: #fff5f5;
+        border-radius: 10px;
+        padding: 15px;
+        margin-bottom: 15px;
+    }
+    
+    .alert-card.warning {
+        border-left-color: #ffc107;
+        background: #fffbf0;
+    }
+    
+    .alert-card.success {
+        border-left-color: #28a745;
+        background: #f0fff4;
+    }
+    
+    .progress-modern {
+        height: 10px;
+        border-radius: 10px;
+        background: #e9ecef;
+        overflow: hidden;
+    }
+    
+    .progress-bar-modern {
+        height: 100%;
+        border-radius: 10px;
+        transition: width 0.6s ease;
+    }
+    
+    .metric-badge {
+        display: inline-block;
+        padding: 5px 12px;
+        border-radius: 20px;
+        font-size: 0.875rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    
+    .metric-badge.high {
+        background: #d4edda;
+        color: #155724;
+    }
+    
+    .metric-badge.medium {
+        background: #fff3cd;
+        color: #856404;
+    }
+    
+    .metric-badge.low {
+        background: #f8d7da;
+        color: #721c24;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="dashboard-header">
+    <div class="container">
+        <h1 class="display-4 mb-0">
+            <i class="fas fa-industry me-3"></i>
+            Dashboard de Producción
+        </h1>
+        <p class="lead mb-0">Control y seguimiento de la producción de platos</p>
+    </div>
+</div>
+
+<div class="container-fluid">
+    <!-- Tarjetas de estadísticas de producción -->
+    <div class="row mb-4">
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card production-card">
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <h5 class="card-title text-uppercase mb-0">Producciones Activas</h5>
+                            <span class="h2 font-weight-bold mb-0" id="producciones-activas">-</span>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-cogs stat-icon"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card production-card success">
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <h5 class="card-title text-uppercase mb-0">Completadas Hoy</h5>
+                            <span class="h2 font-weight-bold mb-0" id="completadas-hoy">-</span>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-check-circle stat-icon"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card production-card warning">
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <h5 class="card-title text-uppercase mb-0">Inventario Crítico</h5>
+                            <span class="h2 font-weight-bold mb-0" id="inventario-critico">-</span>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-exclamation-triangle stat-icon"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card production-card info">
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <h5 class="card-title text-uppercase mb-0">Eficiencia Promedio</h5>
+                            <span class="h2 font-weight-bold mb-0" id="eficiencia-promedio">-</span>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-tachometer-alt stat-icon"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Gráficos de producción -->
+    <div class="row">
+        <div class="col-xl-8 col-lg-7">
+            <div class="chart-container">
+                <h4 class="mb-3">
+                    <i class="fas fa-chart-line me-2 text-primary"></i>
+                    Costos de Producción (Últimos 7 días)
+                </h4>
+                <canvas id="costosChart" height="100"></canvas>
+            </div>
+        </div>
+        
+        <div class="col-xl-4 col-lg-5">
+            <div class="chart-container">
+                <h4 class="mb-3">
+                    <i class="fas fa-chart-pie me-2 text-success"></i>
+                    Producción por Estado
+                </h4>
+                <canvas id="estadosChart" height="200"></canvas>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Alertas de inventario -->
+    <div class="row">
+        <div class="col-xl-6 col-lg-6">
+            <div class="chart-container">
+                <h4 class="mb-3">
+                    <i class="fas fa-bell me-2 text-warning"></i>
+                    Alertas de Inventario
+                </h4>
+                <div id="alertas-inventario">
+                    <div class="text-center">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Cargando...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-xl-6 col-lg-6">
+            <div class="chart-container">
+                <h4 class="mb-3">
+                    <i class="fas fa-chart-bar me-2 text-info"></i>
+                    Eficiencia por Plato
+                </h4>
+                <canvas id="eficienciaChart" height="200"></canvas>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Gráfico de rotación de inventario -->
+    <div class="row">
+        <div class="col-12">
+            <div class="chart-container">
+                <h4 class="mb-3">
+                    <i class="fas fa-sync-alt me-2 text-info"></i>
+                    Movimientos de Inventario por Tipo
+                </h4>
+                <canvas id="rotacionChart" height="80"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Cargar estadísticas de producción
+    fetch('/api/production/dashboard/stats/')
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('producciones-activas').textContent = data.producciones_activas.toLocaleString();
+            document.getElementById('completadas-hoy').textContent = data.producciones_completadas_hoy.toLocaleString();
+            document.getElementById('inventario-critico').textContent = data.inventario_critico.toLocaleString();
+            document.getElementById('eficiencia-promedio').textContent = data.eficiencia_promedio.toFixed(1) + '%';
+            
+            // Gráfico de costos de producción
+            const costosCtx = document.getElementById('costosChart').getContext('2d');
+            new Chart(costosCtx, {
+                type: 'line',
+                data: {
+                    labels: data.costos_por_dia.map(c => new Date(c.fecha).toLocaleDateString()),
+                    datasets: [{
+                        label: 'Costos (€)',
+                        data: data.costos_por_dia.map(c => c.costos),
+                        borderColor: 'rgb(255, 99, 132)',
+                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return '€' + value.toLocaleString();
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // Gráfico de producción por estado
+            const estadosCtx = document.getElementById('estadosChart').getContext('2d');
+            new Chart(estadosCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: data.produccion_por_estado.map(p => p.estado),
+                    datasets: [{
+                        data: data.produccion_por_estado.map(p => p.cantidad),
+                        backgroundColor: [
+                            '#36A2EB',
+                            '#FFCE56',
+                            '#4BC0C0',
+                            '#FF6384',
+                            '#9966FF'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+        })
+        .catch(error => console.error('Error:', error));
+    
+    // Cargar alertas de inventario
+    fetch('/api/production/inventory/alerts/')
+        .then(response => response.json())
+        .then(data => {
+            const alertasContainer = document.getElementById('alertas-inventario');
+            let alertasHTML = '';
+            
+            // Inventario vencido
+            if (data.vencido.length > 0) {
+                alertasHTML += '<h6 class="text-danger mb-3"><i class="fas fa-times-circle me-2"></i>Productos Vencidos</h6>';
+                data.vencido.forEach(item => {
+                    alertasHTML += `
+                        <div class="alert-card">
+                            <strong>${item.plato__nombre}</strong><br>
+                            <small>Cantidad: ${item.cantidad_disponible} | Ubicación: ${item.ubicacion}</small>
+                        </div>
+                    `;
+                });
+            }
+            
+            // Inventario próximo a vencer
+            if (data.proximo_vencimiento.length > 0) {
+                alertasHTML += '<h6 class="text-warning mb-3"><i class="fas fa-clock me-2"></i>Próximo a Vencer</h6>';
+                data.proximo_vencimiento.forEach(item => {
+                    alertasHTML += `
+                        <div class="alert-card warning">
+                            <strong>${item.plato__nombre}</strong><br>
+                            <small>Cantidad: ${item.cantidad_disponible} | Vence: ${new Date(item.fecha_vencimiento).toLocaleDateString()}</small>
+                        </div>
+                    `;
+                });
+            }
+            
+            // Bajo stock
+            if (data.bajo_stock.length > 0) {
+                alertasHTML += '<h6 class="text-info mb-3"><i class="fas fa-box me-2"></i>Bajo Stock</h6>';
+                data.bajo_stock.forEach(item => {
+                    alertasHTML += `
+                        <div class="alert-card success">
+                            <strong>${item.plato__nombre}</strong><br>
+                            <small>Cantidad: ${item.cantidad_disponible} | Ubicación: ${item.ubicacion}</small>
+                        </div>
+                    `;
+                });
+            }
+            
+            if (alertasHTML === '') {
+                alertasHTML = '<div class="text-center text-muted"><i class="fas fa-check-circle fa-3x mb-3"></i><br>No hay alertas activas</div>';
+            }
+            
+            alertasContainer.innerHTML = alertasHTML;
+        })
+        .catch(error => console.error('Error:', error));
+    
+    // Cargar gráfico de eficiencia
+    fetch('/api/production/efficiency/chart/')
+        .then(response => response.json())
+        .then(data => {
+            const eficienciaCtx = document.getElementById('eficienciaChart').getContext('2d');
+            new Chart(eficienciaCtx, {
+                type: 'bar',
+                data: {
+                    labels: data.eficiencia_por_plato.map(p => p.plato),
+                    datasets: [{
+                        label: 'Eficiencia (%)',
+                        data: data.eficiencia_por_plato.map(p => p.eficiencia),
+                        backgroundColor: 'rgba(54, 162, 235, 0.8)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            ticks: {
+                                callback: function(value) {
+                                    return value + '%';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        })
+        .catch(error => console.error('Error:', error));
+    
+    // Cargar gráfico de rotación de inventario
+    fetch('/api/production/inventory/rotation/')
+        .then(response => response.json())
+        .then(data => {
+            const rotacionCtx = document.getElementById('rotacionChart').getContext('2d');
+            new Chart(rotacionCtx, {
+                type: 'bar',
+                data: {
+                    labels: data.movimientos_por_tipo.map(m => m.tipo),
+                    datasets: [{
+                        label: 'Cantidad de Movimientos',
+                        data: data.movimientos_por_tipo.map(m => m.movimientos),
+                        backgroundColor: [
+                            'rgba(75, 192, 192, 0.8)',
+                            'rgba(255, 99, 132, 0.8)',
+                            'rgba(255, 205, 86, 0.8)',
+                            'rgba(153, 102, 255, 0.8)'
+                        ],
+                        borderColor: [
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(255, 205, 86, 1)',
+                            'rgba(153, 102, 255, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        })
+        .catch(error => console.error('Error:', error));
+});
+</script>
+{% endblock %}

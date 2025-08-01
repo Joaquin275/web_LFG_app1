@@ -174,3 +174,137 @@ class PedidoHistorico(models.Model):
 
     def __str__(self):
         return f"{self.cantidad} x {self.plato.nombre} - {self.usuario.username} ({self.get_dia_semana_display()}) {self.fecha_emision}"
+
+# -------------------- MODELOS DE PRODUCCIÓN --------------------
+
+class Produccion(models.Model):
+    """Modelo para gestionar la producción de platos"""
+    ESTADO_CHOICES = [
+        ('PLANIFICADA', 'Planificada'),
+        ('EN_PROCESO', 'En Proceso'),
+        ('COMPLETADA', 'Completada'),
+        ('CANCELADA', 'Cancelada'),
+    ]
+    
+    plato = models.ForeignKey(Plato, on_delete=models.CASCADE, related_name='producciones')
+    cantidad_planificada = models.PositiveIntegerField(help_text="Cantidad planificada a producir")
+    cantidad_producida = models.PositiveIntegerField(default=0, help_text="Cantidad realmente producida")
+    fecha_planificada = models.DateField(help_text="Fecha planificada de producción")
+    fecha_inicio = models.DateTimeField(null=True, blank=True, help_text="Fecha y hora de inicio de producción")
+    fecha_completada = models.DateTimeField(null=True, blank=True, help_text="Fecha y hora de finalización")
+    estado = models.CharField(max_length=20, choices=ESTADO_CHOICES, default='PLANIFICADA')
+    
+    # Costos de producción
+    costo_ingredientes = models.DecimalField(max_digits=8, decimal_places=2, default=0, help_text="Costo total de ingredientes")
+    costo_mano_obra = models.DecimalField(max_digits=8, decimal_places=2, default=0, help_text="Costo de mano de obra")
+    otros_costos = models.DecimalField(max_digits=8, decimal_places=2, default=0, help_text="Otros costos de producción")
+    
+    # Responsable
+    responsable = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, help_text="Responsable de la producción")
+    
+    # Notas
+    notas = models.TextField(blank=True, help_text="Notas adicionales sobre la producción")
+    
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        ordering = ['-fecha_planificada', '-created_at']
+        verbose_name = "Producción"
+        verbose_name_plural = "Producciones"
+    
+    def __str__(self):
+        return f"Producción {self.plato.nombre} - {self.fecha_planificada} ({self.get_estado_display()})"
+    
+    @property
+    def costo_total(self):
+        return self.costo_ingredientes + self.costo_mano_obra + self.otros_costos
+    
+    @property
+    def porcentaje_completado(self):
+        if self.cantidad_planificada > 0:
+            return min((self.cantidad_producida / self.cantidad_planificada) * 100, 100)
+        return 0
+    
+    @property
+    def eficiencia(self):
+        """Calcula la eficiencia de producción basada en tiempo planificado vs real"""
+        if self.fecha_inicio and self.fecha_completada and self.estado == 'COMPLETADA':
+            tiempo_real = (self.fecha_completada - self.fecha_inicio).total_seconds() / 3600  # horas
+            # Asumimos 8 horas como tiempo estándar por lote
+            tiempo_estandar = 8
+            return min((tiempo_estandar / tiempo_real) * 100, 100) if tiempo_real > 0 else 0
+        return 0
+
+class Inventario(models.Model):
+    """Modelo para gestionar el inventario de platos producidos"""
+    plato = models.ForeignKey(Plato, on_delete=models.CASCADE, related_name='inventario')
+    cantidad_disponible = models.PositiveIntegerField(default=0, help_text="Cantidad disponible en inventario")
+    cantidad_reservada = models.PositiveIntegerField(default=0, help_text="Cantidad reservada para pedidos")
+    fecha_produccion = models.DateField(help_text="Fecha de producción del lote")
+    fecha_vencimiento = models.DateField(help_text="Fecha de vencimiento")
+    ubicacion = models.CharField(max_length=100, blank=True, help_text="Ubicación física del inventario")
+    
+    # Lote de producción relacionado
+    produccion = models.ForeignKey(Produccion, on_delete=models.CASCADE, related_name='inventario_generado')
+    
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        ordering = ['fecha_vencimiento', 'fecha_produccion']
+        verbose_name = "Inventario"
+        verbose_name_plural = "Inventarios"
+    
+    def __str__(self):
+        return f"{self.plato.nombre} - {self.cantidad_disponible} unidades (Vence: {self.fecha_vencimiento})"
+    
+    @property
+    def cantidad_total(self):
+        return self.cantidad_disponible + self.cantidad_reservada
+    
+    @property
+    def dias_hasta_vencimiento(self):
+        from datetime import date
+        return (self.fecha_vencimiento - date.today()).days
+    
+    @property
+    def estado_frescura(self):
+        dias = self.dias_hasta_vencimiento
+        if dias < 0:
+            return 'VENCIDO'
+        elif dias <= 1:
+            return 'CRITICO'
+        elif dias <= 2:
+            return 'ADVERTENCIA'
+        else:
+            return 'FRESCO'
+
+class MovimientoInventario(models.Model):
+    """Modelo para registrar movimientos de inventario"""
+    TIPO_MOVIMIENTO_CHOICES = [
+        ('ENTRADA', 'Entrada (Producción)'),
+        ('SALIDA', 'Salida (Venta)'),
+        ('AJUSTE', 'Ajuste de Inventario'),
+        ('MERMA', 'Merma/Desperdicio'),
+    ]
+    
+    inventario = models.ForeignKey(Inventario, on_delete=models.CASCADE, related_name='movimientos')
+    tipo_movimiento = models.CharField(max_length=20, choices=TIPO_MOVIMIENTO_CHOICES)
+    cantidad = models.IntegerField(help_text="Cantidad (positiva para entrada, negativa para salida)")
+    motivo = models.CharField(max_length=200, help_text="Motivo del movimiento")
+    
+    # Referencias opcionales
+    recibo = models.ForeignKey(Recibo, on_delete=models.SET_NULL, null=True, blank=True, help_text="Recibo relacionado (si es venta)")
+    usuario_responsable = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+    
+    fecha_movimiento = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        ordering = ['-fecha_movimiento']
+        verbose_name = "Movimiento de Inventario"
+        verbose_name_plural = "Movimientos de Inventario"
+    
+    def __str__(self):
+        signo = "+" if self.cantidad >= 0 else ""
+        return f"{self.inventario.plato.nombre} - {signo}{self.cantidad} ({self.get_tipo_movimiento_display()})"

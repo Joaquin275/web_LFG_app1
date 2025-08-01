@@ -61,6 +61,8 @@ CSRF_COOKIE_SAMESITE = 'Lax'
 # Application definition
 
 INSTALLED_APPS = [
+    'admin_interface',
+    'colorfield',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
