@@ -1,0 +1,333 @@
+/* ==================== FAMILIA GASTRO CUSTOM JAZZMIN STYLES ==================== */
+
+/* Brand Colors */
+:root {
+    --familia-primary: #667eea;
+    --familia-secondary: #764ba2;
+    --familia-success: #43e97b;
+    --familia-warning: #f093fb;
+    --familia-danger: #f5576c;
+    --familia-info: #4facfe;
+}
+
+/* Custom Brand Styling */
+.brand-link {
+    background: linear-gradient(135deg, var(--familia-primary) 0%, var(--familia-secondary) 100%) !important;
+    border-bottom: 3px solid rgba(255,255,255,0.2) !important;
+}
+
+.brand-text {
+    font-weight: 700 !important;
+    font-size: 1.2rem !important;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.3) !important;
+}
+
+/* Sidebar Enhancements */
+.main-sidebar {
+    box-shadow: 2px 0 10px rgba(0,0,0,0.1) !important;
+}
+
+.nav-sidebar .nav-item .nav-link {
+    border-radius: 8px !important;
+    margin: 2px 8px !important;
+    transition: all 0.3s ease !important;
+}
+
+.nav-sidebar .nav-item .nav-link:hover {
+    background: rgba(255,255,255,0.1) !important;
+    transform: translateX(5px) !important;
+}
+
+.nav-sidebar .nav-item .nav-link.active {
+    background: linear-gradient(135deg, var(--familia-primary) 0%, var(--familia-secondary) 100%) !important;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4) !important;
+}
+
+/* Dashboard Cards */
+.card {
+    border-radius: 15px !important;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1) !important;
+    border: none !important;
+    transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+}
+
+.card:hover {
+    transform: translateY(-5px) !important;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.15) !important;
+}
+
+.card-header {
+    background: linear-gradient(135deg, var(--familia-primary) 0%, var(--familia-secondary) 100%) !important;
+    color: white !important;
+    border-radius: 15px 15px 0 0 !important;
+    border: none !important;
+    font-weight: 600 !important;
+}
+
+/* Info Boxes (Statistics Cards) */
+.info-box {
+    border-radius: 15px !important;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1) !important;
+    border: none !important;
+    overflow: hidden !important;
+    transition: transform 0.3s ease !important;
+}
+
+.info-box:hover {
+    transform: translateY(-5px) !important;
+}
+
+.info-box-icon {
+    border-radius: 15px 0 0 15px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.bg-info {
+    background: linear-gradient(135deg, var(--familia-info) 0%, #00f2fe 100%) !important;
+}
+
+.bg-success {
+    background: linear-gradient(135deg, var(--familia-success) 0%, #38f9d7 100%) !important;
+}
+
+.bg-warning {
+    background: linear-gradient(135deg, var(--familia-warning) 0%, var(--familia-danger) 100%) !important;
+}
+
+.bg-primary {
+    background: linear-gradient(135deg, var(--familia-primary) 0%, var(--familia-secondary) 100%) !important;
+}
+
+/* Buttons */
+.btn {
+    border-radius: 10px !important;
+    font-weight: 600 !important;
+    transition: all 0.3s ease !important;
+}
+
+.btn:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2) !important;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--familia-primary) 0%, var(--familia-secondary) 100%) !important;
+    border: none !important;
+}
+
+.btn-success {
+    background: linear-gradient(135deg, var(--familia-success) 0%, #38f9d7 100%) !important;
+    border: none !important;
+}
+
+.btn-warning {
+    background: linear-gradient(135deg, var(--familia-warning) 0%, var(--familia-danger) 100%) !important;
+    border: none !important;
+}
+
+.btn-info {
+    background: linear-gradient(135deg, var(--familia-info) 0%, #00f2fe 100%) !important;
+    border: none !important;
+}
+
+/* Tables */
+.table {
+    border-radius: 10px !important;
+    overflow: hidden !important;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1) !important;
+}
+
+.table thead th {
+    background: linear-gradient(135deg, var(--familia-primary) 0%, var(--familia-secondary) 100%) !important;
+    color: white !important;
+    border: none !important;
+    font-weight: 600 !important;
+}
+
+.table tbody tr:hover {
+    background: rgba(102, 126, 234, 0.05) !important;
+}
+
+/* Forms */
+.form-control {
+    border-radius: 10px !important;
+    border: 2px solid #e9ecef !important;
+    transition: all 0.3s ease !important;
+}
+
+.form-control:focus {
+    border-color: var(--familia-primary) !important;
+    box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25) !important;
+}
+
+/* Navbar */
+.navbar {
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1) !important;
+}
+
+.navbar-nav .nav-link {
+    border-radius: 8px !important;
+    margin: 0 5px !important;
+    transition: all 0.3s ease !important;
+}
+
+.navbar-nav .nav-link:hover {
+    background: rgba(255,255,255,0.1) !important;
+}
+
+/* Content Wrapper */
+.content-wrapper {
+    background: linear-gradient(135deg, #f8f9ff 0%, #f0f4ff 100%) !important;
+}
+
+/* Pagination */
+.pagination .page-link {
+    border-radius: 8px !important;
+    margin: 0 2px !important;
+    border: 2px solid #e9ecef !important;
+    color: var(--familia-primary) !important;
+}
+
+.pagination .page-item.active .page-link {
+    background: linear-gradient(135deg, var(--familia-primary) 0%, var(--familia-secondary) 100%) !important;
+    border-color: var(--familia-primary) !important;
+}
+
+/* Alerts */
+.alert {
+    border-radius: 10px !important;
+    border: none !important;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1) !important;
+}
+
+.alert-success {
+    background: linear-gradient(135deg, rgba(67, 233, 123, 0.1) 0%, rgba(56, 249, 215, 0.1) 100%) !important;
+    border-left: 4px solid var(--familia-success) !important;
+    color: #155724 !important;
+}
+
+.alert-warning {
+    background: linear-gradient(135deg, rgba(240, 147, 251, 0.1) 0%, rgba(245, 87, 108, 0.1) 100%) !important;
+    border-left: 4px solid var(--familia-warning) !important;
+    color: #856404 !important;
+}
+
+.alert-danger {
+    background: linear-gradient(135deg, rgba(245, 87, 108, 0.1) 0%, rgba(240, 147, 251, 0.1) 100%) !important;
+    border-left: 4px solid var(--familia-danger) !important;
+    color: #721c24 !important;
+}
+
+.alert-info {
+    background: linear-gradient(135deg, rgba(79, 172, 254, 0.1) 0%, rgba(0, 242, 254, 0.1) 100%) !important;
+    border-left: 4px solid var(--familia-info) !important;
+    color: #0c5460 !important;
+}
+
+/* Dashboard Specific Styles */
+.dashboard-card {
+    background: linear-gradient(135deg, var(--familia-primary) 0%, var(--familia-secondary) 100%) !important;
+    border: none !important;
+    border-radius: 15px !important;
+    color: white !important;
+    transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+}
+
+.dashboard-card:hover {
+    transform: translateY(-5px) !important;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2) !important;
+}
+
+.dashboard-card.success {
+    background: linear-gradient(135deg, var(--familia-success) 0%, #38f9d7 100%) !important;
+}
+
+.dashboard-card.warning {
+    background: linear-gradient(135deg, var(--familia-warning) 0%, var(--familia-danger) 100%) !important;
+}
+
+.dashboard-card.info {
+    background: linear-gradient(135deg, var(--familia-info) 0%, #00f2fe 100%) !important;
+}
+
+.stat-icon {
+    font-size: 2.5rem !important;
+    opacity: 0.8 !important;
+}
+
+/* Chart Containers */
+.chart-container {
+    background: white !important;
+    border-radius: 15px !important;
+    padding: 25px !important;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1) !important;
+    margin-bottom: 25px !important;
+    border: 1px solid #e3e6f0 !important;
+}
+
+/* Loading Spinner */
+.spinner-border {
+    color: var(--familia-primary) !important;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, var(--familia-primary) 0%, var(--familia-secondary) 100%);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, var(--familia-secondary) 0%, var(--familia-primary) 100%);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .dashboard-card {
+        margin-bottom: 20px !important;
+    }
+    
+    .chart-container {
+        padding: 15px !important;
+    }
+    
+    .card {
+        margin-bottom: 15px !important;
+    }
+}
+
+/* Animation Classes */
+.fade-in {
+    animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.slide-in-left {
+    animation: slideInLeft 0.5s ease-out;
+}
+
+@keyframes slideInLeft {
+    from { opacity: 0; transform: translateX(-30px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+/* Footer */
+.main-footer {
+    background: linear-gradient(135deg, var(--familia-primary) 0%, var(--familia-secondary) 100%) !important;
+    color: white !important;
+    border-top: none !important;
+}
