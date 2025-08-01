@@ -311,6 +311,48 @@ def procesar_pago(request):
 
     return redirect('pago')
 
+def admin_status_check(request):
+    """Vista para verificar el estado del admin"""
+    from django.contrib.admin.sites import site
+    from django.contrib.auth.models import User
+    
+    try:
+        # Verificar que el admin esté funcionando
+        admin_urls = []
+        for model, model_admin in site._registry.items():
+            app_label = model._meta.app_label
+            model_name = model._meta.model_name
+            admin_urls.append({
+                'model': f"{app_label}.{model_name}",
+                'url': f"/admin/{app_label}/{model_name}/",
+                'name': model._meta.verbose_name_plural
+            })
+        
+        # Verificar usuarios
+        total_users = User.objects.count()
+        admin_users = User.objects.filter(is_staff=True).count()
+        
+        context = {
+            'admin_working': True,
+            'total_models': len(admin_urls),
+            'admin_urls': admin_urls[:10],  # Mostrar solo los primeros 10
+            'total_users': total_users,
+            'admin_users': admin_users,
+            'error': None
+        }
+        
+    except Exception as e:
+        context = {
+            'admin_working': False,
+            'error': str(e),
+            'total_models': 0,
+            'admin_urls': [],
+            'total_users': 0,
+            'admin_users': 0
+        }
+    
+    return render(request, 'admin_status_check.html', context)
+
 def design_demo(request):
     """Vista para mostrar el diseño corporativo actualizado"""
     from .models import Plato, DisponibilidadPlato, Cliente, Recibo

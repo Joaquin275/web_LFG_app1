@@ -471,10 +471,10 @@
                     <h2>
                         {% if app.name == 'Myapp' %}
                             🍽️ Familia Gastro
-                        {% elif app.name == 'Authentication and Authorization' %}
+                        {% elif app.name == 'Authentication and Authorization' or app.name == 'Autenticación y autorización' %}
                             🔐 Usuarios y Permisos
                         {% else %}
-                            📁 {{ app.name|capfirst|default:app.label }}
+                            📁 {{ app.name|capfirst }}
                         {% endif %}
                     </h2>
                     {% if app.models %}

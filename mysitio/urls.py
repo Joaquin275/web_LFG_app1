@@ -61,6 +61,7 @@ urlpatterns = [
     path('admin_test/', views.admin_test, name='admin_test'),
     path('test_admin_links/', views.test_admin_links, name='test_admin_links'),
     path('design_demo/', views.design_demo, name='design_demo'),
+    path('admin_status/', views.admin_status_check, name='admin_status_check'),
     path('pago/', views.pago, name='pago'),
     path('eliminar-item/<int:item_id>/', views.eliminar_carrito_item, name='eliminar_item'),
 ] 

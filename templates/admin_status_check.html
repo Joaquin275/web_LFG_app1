@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estado del Admin - Familia Gastro</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --color-primary: #b71c1c;
+            --color-success: #28a745;
+            --color-danger: #dc3545;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .status-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid #dee2e6;
+        }
+        
+        .status-success {
+            border-left: 5px solid var(--color-success);
+        }
+        
+        .status-error {
+            border-left: 5px solid var(--color-danger);
+        }
+        
+        .metric {
+            text-align: center;
+            padding: 1rem;
+            margin: 0.5rem;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+        
+        .metric-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--color-primary);
+        }
+        
+        .metric-label {
+            font-size: 0.9rem;
+            color: #6c757d;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-12">
+                <h1 class="text-center mb-5" style="color: var(--color-primary);">
+                    🔍 Estado del Sistema Admin - Familia Gastro
+                </h1>
+            </div>
+        </div>
+        
+        {% if admin_working %}
+        <div class="row">
+            <div class="col-12">
+                <div class="status-card status-success">
+                    <div class="d-flex align-items-center mb-4">
+                        <div class="me-3">
+                            <span style="font-size: 3rem;">✅</span>
+                        </div>
+                        <div>
+                            <h3 class="mb-0" style="color: var(--color-success);">Sistema Admin Funcionando Correctamente</h3>
+                            <p class="mb-0 text-muted">Todos los componentes están operativos</p>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="metric">
+                                <div class="metric-number">{{ total_models }}</div>
+                                <div class="metric-label">Modelos Registrados</div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="metric">
+                                <div class="metric-number">{{ total_users }}</div>
+                                <div class="metric-label">Usuarios Totales</div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="metric">
+                                <div class="metric-number">{{ admin_users }}</div>
+                                <div class="metric-label">Usuarios Admin</div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="metric">
+                                <div class="metric-number">🍽️</div>
+                                <div class="metric-label">Sistema Activo</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-12">
+                <div class="status-card">
+                    <h4 style="color: var(--color-primary);">📋 Modelos Disponibles en el Admin</h4>
+                    <div class="row">
+                        {% for url in admin_urls %}
+                        <div class="col-md-6 col-lg-4 mb-2">
+                            <div class="p-3 bg-light rounded">
+                                <strong>{{ url.name }}</strong><br>
+                                <small class="text-muted">{{ url.model }}</small><br>
+                                <a href="{{ url.url }}" class="btn btn-sm btn-outline-primary mt-1">
+                                    Ver en Admin
+                                </a>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        {% else %}
+        <div class="row">
+            <div class="col-12">
+                <div class="status-card status-error">
+                    <div class="d-flex align-items-center mb-4">
+                        <div class="me-3">
+                            <span style="font-size: 3rem;">❌</span>
+                        </div>
+                        <div>
+                            <h3 class="mb-0" style="color: var(--color-danger);">Error en el Sistema Admin</h3>
+                            <p class="mb-0 text-muted">Se detectó un problema</p>
+                        </div>
+                    </div>
+                    
+                    <div class="alert alert-danger">
+                        <strong>Error:</strong> {{ error }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        
+        <div class="row">
+            <div class="col-12">
+                <div class="status-card">
+                    <h4 style="color: var(--color-primary);">🔗 Enlaces Rápidos</h4>
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <a href="/admin/" class="btn btn-primary w-100">
+                                🏠 Dashboard Admin
+                            </a>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <a href="/design_demo/" class="btn btn-outline-primary w-100">
+                                🎨 Demo de Diseño
+                            </a>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <a href="/test_admin_links/" class="btn btn-outline-secondary w-100">
+                                🔧 Test de Enlaces
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-12 text-center">
+                <p class="text-muted">
+                    <small>
+                        Última verificación: {{ "now"|date:"d/m/Y H:i:s" }}
+                        <br>
+                        Sistema: Familia Gastro Admin Panel
+                    </small>
+                </p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1941,3 +1941,49 @@ Traceback (most recent call last):
     ^
 django.template.base.VariableDoesNotExist: Failed lookup for key [label] in {'name': 'Autenticación y autorización', 'app_label': 'auth', 'app_url': '/admin/auth/', 'has_module_perms': True, 'models': [{'model': <class 'django.contrib.auth.models.Group'>, 'name': 'Grupos', 'object_name': 'Group', 'perms': {'add': True, 'change': True, 'delete': True, 'view': True}, 'admin_url': '/admin/auth/group/', 'add_url': '/admin/auth/group/add/', 'view_only': False}, {'model': <class 'django.contrib.auth.models.User'>, 'name': 'Usuarios', 'object_name': 'User', 'perms': {'add': True, 'change': True, 'delete': True, 'view': True}, 'admin_url': '/admin/auth/user/', 'add_url': '/admin/auth/user/add/', 'view_only': False}]}
 ERROR 2025-08-01 13:56:15,579 basehttp 65904 140194566104768 "GET /admin/ HTTP/1.1" 500 482875
+INFO 2025-08-01 13:56:51,018 basehttp 65904 140194566104768 "GET /design_demo/ HTTP/1.1" 200 29184
+INFO 2025-08-01 13:57:04,639 basehttp 65904 140194575546048 "HEAD /admin/ HTTP/1.1" 302 0
+INFO 2025-08-01 13:57:09,703 basehttp 65904 140194566104768 "GET /admin/ HTTP/1.1" 200 57730
+INFO 2025-08-01 13:57:10,000 basehttp 65904 140194566104768 "GET /static/admin/css/base.css HTTP/1.1" 304 0
+INFO 2025-08-01 13:57:10,002 basehttp 65904 140194556663488 "GET /static/admin/css/dark_mode.css HTTP/1.1" 304 0
+INFO 2025-08-01 13:57:10,208 basehttp 65904 140194556663488 "GET /static/admin/css/nav_sidebar.css HTTP/1.1" 304 0
+INFO 2025-08-01 13:57:10,210 basehttp 65904 140194566104768 "GET /static/css/admin-custom.css HTTP/1.1" 304 0
+INFO 2025-08-01 13:57:10,413 basehttp 65904 140194575546048 "GET /admin/ HTTP/1.1" 302 0
+INFO 2025-08-01 13:57:11,342 basehttp 65904 140194531485376 "GET /static/admin/js/theme.js HTTP/1.1" 304 0
+INFO 2025-08-01 13:57:11,347 basehttp 65904 140194523092672 "GET /static/admin/css/responsive.css HTTP/1.1" 304 0
+INFO 2025-08-01 13:57:11,573 basehttp 65904 140194523092672 "GET /static/admin/js/nav_sidebar.js HTTP/1.1" 304 0
+INFO 2025-08-01 13:57:11,590 basehttp 65904 140194531485376 "GET /static/admin/img/icon-changelink.svg HTTP/1.1" 304 0
+INFO 2025-08-01 13:57:26,391 autoreload 65904 140194960601344 /workspace/myapp/views.py changed, reloading.
+INFO 2025-08-01 13:57:26,934 autoreload 70530 140638795596032 Watching for file changes with StatReloader
+INFO 2025-08-01 13:57:50,290 basehttp 70530 140638478472896 "GET /admin/myapp/inventario/ HTTP/1.1" 200 23249
+INFO 2025-08-01 13:57:50,624 basehttp 70530 140638469031616 "GET /static/admin/css/changelists.css HTTP/1.1" 304 0
+INFO 2025-08-01 13:57:50,630 basehttp 70530 140638459590336 "GET /admin/jsi18n/ HTTP/1.1" 200 8691
+INFO 2025-08-01 13:57:50,702 basehttp 70530 140638478472896 "GET /static/admin/js/vendor/jquery/jquery.js HTTP/1.1" 304 0
+INFO 2025-08-01 13:57:50,833 basehttp 70530 140638469031616 "GET /static/admin/js/jquery.init.js HTTP/1.1" 304 0
+INFO 2025-08-01 13:57:50,848 basehttp 70530 140638459590336 "GET /static/admin/js/core.js HTTP/1.1" 304 0
+INFO 2025-08-01 13:57:50,912 basehttp 70530 140638478472896 "GET /static/admin/js/admin/RelatedObjectLookups.js HTTP/1.1" 304 0
+INFO 2025-08-01 13:57:51,046 basehttp 70530 140638469031616 "GET /static/admin/js/vendor/xregexp/xregexp.js HTTP/1.1" 304 0
+INFO 2025-08-01 13:57:51,064 basehttp 70530 140638459590336 "GET /static/admin/img/search.svg HTTP/1.1" 304 0
+INFO 2025-08-01 13:57:51,857 basehttp 70530 140638451197632 "GET /static/admin/js/actions.js HTTP/1.1" 304 0
+INFO 2025-08-01 13:57:51,865 basehttp 70530 140638100125376 "GET /static/admin/js/urlify.js HTTP/1.1" 304 0
+INFO 2025-08-01 13:57:51,878 basehttp 70530 140638091732672 "GET /static/admin/js/prepopulate.js HTTP/1.1" 304 0
+INFO 2025-08-01 13:57:52,089 basehttp 70530 140638091732672 "GET /static/admin/js/filters.js HTTP/1.1" 304 0
+INFO 2025-08-01 13:57:52,123 basehttp 70530 140638100125376 "GET /static/admin/img/sorting-icons.svg HTTP/1.1" 304 0
+INFO 2025-08-01 13:58:03,596 autoreload 70530 140638795596032 /workspace/mysitio/urls.py changed, reloading.
+INFO 2025-08-01 13:58:04,095 autoreload 70845 139850767933696 Watching for file changes with StatReloader
+INFO 2025-08-01 13:58:05,495 basehttp 70845 139850376279744 "GET /admin/ HTTP/1.1" 200 57730
+INFO 2025-08-01 13:58:09,223 basehttp 70845 139850351101632 "GET /admin_status/ HTTP/1.1" 200 11452
+INFO 2025-08-01 13:58:10,711 basehttp 70845 139850376279744 "GET /admin/myapp/cliente/add/ HTTP/1.1" 200 37407
+INFO 2025-08-01 13:58:10,970 basehttp 70845 139850376279744 "GET /static/admin/img/icon-addlink.svg HTTP/1.1" 304 0
+INFO 2025-08-01 13:58:10,971 basehttp 70845 139850367887040 "GET /static/admin/img/icon-viewlink.svg HTTP/1.1" 304 0
+INFO 2025-08-01 13:58:15,884 basehttp 70845 139850351101632 "HEAD /admin_status/ HTTP/1.1" 200 0
+INFO 2025-08-01 13:58:16,395 basehttp 70845 139850367887040 "GET /admin/myapp/cliente/ HTTP/1.1" 200 25150
+INFO 2025-08-01 13:58:16,655 basehttp 70845 139850376279744 "GET /admin/jsi18n/ HTTP/1.1" 200 8691
+INFO 2025-08-01 13:58:16,807 basehttp 70845 139850367887040 "GET /static/admin/img/icon-no.svg HTTP/1.1" 304 0
+INFO 2025-08-01 13:58:16,813 basehttp 70845 139850359494336 "GET /static/admin/img/icon-yes.svg HTTP/1.1" 304 0
+INFO 2025-08-01 13:58:24,124 basehttp 70845 139850359494336 "GET /admin/myapp/cliente/8/change/ HTTP/1.1" 200 37599
+INFO 2025-08-01 13:58:37,610 autoreload 71382 140323990139136 Watching for file changes with StatReloader
+INFO 2025-08-01 13:58:44,291 basehttp 71382 140323673024192 "GET /admin/ HTTP/1.1" 200 57730
+INFO 2025-08-01 13:58:57,435 basehttp 71382 140323673024192 "GET /admin/myapp/plato/add/ HTTP/1.1" 200 49768
+WARNING 2025-08-01 13:59:11,235 log 71382 140323673024192 Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2025-08-01 13:59:11,235 basehttp 71382 140323673024192 "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 6780
