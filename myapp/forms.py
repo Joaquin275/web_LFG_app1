@@ -35,9 +35,26 @@ class DisponibilidadPlatoForm(forms.ModelForm):
         model = DisponibilidadPlato
         fields = '__all__'
         widgets = {
-            'plato': forms.Select(attrs={'class': 'form-control'}),
-            'dia': forms.Select(attrs={'class': 'form-control'}),
+            'plato': forms.Select(attrs={
+                'class': 'form-control',
+                'style': 'width: 100%;'
+            }),
+            'dia': forms.Select(attrs={
+                'class': 'form-control',
+                'style': 'width: 100%;'
+            }),
         }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        
+        # Mejorar las opciones del formulario
+        if 'plato' in self.fields:
+            self.fields['plato'].queryset = Plato.objects.all().order_by('nombre')
+            self.fields['plato'].empty_label = "Selecciona un plato..."
+            
+        if 'dia' in self.fields:
+            self.fields['dia'].empty_label = "Selecciona un día..."
 
     def clean(self):
         cleaned_data = super().clean()
@@ -45,13 +62,17 @@ class DisponibilidadPlatoForm(forms.ModelForm):
         dia = cleaned_data.get('dia')
 
         if plato and dia:
-            # Excluir el objeto actual si estamos editando
+            # Verificar si ya existe esta combinación
             qs = DisponibilidadPlato.objects.filter(plato=plato, dia=dia)
-            if self.instance.pk:
+            
+            # Si estamos editando, excluir el objeto actual
+            if self.instance and self.instance.pk:
                 qs = qs.exclude(pk=self.instance.pk)
             
             if qs.exists():
-                raise ValidationError("Este plato ya está asignado para ese día.")
+                raise ValidationError({
+                    '__all__': f"El plato '{plato.nombre}' ya está disponible el {dict(DisponibilidadPlato.DIAS_SEMANA)[dia]}."
+                })
 
         return cleaned_data
 

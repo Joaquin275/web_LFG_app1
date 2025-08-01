@@ -984,3 +984,17 @@ WARNING 2025-08-01 13:06:01,633 log 44296 139715311761088 Not Found: /.well-know
 WARNING 2025-08-01 13:06:01,633 basehttp 44296 139715311761088 "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 6064
 WARNING 2025-08-01 13:06:01,847 log 44296 139715311761088 Not Found: /.well-known/appspecific/com.chrome.devtools.json
 WARNING 2025-08-01 13:06:01,848 basehttp 44296 139715311761088 "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 6064
+INFO 2025-08-01 13:08:51,732 autoreload 44296 139715646025984 /workspace/myapp/admin.py changed, reloading.
+INFO 2025-08-01 13:08:52,226 autoreload 50129 140172596609280 Watching for file changes with StatReloader
+INFO 2025-08-01 13:09:22,663 autoreload 50129 140172596609280 /workspace/myapp/forms.py changed, reloading.
+INFO 2025-08-01 13:09:23,140 autoreload 50364 140293411143936 Watching for file changes with StatReloader
+INFO 2025-08-01 13:09:36,163 basehttp 50364 140293026346688 "HEAD /admin/myapp/disponibilidadplato/1/change/ HTTP/1.1" 302 0
+INFO 2025-08-01 13:10:08,737 autoreload 50364 140293411143936 /workspace/myapp/views.py changed, reloading.
+INFO 2025-08-01 13:10:09,262 autoreload 50681 139654303424768 Watching for file changes with StatReloader
+INFO 2025-08-01 13:10:35,761 autoreload 50681 139654303424768 /workspace/mysitio/urls.py changed, reloading.
+INFO 2025-08-01 13:10:36,279 autoreload 50924 139740960555264 Watching for file changes with StatReloader
+INFO 2025-08-01 13:10:40,731 basehttp 50924 139740575692480 "HEAD /admin_test/ HTTP/1.1" 200 0
+INFO 2025-08-01 13:11:10,946 basehttp 50924 139740575692480 "HEAD /admin/ HTTP/1.1" 302 0
+INFO 2025-08-01 13:11:10,953 basehttp 50924 139740566251200 "HEAD /admin/myapp/plato/add/ HTTP/1.1" 302 0
+INFO 2025-08-01 13:11:10,960 basehttp 50924 139740557858496 "HEAD /admin/myapp/disponibilidadplato/1/change/ HTTP/1.1" 302 0
+INFO 2025-08-01 13:11:10,966 basehttp 50924 139740549465792 "HEAD /admin/myapp/disponibilidadplato/ HTTP/1.1" 302 0

@@ -311,6 +311,27 @@ def procesar_pago(request):
 
     return redirect('pago')
 
+def admin_test(request):
+    """Vista de diagnóstico para verificar el funcionamiento del admin"""
+    from django.contrib.admin.sites import site
+    from .models import DisponibilidadPlato, Plato
+    
+    # Información de diagnóstico
+    diagnostics = {
+        'total_platos': Plato.objects.count(),
+        'total_disponibilidades': DisponibilidadPlato.objects.count(),
+        'platos_con_imagen': Plato.objects.exclude(imagen__isnull=True).exclude(imagen__exact='').count(),
+        'admin_registered_models': len(site._registry),
+        'disponibilidades_por_dia': {}
+    }
+    
+    # Disponibilidades por día
+    for dia_code, dia_name in DisponibilidadPlato.DIAS_SEMANA:
+        count = DisponibilidadPlato.objects.filter(dia=dia_code).count()
+        diagnostics['disponibilidades_por_dia'][dia_name] = count
+    
+    return render(request, 'admin_test.html', {'diagnostics': diagnostics})
+
 def test_images(request):
     """Vista de prueba para verificar que las imágenes funcionan"""
     platos = Plato.objects.all()

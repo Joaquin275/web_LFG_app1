@@ -42,6 +42,19 @@ class ClienteAdmin(admin.ModelAdmin):
     list_filter = ('es_particular', 'empresa', 'importante')
     search_fields = ('Nombre_Completo', 'usuario__username', 'celular', 'dni', 'correo')
     readonly_fields = ('Creacion_cuenta',)
+    
+    fieldsets = (
+        ('Información Personal', {
+            'fields': ('Nombre_Completo', 'usuario', 'celular', 'dni', 'correo')
+        }),
+        ('Tipo de Cliente', {
+            'fields': ('es_particular', 'empresa', 'direccion_particular')
+        }),
+        ('Configuración', {
+            'fields': ('importante', 'Creacion_cuenta'),
+            'classes': ('collapse',)
+        }),
+    )
 
 class EmpresaAdmin(admin.ModelAdmin):
     list_display = ('codigo', 'nombre', 'cif', 'direccion')
@@ -49,21 +62,71 @@ class EmpresaAdmin(admin.ModelAdmin):
     ordering = ('codigo',)
 
 class PlatoAdmin(admin.ModelAdmin):
-    list_display = ('codigo', 'nombre', 'grupo', 'precio', 'precio_sin_iva', 'estado')
+    list_display = ('codigo', 'nombre', 'grupo', 'precio', 'precio_sin_iva', 'estado', 'imagen_preview')
     list_filter = ('grupo', 'estado')
     search_fields = ('codigo', 'nombre', 'ingredientes', 'alergenos')
-    readonly_fields = ('precio_sin_iva',)
+    readonly_fields = ('precio_sin_iva', 'imagen_preview')
     list_per_page = 20
+    
+    fieldsets = (
+        ('Información Básica', {
+            'fields': ('codigo', 'nombre', 'descripcion', 'grupo', 'estado')
+        }),
+        ('Imagen', {
+            'fields': ('imagen', 'imagen_preview'),
+            'description': 'Sube una imagen para el plato. Se mostrará en el sitio web.'
+        }),
+        ('Precios', {
+            'fields': ('precio', 'precio_sin_iva')
+        }),
+        ('Detalles del Producto', {
+            'fields': ('kilogramos', 'ingredientes', 'alergenos', 'vida_util'),
+            'classes': ('collapse',)
+        }),
+        ('Información Nutricional', {
+            'fields': ('calorias', 'proteinas', 'grasa', 'carbohidratos', 'sodio'),
+            'classes': ('collapse',)
+        }),
+    )
+    
+    def imagen_preview(self, obj):
+        if obj.imagen:
+            return format_html(
+                '<img src="{}" style="width: 100px; height: 70px; object-fit: cover; border-radius: 5px;" />',
+                obj.imagen.url
+            )
+        return "Sin imagen"
+    imagen_preview.short_description = "Vista previa"
 
 class DisponibilidadPlatoAdmin(admin.ModelAdmin):
     form = DisponibilidadPlatoForm
-    list_display = ('plato', 'dia_display')
-    list_filter = ('dia', 'plato__grupo')
+    list_display = ('plato', 'dia_display', 'plato_grupo', 'plato_precio')
+    list_filter = ('dia', 'plato__grupo', 'plato__estado')
     search_fields = ('plato__nombre', 'plato__codigo')
+    list_per_page = 50
+    
+    # Permitir edición inline más fácil
+    list_editable = ()  # Quitamos edición inline para evitar problemas
     
     def dia_display(self, obj):
         return obj.get_dia_display()
     dia_display.short_description = 'Día'
+    
+    def plato_grupo(self, obj):
+        return obj.plato.get_grupo_display()
+    plato_grupo.short_description = 'Grupo'
+    
+    def plato_precio(self, obj):
+        return f"€{obj.plato.precio}"
+    plato_precio.short_description = 'Precio'
+    
+    # Mejorar el formulario de cambio
+    fieldsets = (
+        (None, {
+            'fields': ('plato', 'dia'),
+            'description': 'Selecciona el plato y el día de la semana en que estará disponible.'
+        }),
+    )
 
 class CarritoItemAdmin(admin.ModelAdmin):
     form = CarritoItemForm
@@ -165,6 +228,33 @@ class PedidoHistoricoAdmin(admin.ModelAdmin):
     list_filter = ('dia_semana', 'fecha_emision', 'plato__grupo')
     search_fields = ('usuario__username', 'plato__nombre')
     actions = [exportar_pedidos_excel]
+
+# ==================== ACTIONS PERSONALIZADAS ====================
+
+def duplicar_disponibilidad_semana(modeladmin, request, queryset):
+    """Duplicar disponibilidades para todos los días de la semana"""
+    platos_seleccionados = set()
+    for disp in queryset:
+        platos_seleccionados.add(disp.plato)
+    
+    dias_semana = ['LUN', 'MAR', 'MIE', 'JUE', 'VIE', 'SAB', 'DOM']
+    creados = 0
+    
+    for plato in platos_seleccionados:
+        for dia in dias_semana:
+            _, created = DisponibilidadPlato.objects.get_or_create(
+                plato=plato,
+                dia=dia
+            )
+            if created:
+                creados += 1
+    
+    modeladmin.message_user(request, f"Se crearon {creados} nuevas disponibilidades.")
+
+duplicar_disponibilidad_semana.short_description = "Hacer disponible toda la semana"
+
+# Agregar la acción al admin
+DisponibilidadPlatoAdmin.actions = [duplicar_disponibilidad_semana]
 
 # ==================== SITIO ADMIN PERSONALIZADO ====================
 

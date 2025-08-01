@@ -58,6 +58,7 @@ urlpatterns = [
     path('pago-exitoso/', views.pago_exitoso, name='pago_exitoso'),
     path('pago-fallido/', views.pago_fallido, name='pago_fallido'),
     path('test_images/', views.test_images, name='test_images'),
+    path('admin_test/', views.admin_test, name='admin_test'),
     path('pago/', views.pago, name='pago'),
     path('eliminar-item/<int:item_id>/', views.eliminar_carrito_item, name='eliminar_item'),
 ] 
