@@ -311,6 +311,35 @@ def procesar_pago(request):
 
     return redirect('pago')
 
+def test_admin_links(request):
+    """Vista para probar que los enlaces del admin funcionan"""
+    from django.urls import reverse
+    from .models import DisponibilidadPlato
+    
+    # Obtener algunas disponibilidades para probar
+    disponibilidades = DisponibilidadPlato.objects.all()[:5]
+    
+    test_data = []
+    for disp in disponibilidades:
+        try:
+            edit_url = reverse('admin:myapp_disponibilidadplato_change', args=[disp.id])
+            test_data.append({
+                'id': disp.id,
+                'plato': disp.plato.nombre,
+                'dia': disp.get_dia_display(),
+                'edit_url': edit_url,
+                'full_url': f'http://localhost:8000{edit_url}'
+            })
+        except Exception as e:
+            test_data.append({
+                'id': disp.id,
+                'plato': disp.plato.nombre,
+                'dia': disp.get_dia_display(),
+                'error': str(e)
+            })
+    
+    return render(request, 'test_admin_links.html', {'test_data': test_data})
+
 def admin_test(request):
     """Vista de diagnóstico para verificar el funcionamiento del admin"""
     from django.contrib.admin.sites import site

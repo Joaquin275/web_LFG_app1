@@ -100,11 +100,20 @@ class PlatoAdmin(admin.ModelAdmin):
 
 class DisponibilidadPlatoAdmin(admin.ModelAdmin):
     form = DisponibilidadPlatoForm
-    list_display = ('id', 'plato', 'dia_display', 'plato_grupo', 'plato_precio')
+    list_display = ('id', 'plato_link', 'dia_display', 'plato_grupo', 'plato_precio', 'editar_link')
     list_filter = ('dia', 'plato__grupo', 'plato__estado')
     search_fields = ('plato__nombre', 'plato__codigo')
     list_per_page = 50
     ordering = ('plato__nombre', 'dia')
+    
+    def plato_link(self, obj):
+        """Hacer el nombre del plato clickeable para editar"""
+        from django.urls import reverse
+        from django.utils.html import format_html
+        url = reverse('admin:myapp_disponibilidadplato_change', args=[obj.id])
+        return format_html('<a href="{}">{}</a>', url, obj.plato.nombre)
+    plato_link.short_description = 'Plato'
+    plato_link.admin_order_field = 'plato__nombre'
     
     def dia_display(self, obj):
         return obj.get_dia_display()
@@ -121,6 +130,14 @@ class DisponibilidadPlatoAdmin(admin.ModelAdmin):
     plato_precio.short_description = 'Precio'
     plato_precio.admin_order_field = 'plato__precio'
     
+    def editar_link(self, obj):
+        """Botón explícito para editar"""
+        from django.urls import reverse
+        from django.utils.html import format_html
+        url = reverse('admin:myapp_disponibilidadplato_change', args=[obj.id])
+        return format_html('<a href="{}" class="button">✏️ Editar</a>', url)
+    editar_link.short_description = 'Acciones'
+    
     # Configuración del formulario
     fieldsets = (
         ('Configuración de Disponibilidad', {
@@ -129,15 +146,17 @@ class DisponibilidadPlatoAdmin(admin.ModelAdmin):
         }),
     )
     
-    # Mejorar la experiencia de usuario
+    # Asegurar que se pueden editar los registros
     def get_readonly_fields(self, request, obj=None):
-        # No hay campos de solo lectura, permitir editar todo
         return []
     
     def has_change_permission(self, request, obj=None):
         return True
     
     def has_delete_permission(self, request, obj=None):
+        return True
+        
+    def has_add_permission(self, request):
         return True
 
 class CarritoItemAdmin(admin.ModelAdmin):

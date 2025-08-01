@@ -1155,3 +1155,13 @@ INFO 2025-08-01 13:22:14,111 basehttp 54425 139971709105856 "GET /admin/myapp/di
 INFO 2025-08-01 13:22:14,395 basehttp 54425 139971709105856 "GET /admin/jsi18n/ HTTP/1.1" 200 8691
 INFO 2025-08-01 13:22:21,697 basehttp 54425 139971709105856 "GET /admin/myapp/plato/7/change/?_to_field=id&_popup=1&_modal=329864 HTTP/1.1" 200 31090
 INFO 2025-08-01 13:22:26,171 basehttp 54425 139971709105856 "GET /admin/ HTTP/1.1" 200 32139
+INFO 2025-08-01 13:23:46,807 basehttp 54425 139971683927744 "GET /admin/myapp/disponibilidadplato/ HTTP/1.1" 302 0
+INFO 2025-08-01 13:24:03,115 autoreload 54425 139972098384128 /workspace/myapp/admin.py changed, reloading.
+INFO 2025-08-01 13:24:03,612 autoreload 57106 140596525846784 Watching for file changes with StatReloader
+INFO 2025-08-01 13:24:30,057 autoreload 57106 140596525846784 /workspace/myapp/views.py changed, reloading.
+INFO 2025-08-01 13:24:30,547 autoreload 57338 139799594275072 Watching for file changes with StatReloader
+INFO 2025-08-01 13:25:02,044 autoreload 57338 139799594275072 /workspace/mysitio/urls.py changed, reloading.
+INFO 2025-08-01 13:25:02,541 autoreload 57595 140220039758080 Watching for file changes with StatReloader
+INFO 2025-08-01 13:25:06,283 basehttp 57595 140219722618560 "HEAD /test_admin_links/ HTTP/1.1" 200 0
+INFO 2025-08-01 13:25:14,263 basehttp 57595 140219722618560 "GET /test_admin_links/ HTTP/1.1" 200 12653
+INFO 2025-08-01 13:25:35,158 basehttp 57595 140219713177280 "HEAD /admin/myapp/disponibilidadplato/1/change/ HTTP/1.1" 302 0

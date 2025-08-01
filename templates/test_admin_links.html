@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test de Enlaces Admin - Familia Gastro</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="mb-4">🔗 Test de Enlaces de Edición del Admin</h1>
+        
+        <div class="alert alert-info">
+            <h6>ℹ️ Instrucciones:</h6>
+            <p>Haz clic en los enlaces "Editar" para verificar que te lleven a la página de edición correcta.</p>
+        </div>
+        
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h5>📋 Disponibilidades de Prueba</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Plato</th>
+                                        <th>Día</th>
+                                        <th>URL de Edición</th>
+                                        <th>Acción</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for item in test_data %}
+                                    <tr>
+                                        <td><strong>{{ item.id }}</strong></td>
+                                        <td>{{ item.plato }}</td>
+                                        <td>
+                                            <span class="badge bg-secondary">{{ item.dia }}</span>
+                                        </td>
+                                        <td>
+                                            {% if item.edit_url %}
+                                                <code>{{ item.edit_url }}</code>
+                                            {% else %}
+                                                <span class="text-danger">{{ item.error }}</span>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            {% if item.edit_url %}
+                                                <a href="{{ item.edit_url }}" class="btn btn-primary btn-sm" target="_blank">
+                                                    ✏️ Editar
+                                                </a>
+                                                <button class="btn btn-outline-info btn-sm ms-2" onclick="testLink('{{ item.full_url }}')">
+                                                    🧪 Test
+                                                </button>
+                                            {% else %}
+                                                <span class="text-muted">❌ Error</span>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header bg-success text-white">
+                        <h5>🔗 Enlaces Directos al Admin</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <a href="/admin/myapp/disponibilidadplato/" class="btn btn-success w-100">
+                                    📋 Lista de Disponibilidades
+                                </a>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <a href="/admin/myapp/disponibilidadplato/add/" class="btn btn-primary w-100">
+                                    ➕ Agregar Disponibilidad
+                                </a>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <a href="/admin/" class="btn btn-secondary w-100">
+                                    🏠 Admin Principal
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row mt-4">
+            <div class="col-12">
+                <div id="test-results" class="alert alert-light">
+                    <h6>📊 Resultados de Test:</h6>
+                    <p>Haz clic en los botones "🧪 Test" para verificar los enlaces.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function testLink(url) {
+            const resultsDiv = document.getElementById('test-results');
+            
+            fetch(url, { method: 'HEAD' })
+                .then(response => {
+                    if (response.status === 200) {
+                        resultsDiv.innerHTML = `
+                            <h6>✅ Test Exitoso:</h6>
+                            <p>El enlace <code>${url}</code> responde correctamente (${response.status}).</p>
+                        `;
+                        resultsDiv.className = 'alert alert-success';
+                    } else if (response.status === 302) {
+                        resultsDiv.innerHTML = `
+                            <h6>🔄 Redirección (probablemente requiere login):</h6>
+                            <p>El enlace <code>${url}</code> redirige (${response.status}). Esto es normal si no estás logueado.</p>
+                        `;
+                        resultsDiv.className = 'alert alert-warning';
+                    } else {
+                        resultsDiv.innerHTML = `
+                            <h6>⚠️ Respuesta inesperada:</h6>
+                            <p>El enlace <code>${url}</code> respondió con ${response.status}.</p>
+                        `;
+                        resultsDiv.className = 'alert alert-warning';
+                    }
+                })
+                .catch(error => {
+                    resultsDiv.innerHTML = `
+                        <h6>❌ Error en el test:</h6>
+                        <p>No se pudo acceder a <code>${url}</code>. Error: ${error.message}</p>
+                    `;
+                    resultsDiv.className = 'alert alert-danger';
+                });
+        }
+    </script>
+</body>
+</html>
