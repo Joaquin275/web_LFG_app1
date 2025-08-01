@@ -127,7 +127,7 @@ def main(request):
     # 4. Obtener platos disponibles para el día (OPTIMIZADO)
     disponibles = DisponibilidadPlato.objects.filter(
         dia=dia_actual
-    ).select_related('plato').prefetch_related('plato__recibos')
+    ).select_related('plato')
 
     if grupo_actual:
         disponibles = disponibles.filter(plato__grupo=grupo_actual)

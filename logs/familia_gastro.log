@@ -211,3 +211,5 @@ Traceback (most recent call last):
     ...<7 lines>...
     )
 AttributeError: Cannot find 'recibos' on Plato object, 'plato__recibos' is an invalid parameter to prefetch_related()
+INFO 2025-08-01 10:14:20,559 autoreload 7779 140693028237568 /workspace/myapp/views.py changed, reloading.
+INFO 2025-08-01 10:14:20,989 autoreload 8819 140011613966592 Watching for file changes with StatReloader
