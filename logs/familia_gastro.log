@@ -155,3 +155,4 @@ Traceback (most recent call last):
 django.core.exceptions.FieldError: Invalid field name(s) given in select_related: 'cliente'. Choices are: usuario, plato
 INFO 2025-08-01 10:09:47,942 autoreload 6607 139690391392512 Watching for file changes with StatReloader
 WARNING 2025-08-01 10:10:09,005 log 6607 139690079418048 Forbidden: /api/
+INFO 2025-08-01 10:11:59,924 autoreload 7779 140693028237568 Watching for file changes with StatReloader
