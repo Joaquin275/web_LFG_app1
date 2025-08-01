@@ -326,3 +326,4 @@ Traceback (most recent call last):
     )
 django.template.exceptions.TemplateSyntaxError: Invalid block tag on line 14: 'static'. Did you forget to register or load this tag?
 INFO 2025-08-01 11:35:47,300 autoreload 4452 139883892187392 Watching for file changes with StatReloader
+INFO 2025-08-01 11:49:54,193 autoreload 8688 139919427342592 Watching for file changes with StatReloader
