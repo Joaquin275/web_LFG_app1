@@ -1,0 +1,443 @@
+{% extends "admin/change_form.html" %}
+{% load static %}
+
+{% block extrahead %}
+{{ block.super }}
+<style>
+.plato-preview-section {
+    background: var(--color-gray-50);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-6);
+    margin-bottom: var(--spacing-6);
+    border: 1px solid var(--color-gray-200);
+}
+
+.plato-preview-grid {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: var(--spacing-6);
+    align-items: start;
+}
+
+.image-preview-container {
+    text-align: center;
+}
+
+.image-preview-large {
+    max-width: 100%;
+    max-height: 250px;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    border: 3px solid var(--color-gray-200);
+    object-fit: cover;
+    transition: var(--transition-normal);
+}
+
+.image-preview-large:hover {
+    transform: scale(1.05);
+    box-shadow: var(--shadow-xl);
+}
+
+.image-placeholder {
+    width: 100%;
+    height: 200px;
+    background: linear-gradient(135deg, var(--color-gray-100) 0%, var(--color-gray-200) 100%);
+    border-radius: var(--radius-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-gray-500);
+    font-size: var(--font-size-lg);
+    border: 2px dashed var(--color-gray-300);
+}
+
+.plato-info-grid {
+    display: grid;
+    gap: var(--spacing-3);
+}
+
+.info-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-2) 0;
+    border-bottom: 1px solid var(--color-gray-200);
+}
+
+.info-row:last-child {
+    border-bottom: none;
+}
+
+.info-label {
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-gray-600);
+    font-size: var(--font-size-sm);
+}
+
+.info-value {
+    font-weight: var(--font-weight-medium);
+    color: var(--color-gray-800);
+    font-size: var(--font-size-sm);
+}
+
+.price-display {
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-light) 100%);
+    color: var(--color-white);
+    padding: var(--spacing-2) var(--spacing-4);
+    border-radius: var(--radius-md);
+    font-weight: var(--font-weight-bold);
+    font-size: var(--font-size-lg);
+    text-align: center;
+    margin-top: var(--spacing-3);
+}
+
+.nutrition-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: var(--spacing-3);
+    margin-top: var(--spacing-4);
+}
+
+.nutrition-item {
+    background: var(--color-white);
+    padding: var(--spacing-3);
+    border-radius: var(--radius-md);
+    text-align: center;
+    border: 1px solid var(--color-gray-200);
+    box-shadow: var(--shadow-sm);
+}
+
+.nutrition-value {
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-primary);
+    margin-bottom: var(--spacing-1);
+}
+
+.nutrition-label {
+    font-size: var(--font-size-xs);
+    color: var(--color-gray-600);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.status-badge {
+    padding: var(--spacing-1) var(--spacing-3);
+    border-radius: var(--radius-md);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-semibold);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.status-disponible {
+    background: #d1fae5;
+    color: #065f46;
+}
+
+.status-no-disponible {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.quick-actions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--spacing-4);
+    margin-top: var(--spacing-6);
+}
+
+.quick-action-btn {
+    background: var(--color-white);
+    border: 2px solid var(--color-gray-200);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-4);
+    text-decoration: none;
+    color: var(--color-gray-700);
+    transition: var(--transition-normal);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-2);
+}
+
+.quick-action-btn:hover {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+    text-decoration: none;
+}
+
+.quick-action-icon {
+    font-size: var(--font-size-xl);
+}
+
+.quick-action-label {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+}
+
+@media (max-width: 768px) {
+    .plato-preview-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .nutrition-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .quick-actions-grid {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+{% endblock %}
+
+{% block form_top %}
+{% if original %}
+<div class="plato-preview-section">
+    <h3 style="color: var(--color-primary); margin: 0 0 var(--spacing-4) 0; font-size: var(--font-size-xl);">
+        🍽️ Vista Previa del Plato
+    </h3>
+    
+    <div class="plato-preview-grid">
+        <!-- Imagen del plato -->
+        <div class="image-preview-container">
+            {% if original.imagen %}
+                <img src="{{ original.imagen.url }}" alt="{{ original.nombre }}" class="image-preview-large" id="plato-image-preview">
+            {% else %}
+                <div class="image-placeholder" id="plato-image-placeholder">
+                    🍽️<br>Sin imagen
+                </div>
+            {% endif %}
+            
+            {% if original.precio %}
+            <div class="price-display">
+                💰 €{{ original.precio }}
+                {% if original.precio_sin_iva %}
+                    <small style="display: block; opacity: 0.8; font-size: var(--font-size-sm);">
+                        (€{{ original.precio_sin_iva }} sin IVA)
+                    </small>
+                {% endif %}
+            </div>
+            {% endif %}
+        </div>
+        
+        <!-- Información del plato -->
+        <div class="plato-info-grid">
+            <div class="info-row">
+                <span class="info-label">📋 Código:</span>
+                <span class="info-value">{{ original.codigo|default:"No asignado" }}</span>
+            </div>
+            
+            <div class="info-row">
+                <span class="info-label">🏷️ Nombre:</span>
+                <span class="info-value">{{ original.nombre|default:"Sin nombre" }}</span>
+            </div>
+            
+            <div class="info-row">
+                <span class="info-label">📂 Grupo:</span>
+                <span class="info-value">{{ original.get_grupo_display|default:"Sin grupo" }}</span>
+            </div>
+            
+            <div class="info-row">
+                <span class="info-label">📊 Estado:</span>
+                <span class="status-badge {% if original.estado == 'disponible' %}status-disponible{% else %}status-no-disponible{% endif %}">
+                    {{ original.get_estado_display|default:"Sin estado" }}
+                </span>
+            </div>
+            
+            {% if original.kilogramos %}
+            <div class="info-row">
+                <span class="info-label">⚖️ Peso:</span>
+                <span class="info-value">{{ original.kilogramos }} kg</span>
+            </div>
+            {% endif %}
+            
+            {% if original.vida_util %}
+            <div class="info-row">
+                <span class="info-label">📅 Vida útil:</span>
+                <span class="info-value">{{ original.vida_util }} días</span>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    
+    <!-- Información nutricional -->
+    {% if original.calorias or original.proteinas or original.grasa or original.carbohidratos %}
+    <h4 style="color: var(--color-gray-700); margin: var(--spacing-4) 0 var(--spacing-3) 0;">
+        📊 Información Nutricional
+    </h4>
+    <div class="nutrition-grid">
+        {% if original.calorias %}
+        <div class="nutrition-item">
+            <div class="nutrition-value">{{ original.calorias }}</div>
+            <div class="nutrition-label">Calorías</div>
+        </div>
+        {% endif %}
+        
+        {% if original.proteinas %}
+        <div class="nutrition-item">
+            <div class="nutrition-value">{{ original.proteinas }}g</div>
+            <div class="nutrition-label">Proteínas</div>
+        </div>
+        {% endif %}
+        
+        {% if original.grasa %}
+        <div class="nutrition-item">
+            <div class="nutrition-value">{{ original.grasa }}g</div>
+            <div class="nutrition-label">Grasas</div>
+        </div>
+        {% endif %}
+        
+        {% if original.carbohidratos %}
+        <div class="nutrition-item">
+            <div class="nutrition-value">{{ original.carbohidratos }}g</div>
+            <div class="nutrition-label">Carbohidratos</div>
+        </div>
+        {% endif %}
+        
+        {% if original.sodio %}
+        <div class="nutrition-item">
+            <div class="nutrition-value">{{ original.sodio }}mg</div>
+            <div class="nutrition-label">Sodio</div>
+        </div>
+        {% endif %}
+    </div>
+    {% endif %}
+    
+    <!-- Acciones rápidas -->
+    <div class="quick-actions-grid">
+        <a href="{% url 'admin:myapp_disponibilidadplato_add' %}?plato={{ original.pk }}" class="quick-action-btn">
+            <div class="quick-action-icon">📅</div>
+            <div class="quick-action-label">Configurar Disponibilidad</div>
+        </a>
+        
+        <a href="{% url 'admin:myapp_disponibilidadplato_changelist' %}?plato__id__exact={{ original.pk }}" class="quick-action-btn">
+            <div class="quick-action-icon">📋</div>
+            <div class="quick-action-label">Ver Disponibilidades</div>
+        </a>
+        
+        <a href="{% url 'admin:myapp_produccion_add' %}?plato={{ original.pk }}" class="quick-action-btn">
+            <div class="quick-action-icon">🏭</div>
+            <div class="quick-action-label">Planificar Producción</div>
+        </a>
+        
+        <a href="{% url 'admin:myapp_inventario_changelist' %}?plato__id__exact={{ original.pk }}" class="quick-action-btn">
+            <div class="quick-action-icon">📦</div>
+            <div class="quick-action-label">Ver Inventario</div>
+        </a>
+    </div>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block admin_change_form_document_ready %}
+{{ block.super }}
+<script>
+(function($) {
+    $(document).ready(function() {
+        console.log('🍽️ Formulario de plato con vista previa mejorada cargado');
+        
+        // Actualizar vista previa de imagen en tiempo real
+        const imageInput = $('#id_imagen');
+        const imagePreview = $('#plato-image-preview');
+        const imagePlaceholder = $('#plato-image-placeholder');
+        
+        if (imageInput.length) {
+            imageInput.on('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        if (imagePreview.length) {
+                            imagePreview.attr('src', e.target.result);
+                        } else if (imagePlaceholder.length) {
+                            imagePlaceholder.replaceWith(
+                                `<img src="${e.target.result}" alt="Vista previa" class="image-preview-large" id="plato-image-preview">`
+                            );
+                        }
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+        }
+        
+        // Calcular precio sin IVA automáticamente
+        const precioInput = $('#id_precio');
+        const precioSinIvaInput = $('#id_precio_sin_iva');
+        
+        if (precioInput.length && precioSinIvaInput.length) {
+            precioInput.on('input', function() {
+                const precio = parseFloat($(this).val()) || 0;
+                const precioSinIva = (precio / 1.21).toFixed(2); // IVA del 21%
+                precioSinIvaInput.val(precioSinIva);
+                
+                // Actualizar vista previa si existe
+                $('.price-display').html(`
+                    💰 €${precio.toFixed(2)}
+                    <small style="display: block; opacity: 0.8; font-size: var(--font-size-sm);">
+                        (€${precioSinIva} sin IVA)
+                    </small>
+                `);
+            });
+        }
+        
+        // Validación específica para platos
+        const form = $('form');
+        form.on('submit', function(e) {
+            let hasErrors = false;
+            
+            // Validar que el código sea único
+            const codigo = $('#id_codigo').val();
+            if (codigo && codigo.length < 3) {
+                $('#id_codigo').css('border-color', '#dc2626');
+                showNotification('El código debe tener al menos 3 caracteres', 'error');
+                hasErrors = true;
+            }
+            
+            // Validar precio
+            const precio = parseFloat($('#id_precio').val());
+            if (precio && precio <= 0) {
+                $('#id_precio').css('border-color', '#dc2626');
+                showNotification('El precio debe ser mayor a 0', 'error');
+                hasErrors = true;
+            }
+            
+            if (hasErrors) {
+                e.preventDefault();
+            }
+        });
+        
+        // Función para mostrar notificaciones
+        function showNotification(message, type) {
+            const notification = $(`
+                <div style="
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    background: ${type === 'error' ? '#dc2626' : '#10b981'};
+                    color: white;
+                    padding: 12px 20px;
+                    border-radius: 8px;
+                    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+                    z-index: 1000;
+                    font-size: 14px;
+                    font-weight: 500;
+                    max-width: 300px;
+                    animation: slideIn 0.3s ease-out;
+                ">${message}</div>
+            `);
+            
+            $('body').append(notification);
+            
+            setTimeout(() => {
+                notification.fadeOut(() => notification.remove());
+            }, 4000);
+        }
+    });
+})(django.jQuery);
+</script>
+{% endblock %}

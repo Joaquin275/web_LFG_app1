@@ -1570,3 +1570,9 @@ INFO 2025-08-01 13:43:35,791 basehttp 63070 140364393461440 "GET /static/admin/j
 INFO 2025-08-01 13:43:35,980 basehttp 63070 140364384020160 "GET /static/admin/css/changelists.css HTTP/1.1" 304 0
 INFO 2025-08-01 13:43:36,020 basehttp 63070 140364393461440 "GET /static/admin/js/filters.js HTTP/1.1" 304 0
 INFO 2025-08-01 13:43:36,307 basehttp 63070 140364393461440 "GET /static/admin/img/sorting-icons.svg HTTP/1.1" 304 0
+INFO 2025-08-01 13:46:27,839 autoreload 63070 140364813758720 /workspace/myapp/context_processors.py changed, reloading.
+INFO 2025-08-01 13:46:28,377 autoreload 65904 140194960601344 Watching for file changes with StatReloader
+INFO 2025-08-01 13:50:35,003 basehttp 65904 140194575546048 "HEAD /admin/ HTTP/1.1" 302 0
+INFO 2025-08-01 13:50:38,777 basehttp 65904 140194575546048 "GET /admin/ HTTP/1.1" 302 0
+INFO 2025-08-01 13:51:07,601 basehttp 65904 140194566104768 "GET /design_demo/ HTTP/1.1" 200 29184
+INFO 2025-08-01 13:51:14,282 basehttp 65904 140194566104768 "GET /test_admin_links/ HTTP/1.1" 200 12653

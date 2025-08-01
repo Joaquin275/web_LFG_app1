@@ -35,7 +35,7 @@
         
         .dashboard-stats {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: var(--spacing-6);
             margin-bottom: var(--spacing-8);
         }
@@ -66,11 +66,26 @@
             box-shadow: var(--shadow-xl);
         }
         
+        .stat-card.warning::before {
+            background: #f59e0b;
+        }
+        
+        .stat-card.success::before {
+            background: #10b981;
+        }
+        
+        .stat-card.info::before {
+            background: #3b82f6;
+        }
+        
         .stat-number {
             font-size: var(--font-size-3xl);
             font-weight: var(--font-weight-bold);
             color: var(--color-primary);
             margin-bottom: var(--spacing-2);
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-2);
         }
         
         .stat-label {
@@ -79,6 +94,13 @@
             font-weight: var(--font-weight-medium);
             text-transform: uppercase;
             letter-spacing: 0.05em;
+            margin-bottom: var(--spacing-2);
+        }
+        
+        .stat-sublabel {
+            color: var(--color-gray-500);
+            font-size: var(--font-size-xs);
+            font-style: italic;
         }
         
         .stat-icon {
@@ -127,7 +149,20 @@
             font-size: var(--font-size-sm);
         }
         
-        .recent-actions {
+        .action-btn .description {
+            font-size: var(--font-size-xs);
+            color: var(--color-gray-500);
+            line-height: var(--line-height-tight);
+        }
+        
+        .business-insights {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: var(--spacing-6);
+            margin-bottom: var(--spacing-8);
+        }
+        
+        .insight-card {
             background: var(--color-white);
             border-radius: var(--radius-lg);
             box-shadow: var(--shadow-md);
@@ -135,19 +170,113 @@
             overflow: hidden;
         }
         
-        .recent-actions h3 {
+        .insight-header {
             background: linear-gradient(135deg, var(--color-gray-800) 0%, var(--color-gray-900) 100%);
             color: var(--color-white);
-            margin: 0;
             padding: var(--spacing-4) var(--spacing-6);
             font-size: var(--font-size-lg);
             font-weight: var(--font-weight-semibold);
+        }
+        
+        .insight-content {
+            padding: var(--spacing-6);
+        }
+        
+        .metric-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: var(--spacing-3) 0;
+            border-bottom: 1px solid var(--color-gray-100);
+        }
+        
+        .metric-row:last-child {
+            border-bottom: none;
+        }
+        
+        .metric-label {
+            font-size: var(--font-size-sm);
+            color: var(--color-gray-600);
+        }
+        
+        .metric-value {
+            font-weight: var(--font-weight-semibold);
+            color: var(--color-gray-800);
+        }
+        
+        .metric-value.primary {
+            color: var(--color-primary);
+        }
+        
+        .metric-value.success {
+            color: #10b981;
+        }
+        
+        .metric-value.warning {
+            color: #f59e0b;
         }
         
         .app-list {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: var(--spacing-6);
+        }
+        
+        .popular-items {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .popular-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: var(--spacing-3);
+            margin-bottom: var(--spacing-2);
+            background: var(--color-gray-50);
+            border-radius: var(--radius-md);
+            border-left: 3px solid var(--color-primary);
+        }
+        
+        .item-name {
+            font-weight: var(--font-weight-medium);
+            color: var(--color-gray-800);
+        }
+        
+        .item-count {
+            background: var(--color-primary);
+            color: var(--color-white);
+            padding: var(--spacing-1) var(--spacing-3);
+            border-radius: var(--radius-sm);
+            font-size: var(--font-size-xs);
+            font-weight: var(--font-weight-semibold);
+        }
+        
+        .alert-badge {
+            background: #dc2626;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--font-size-xs);
+            font-weight: var(--font-weight-bold);
+        }
+        
+        .success-badge {
+            background: #059669;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--font-size-xs);
+            font-weight: var(--font-weight-bold);
         }
     </style>
 {% endblock %}
@@ -157,43 +286,141 @@
     <!-- Welcome Section -->
     <div class="dashboard-welcome">
         <h1 style="margin: 0; font-size: var(--font-size-4xl); font-weight: var(--font-weight-bold); text-shadow: 0 2px 4px rgba(0,0,0,0.3);">
-            ¡Bienvenido al Panel de Administración!
+            ¡Bienvenido, {{ user.get_full_name|default:user.username }}!
         </h1>
         <p style="margin: var(--spacing-4) 0 0 0; font-size: var(--font-size-lg); opacity: 0.9;">
-            Gestiona tu restaurante de manera eficiente y moderna
+            Panel de Control - Familia Gastro
         </p>
         <div style="margin-top: var(--spacing-6); font-size: var(--font-size-sm); opacity: 0.8;">
-            <span>👨‍💼 Usuario: <strong>{{ user.get_full_name|default:user.username }}</strong></span>
+            <span>📅 {{ "now"|date:"l, d \d\e F \d\e Y" }}</span>
             <span style="margin: 0 var(--spacing-4);">•</span>
-            <span>📅 Último acceso: <strong>{{ user.last_login|date:"d/m/Y H:i" }}</strong></span>
+            <span>⏰ {{ "now"|date:"H:i" }}</span>
         </div>
     </div>
 
-    <!-- Quick Stats -->
+    <!-- Estadísticas Principales -->
     <div class="dashboard-stats">
         <div class="stat-card">
             <div class="stat-icon">🍽️</div>
             <div class="stat-number">{{ platos_count|default:0 }}</div>
-            <div class="stat-label">Platos Registrados</div>
+            <div class="stat-label">Platos Activos</div>
+            <div class="stat-sublabel">Disponibles para venta</div>
         </div>
-        <div class="stat-card">
-            <div class="stat-icon">📅</div>
-            <div class="stat-number">{{ disponibilidades_count|default:0 }}</div>
-            <div class="stat-label">Disponibilidades</div>
+        
+        <div class="stat-card success">
+            <div class="stat-icon">💰</div>
+            <div class="stat-number">€{{ ingresos_hoy|default:0 }}</div>
+            <div class="stat-label">Ingresos Hoy</div>
+            <div class="stat-sublabel">{{ pedidos_hoy|default:0 }} pedido{{ pedidos_hoy|pluralize }}</div>
         </div>
-        <div class="stat-card">
-            <div class="stat-icon">👥</div>
-            <div class="stat-number">{{ clientes_count|default:0 }}</div>
-            <div class="stat-label">Clientes Activos</div>
+        
+        <div class="stat-card info">
+            <div class="stat-icon">📊</div>
+            <div class="stat-number">€{{ ticket_promedio|default:0 }}</div>
+            <div class="stat-label">Ticket Promedio</div>
+            <div class="stat-sublabel">Esta semana</div>
         </div>
-        <div class="stat-card">
-            <div class="stat-icon">🧾</div>
-            <div class="stat-number">{{ pedidos_hoy|default:0 }}</div>
-            <div class="stat-label">Pedidos Hoy</div>
+        
+        <div class="stat-card {% if inventario_bajo > 0 %}warning{% else %}success{% endif %}">
+            <div class="stat-icon">📦</div>
+            <div class="stat-number">
+                {{ inventario_bajo|default:0 }}
+                {% if inventario_bajo > 0 %}
+                    <span class="alert-badge">!</span>
+                {% else %}
+                    <span class="success-badge">✓</span>
+                {% endif %}
+            </div>
+            <div class="stat-label">Inventario Bajo</div>
+            <div class="stat-sublabel">
+                {% if inventario_bajo > 0 %}
+                    Requiere atención
+                {% else %}
+                    Todo en orden
+                {% endif %}
+            </div>
         </div>
     </div>
 
-    <!-- Quick Actions -->
+    <!-- Insights del Negocio -->
+    <div class="business-insights">
+        <!-- Resumen Semanal -->
+        <div class="insight-card">
+            <div class="insight-header">
+                📊 Resumen Semanal
+            </div>
+            <div class="insight-content">
+                <div class="metric-row">
+                    <span class="metric-label">Pedidos totales</span>
+                    <span class="metric-value primary">{{ pedidos_semana|default:0 }}</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Ingresos totales</span>
+                    <span class="metric-value success">€{{ ingresos_semana|default:0 }}</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Ocupación semanal</span>
+                    <span class="metric-value">{{ ocupacion_semanal|default:0 }}%</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Día más activo</span>
+                    <span class="metric-value primary">{{ dia_mas_activo|default:"N/A" }}</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Platos Populares -->
+        <div class="insight-card">
+            <div class="insight-header">
+                🏆 Platos Más Vendidos
+            </div>
+            <div class="insight-content">
+                {% if platos_populares %}
+                    <ul class="popular-items">
+                        {% for plato in platos_populares %}
+                        <li class="popular-item">
+                            <span class="item-name">{{ plato.plato__nombre }}</span>
+                            <span class="item-count">{{ plato.cantidad_total }}</span>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p style="text-align: center; color: var(--color-gray-500); font-style: italic;">
+                        No hay datos de ventas disponibles
+                    </p>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Estado de Producción -->
+        <div class="insight-card">
+            <div class="insight-header">
+                🏭 Estado de Producción
+            </div>
+            <div class="insight-content">
+                <div class="metric-row">
+                    <span class="metric-label">Clientes particulares</span>
+                    <span class="metric-value">{{ clientes_particulares|default:0 }}</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Clientes empresas</span>
+                    <span class="metric-value">{{ clientes_empresas|default:0 }}</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Producción pendiente</span>
+                    <span class="metric-value {% if produccion_pendiente > 0 %}warning{% else %}success{% endif %}">
+                        {{ produccion_pendiente|default:0 }}
+                    </span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Disponibilidades configuradas</span>
+                    <span class="metric-value primary">{{ disponibilidades_count|default:0 }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Acciones Rápidas -->
     <div style="margin-bottom: var(--spacing-6);">
         <h2 style="color: var(--color-primary); margin-bottom: var(--spacing-4); font-size: var(--font-size-2xl); font-weight: var(--font-weight-bold);">
             🚀 Acciones Rápidas
@@ -201,27 +428,33 @@
         <div class="quick-actions">
             <a href="{% url 'admin:myapp_plato_add' %}" class="action-btn">
                 <div class="icon">🍕</div>
-                <div class="label">Agregar Plato</div>
+                <div class="label">Nuevo Plato</div>
+                <div class="description">Agregar plato al menú</div>
             </a>
             <a href="{% url 'admin:myapp_disponibilidadplato_add' %}" class="action-btn">
                 <div class="icon">📅</div>
-                <div class="label">Nueva Disponibilidad</div>
+                <div class="label">Disponibilidad</div>
+                <div class="description">Configurar días disponibles</div>
             </a>
             <a href="{% url 'admin:myapp_cliente_add' %}" class="action-btn">
                 <div class="icon">👤</div>
                 <div class="label">Nuevo Cliente</div>
+                <div class="description">Registrar cliente</div>
             </a>
             <a href="{% url 'admin:myapp_produccion_add' %}" class="action-btn">
                 <div class="icon">🏭</div>
-                <div class="label">Planificar Producción</div>
+                <div class="label">Planificar</div>
+                <div class="description">Programar producción</div>
             </a>
             <a href="{% url 'admin:myapp_inventario_changelist' %}" class="action-btn">
                 <div class="icon">📦</div>
-                <div class="label">Ver Inventario</div>
+                <div class="label">Inventario</div>
+                <div class="description">Gestionar stock</div>
             </a>
-            <a href="/test_admin_links/" class="action-btn">
-                <div class="icon">🔧</div>
-                <div class="label">Test Enlaces</div>
+            <a href="{% url 'admin:myapp_recibo_changelist' %}" class="action-btn">
+                <div class="icon">🧾</div>
+                <div class="label">Pedidos</div>
+                <div class="description">Ver ventas recientes</div>
             </a>
         </div>
     </div>
@@ -237,7 +470,7 @@
                 <div class="module">
                     <h2>
                         {% if app.name == 'Myapp' %}
-                            🍽️ {{ app.name|capfirst|default:app.label }}
+                            🍽️ Familia Gastro
                         {% elif app.name == 'Authentication and Authorization' %}
                             🔐 Usuarios y Permisos
                         {% else %}
@@ -297,36 +530,35 @@
         {% endif %}
     </div>
 
-    <!-- Recent Actions Section -->
+    <!-- Actividad Reciente -->
     {% load log %}
-    {% get_admin_log 10 as admin_log for_user user %}
+    {% get_admin_log 8 as admin_log for_user user %}
     {% if admin_log %}
         <div style="margin-top: var(--spacing-8);">
-            <div class="recent-actions">
-                <h3>📊 Actividad Reciente</h3>
-                <div style="padding: var(--spacing-4) var(--spacing-6);">
+            <div class="insight-card">
+                <div class="insight-header">📊 Actividad Reciente</div>
+                <div class="insight-content">
                     {% for entry in admin_log %}
-                        <div style="
-                            display: flex;
-                            align-items: center;
-                            padding: var(--spacing-3) 0;
-                            border-bottom: 1px solid var(--color-gray-200);
-                            gap: var(--spacing-3);
-                        ">
-                            <span style="font-size: var(--font-size-lg);">
-                                {% if entry.is_addition %}➕
-                                {% elif entry.is_change %}✏️
-                                {% elif entry.is_deletion %}🗑️
-                                {% else %}📄
-                                {% endif %}
-                            </span>
-                            <div style="flex: 1;">
-                                <div style="font-weight: var(--font-weight-medium); color: var(--color-gray-800);">
-                                    {{ entry.object_repr|truncatechars:50 }}
+                        <div class="metric-row">
+                            <div style="display: flex; align-items: center; gap: var(--spacing-3);">
+                                <span style="font-size: var(--font-size-lg);">
+                                    {% if entry.is_addition %}➕
+                                    {% elif entry.is_change %}✏️
+                                    {% elif entry.is_deletion %}🗑️
+                                    {% else %}📄
+                                    {% endif %}
+                                </span>
+                                <div>
+                                    <div class="metric-label" style="margin: 0;">
+                                        {{ entry.object_repr|truncatechars:40 }}
+                                    </div>
+                                    <div style="font-size: var(--font-size-xs); color: var(--color-gray-400);">
+                                        {{ entry.action_time|timesince }}
+                                    </div>
                                 </div>
-                                <div style="font-size: var(--font-size-xs); color: var(--color-gray-500);">
-                                    {{ entry.action_time|timesince }} - {{ entry.change_message|default:"Sin descripción" }}
-                                </div>
+                            </div>
+                            <div style="font-size: var(--font-size-xs); color: var(--color-gray-500); text-align: right;">
+                                {{ entry.change_message|default:"Sin descripción"|truncatechars:30 }}
                             </div>
                         </div>
                     {% endfor %}
@@ -338,35 +570,106 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('🎨 Dashboard de Familia Gastro cargado exitosamente');
+    console.log('🎨 Dashboard de Familia Gastro - Versión Empresarial cargado');
     
-    // Agregar efectos de hover mejorados
-    const statCards = document.querySelectorAll('.stat-card');
-    statCards.forEach(card => {
+    // Animación mejorada de contadores con efectos visuales
+    const statNumbers = document.querySelectorAll('.stat-number');
+    statNumbers.forEach((numberElement, index) => {
+        const fullText = numberElement.textContent.trim();
+        const numericValue = parseFloat(fullText.replace(/[^0-9.]/g, '')) || 0;
+        
+        if (numericValue > 0) {
+            let currentNumber = 0;
+            const increment = Math.ceil(numericValue / 25);
+            const prefix = fullText.replace(/[0-9.]/g, '');
+            
+            // Delay animation based on index for staggered effect
+            setTimeout(() => {
+                const timer = setInterval(() => {
+                    currentNumber += increment;
+                    if (currentNumber >= numericValue) {
+                        currentNumber = numericValue;
+                        clearInterval(timer);
+                    }
+                    
+                    // Reconstruct the full text with prefix/suffix
+                    const newText = fullText.replace(/[0-9.]+/, currentNumber.toString());
+                    const textParts = numberElement.innerHTML.split(/[0-9.]+/);
+                    numberElement.innerHTML = textParts[0] + currentNumber + (textParts[1] || '');
+                }, 60);
+            }, index * 100);
+        }
+    });
+    
+    // Efectos de hover mejorados para tarjetas
+    const cards = document.querySelectorAll('.stat-card, .insight-card, .action-btn');
+    cards.forEach(card => {
         card.addEventListener('mouseenter', function() {
             this.style.transform = 'translateY(-6px) scale(1.02)';
         });
         card.addEventListener('mouseleave', function() {
-            this.style.transform = 'translateY(-4px) scale(1)';
+            this.style.transform = 'translateY(0) scale(1)';
         });
     });
     
-    // Simular carga de datos en tiempo real (solo visual)
-    const statNumbers = document.querySelectorAll('.stat-number');
-    statNumbers.forEach(number => {
-        const finalNumber = parseInt(number.textContent) || 0;
-        let currentNumber = 0;
-        const increment = Math.ceil(finalNumber / 20);
+    // Mostrar notificaciones inteligentes basadas en datos
+    setTimeout(() => {
+        const inventarioBajo = {{ inventario_bajo|default:0 }};
+        const produccionPendiente = {{ produccion_pendiente|default:0 }};
         
-        const timer = setInterval(() => {
-            currentNumber += increment;
-            if (currentNumber >= finalNumber) {
-                currentNumber = finalNumber;
-                clearInterval(timer);
-            }
-            number.textContent = currentNumber;
-        }, 50);
-    });
+        if (inventarioBajo > 0) {
+            showNotification('⚠️ Atención: ' + inventarioBajo + ' artículo(s) con inventario bajo', 'warning');
+        }
+        
+        if (produccionPendiente > 0) {
+            showNotification('📋 Tienes ' + produccionPendiente + ' producción(es) pendiente(s)', 'info');
+        }
+        
+        if (inventarioBajo === 0 && produccionPendiente === 0) {
+            showNotification('✅ Todo en orden en tu restaurante', 'success');
+        }
+    }, 2000);
+    
+    function showNotification(message, type) {
+        const notification = document.createElement('div');
+        notification.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: ${type === 'warning' ? '#f59e0b' : type === 'success' ? '#10b981' : '#3b82f6'};
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            font-size: 14px;
+            font-weight: 500;
+            max-width: 300px;
+            animation: slideIn 0.3s ease-out;
+        `;
+        
+        notification.textContent = message;
+        document.body.appendChild(notification);
+        
+        setTimeout(() => {
+            notification.style.animation = 'slideOut 0.3s ease-out';
+            setTimeout(() => document.body.removeChild(notification), 300);
+        }, 4000);
+    }
+    
+    // Agregar estilos de animación
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        @keyframes slideOut {
+            from { transform: translateX(0); opacity: 1; }
+            to { transform: translateX(100%); opacity: 0; }
+        }
+    `;
+    document.head.appendChild(style);
 });
 </script>
 {% endblock %}
