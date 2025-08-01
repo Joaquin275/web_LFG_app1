@@ -1078,3 +1078,33 @@ INFO 2025-08-01 13:14:43,547 basehttp 50924 139740531631808 "GET /admin/myapp/pl
 WARNING 2025-08-01 13:14:58,873 log 50924 139740531631808 Not Found: /.well-known/appspecific/com.chrome.devtools.json
 WARNING 2025-08-01 13:14:58,873 basehttp 50924 139740531631808 "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 6237
 INFO 2025-08-01 13:16:15,155 basehttp 50924 139740531631808 "GET /admin/myapp/plato/5/change/?_to_field=id&_popup=1&_modal=87369 HTTP/1.1" 200 31061
+INFO 2025-08-01 13:16:44,789 basehttp 50924 139740531631808 "GET /admin/admin_interface/theme/ HTTP/1.1" 200 30208
+INFO 2025-08-01 13:16:45,141 basehttp 50924 139740531631808 "GET /admin/jsi18n/ HTTP/1.1" 200 8691
+INFO 2025-08-01 13:16:45,157 basehttp 50924 139740575692480 "GET /media/admin-interface/logo/logo.flg.png HTTP/1.1" 304 0
+INFO 2025-08-01 13:16:45,372 basehttp 50924 139740575692480 "GET /media/admin-interface/favicon/Imagen1-removebg-preview.png HTTP/1.1" 304 0
+INFO 2025-08-01 13:16:46,511 basehttp 50924 139740575692480 "GET /admin/admin_interface/theme/2/change/ HTTP/1.1" 200 78942
+INFO 2025-08-01 13:16:46,844 basehttp 50924 139740557858496 "GET /static/colorfield/jscolor/jscolor.js HTTP/1.1" 304 0
+INFO 2025-08-01 13:16:46,844 basehttp 50924 139740540024512 "GET /static/colorfield/colorfield.js HTTP/1.1" 304 0
+INFO 2025-08-01 13:16:46,846 basehttp 50924 139740531631808 "GET /admin/jsi18n/ HTTP/1.1" 200 8691
+INFO 2025-08-01 13:17:25,062 autoreload 50924 139740960555264 /workspace/myapp/forms.py changed, reloading.
+INFO 2025-08-01 13:17:25,599 autoreload 53780 139939044458752 Watching for file changes with StatReloader
+INFO 2025-08-01 13:17:36,887 autoreload 53780 139939044458752 /workspace/myapp/admin.py changed, reloading.
+INFO 2025-08-01 13:17:37,376 autoreload 53867 140395348574464 Watching for file changes with StatReloader
+INFO 2025-08-01 13:18:30,624 autoreload 54425 139972098384128 Watching for file changes with StatReloader
+INFO 2025-08-01 13:18:31,412 basehttp 54425 139971700713152 "POST /admin/admin_interface/theme/2/change/ HTTP/1.1" 302 0
+INFO 2025-08-01 13:18:31,674 basehttp 54425 139971700713152 "GET /admin/admin_interface/theme/add/ HTTP/1.1" 200 78148
+INFO 2025-08-01 13:18:32,103 basehttp 54425 139971709105856 "GET /admin/jsi18n/ HTTP/1.1" 200 8691
+INFO 2025-08-01 13:18:32,327 basehttp 54425 139971709105856 "GET /static/admin/img/icon-yes.svg HTTP/1.1" 304 0
+INFO 2025-08-01 13:18:38,130 basehttp 54425 139971683927744 "HEAD /admin/myapp/disponibilidadplato/1/change/ HTTP/1.1" 302 0
+INFO 2025-08-01 13:18:38,137 basehttp 54425 139971675535040 "HEAD /admin/myapp/disponibilidadplato/add/ HTTP/1.1" 302 0
+INFO 2025-08-01 13:18:38,143 basehttp 54425 139971667142336 "HEAD /admin/myapp/disponibilidadplato/ HTTP/1.1" 302 0
+INFO 2025-08-01 13:18:48,716 basehttp 54425 139971709105856 "GET /admin/admin_interface/theme/ HTTP/1.1" 200 30154
+INFO 2025-08-01 13:18:49,051 basehttp 54425 139971700713152 "GET /admin/jsi18n/ HTTP/1.1" 200 8691
+INFO 2025-08-01 13:18:50,350 basehttp 54425 139971700713152 "GET /admin/admin_interface/theme/2/change/ HTTP/1.1" 200 78888
+INFO 2025-08-01 13:18:50,605 basehttp 54425 139971709105856 "GET /admin/jsi18n/ HTTP/1.1" 200 8691
+INFO 2025-08-01 13:19:06,961 basehttp 54425 139971667142336 "HEAD /admin/myapp/disponibilidadplato/28/change/ HTTP/1.1" 302 0
+INFO 2025-08-01 13:19:11,278 basehttp 54425 139971709105856 "POST /admin/admin_interface/theme/2/change/ HTTP/1.1" 302 0
+INFO 2025-08-01 13:19:11,501 basehttp 54425 139971709105856 "GET /admin/admin_interface/theme/ HTTP/1.1" 200 30373
+INFO 2025-08-01 13:19:11,760 basehttp 54425 139971709105856 "GET /admin/jsi18n/ HTTP/1.1" 200 8691
+INFO 2025-08-01 13:19:17,069 basehttp 54425 139971709105856 "GET /admin/admin_interface/theme/2/change/ HTTP/1.1" 200 78888
+INFO 2025-08-01 13:19:17,354 basehttp 54425 139971700713152 "GET /admin/jsi18n/ HTTP/1.1" 200 8691

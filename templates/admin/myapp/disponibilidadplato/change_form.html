@@ -1,0 +1,98 @@
+{% extends "admin/change_form.html" %}
+{% load i18n admin_urls static %}
+
+{% block extrahead %}
+    {{ block.super }}
+    <style>
+        .form-row {
+            margin-bottom: 20px;
+        }
+        .field-plato, .field-dia {
+            margin-bottom: 15px;
+        }
+        .help {
+            color: #666;
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+        .errorlist {
+            color: #dc3545;
+            list-style: none;
+            padding: 0;
+            margin: 10px 0;
+        }
+        .errorlist li {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            padding: 8px 12px;
+            border-radius: 4px;
+            margin-bottom: 5px;
+        }
+        .submit-row {
+            padding: 12px 14px;
+            margin: 0 0 20px;
+            background: #f8f8f8;
+            border: 1px solid #eee;
+            border-radius: 4px;
+            text-align: right;
+        }
+    </style>
+{% endblock %}
+
+{% block submit_buttons_bottom %}
+    <div class="submit-row">
+        {% if show_save %}
+            <input type="submit" value="💾 Guardar" class="default" name="_save">
+        {% endif %}
+        {% if show_save_and_add_another %}
+            <input type="submit" value="➕ Guardar y agregar otro" name="_addanother">
+        {% endif %}
+        {% if show_save_and_continue %}
+            <input type="submit" value="✏️ Guardar y continuar editando" name="_continue">
+        {% endif %}
+        {% if show_delete_link %}
+            <p class="deletelink-box" style="float: left;">
+                <a href="{% url opts|admin_urlname:'delete' original.pk|admin_urlquote %}" class="deletelink">🗑️ Eliminar</a>
+            </p>
+        {% endif %}
+    </div>
+{% endblock %}
+
+{% block admin_change_form_document_ready %}
+    {{ block.super }}
+    <script>
+    (function($) {
+        $(document).ready(function() {
+            console.log('✅ Formulario de disponibilidad cargado correctamente');
+            
+            // Mejorar la apariencia del formulario
+            $('#id_plato, #id_dia').css({
+                'width': '100%',
+                'padding': '8px',
+                'border': '1px solid #ccc',
+                'border-radius': '4px'
+            });
+            
+            // Agregar validación en tiempo real
+            $('form').on('submit', function(e) {
+                var plato = $('#id_plato').val();
+                var dia = $('#id_dia').val();
+                
+                if (!plato) {
+                    alert('❌ Por favor selecciona un plato');
+                    e.preventDefault();
+                    return false;
+                }
+                
+                if (!dia) {
+                    alert('❌ Por favor selecciona un día');
+                    e.preventDefault();
+                    return false;
+                }
+                
+                console.log('✅ Enviando formulario:', {plato: plato, dia: dia});
+            });
+        });
+    })(django.jQuery);
+    </script>
+{% endblock %}

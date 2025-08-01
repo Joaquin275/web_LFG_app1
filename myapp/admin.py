@@ -100,33 +100,45 @@ class PlatoAdmin(admin.ModelAdmin):
 
 class DisponibilidadPlatoAdmin(admin.ModelAdmin):
     form = DisponibilidadPlatoForm
-    list_display = ('plato', 'dia_display', 'plato_grupo', 'plato_precio')
+    list_display = ('id', 'plato', 'dia_display', 'plato_grupo', 'plato_precio')
     list_filter = ('dia', 'plato__grupo', 'plato__estado')
     search_fields = ('plato__nombre', 'plato__codigo')
     list_per_page = 50
-    
-    # Permitir edición inline más fácil
-    list_editable = ()  # Quitamos edición inline para evitar problemas
+    ordering = ('plato__nombre', 'dia')
     
     def dia_display(self, obj):
         return obj.get_dia_display()
     dia_display.short_description = 'Día'
+    dia_display.admin_order_field = 'dia'
     
     def plato_grupo(self, obj):
         return obj.plato.get_grupo_display()
     plato_grupo.short_description = 'Grupo'
+    plato_grupo.admin_order_field = 'plato__grupo'
     
     def plato_precio(self, obj):
         return f"€{obj.plato.precio}"
     plato_precio.short_description = 'Precio'
+    plato_precio.admin_order_field = 'plato__precio'
     
-    # Mejorar el formulario de cambio
+    # Configuración del formulario
     fieldsets = (
-        (None, {
+        ('Configuración de Disponibilidad', {
             'fields': ('plato', 'dia'),
-            'description': 'Selecciona el plato y el día de la semana en que estará disponible.'
+            'description': 'Configura en qué día de la semana estará disponible este plato.'
         }),
     )
+    
+    # Mejorar la experiencia de usuario
+    def get_readonly_fields(self, request, obj=None):
+        # No hay campos de solo lectura, permitir editar todo
+        return []
+    
+    def has_change_permission(self, request, obj=None):
+        return True
+    
+    def has_delete_permission(self, request, obj=None):
+        return True
 
 class CarritoItemAdmin(admin.ModelAdmin):
     form = CarritoItemForm

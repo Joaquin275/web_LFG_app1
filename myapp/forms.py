@@ -33,28 +33,26 @@ class ClienteForm(forms.ModelForm):
 class DisponibilidadPlatoForm(forms.ModelForm):
     class Meta:
         model = DisponibilidadPlato
-        fields = '__all__'
+        fields = ['plato', 'dia']
         widgets = {
-            'plato': forms.Select(attrs={
-                'class': 'form-control',
-                'style': 'width: 100%;'
-            }),
-            'dia': forms.Select(attrs={
-                'class': 'form-control',
-                'style': 'width: 100%;'
-            }),
+            'plato': forms.Select(attrs={'class': 'form-control'}),
+            'dia': forms.Select(attrs={'class': 'form-control'}),
         }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         
-        # Mejorar las opciones del formulario
+        # Simplificar las opciones del formulario
         if 'plato' in self.fields:
             self.fields['plato'].queryset = Plato.objects.all().order_by('nombre')
-            self.fields['plato'].empty_label = "Selecciona un plato..."
+            self.fields['plato'].empty_label = "--- Selecciona un plato ---"
             
         if 'dia' in self.fields:
-            self.fields['dia'].empty_label = "Selecciona un día..."
+            self.fields['dia'].empty_label = "--- Selecciona un día ---"
+            
+        # Agregar ayuda contextual
+        self.fields['plato'].help_text = "Selecciona el plato que estará disponible"
+        self.fields['dia'].help_text = "Selecciona el día de la semana"
 
     def clean(self):
         cleaned_data = super().clean()
@@ -62,17 +60,19 @@ class DisponibilidadPlatoForm(forms.ModelForm):
         dia = cleaned_data.get('dia')
 
         if plato and dia:
-            # Verificar si ya existe esta combinación
-            qs = DisponibilidadPlato.objects.filter(plato=plato, dia=dia)
+            # Verificar duplicados excluyendo el objeto actual si estamos editando
+            existing_qs = DisponibilidadPlato.objects.filter(plato=plato, dia=dia)
             
-            # Si estamos editando, excluir el objeto actual
-            if self.instance and self.instance.pk:
-                qs = qs.exclude(pk=self.instance.pk)
+            # Si estamos editando (no creando), excluir el objeto actual
+            if self.instance and hasattr(self.instance, 'pk') and self.instance.pk:
+                existing_qs = existing_qs.exclude(pk=self.instance.pk)
             
-            if qs.exists():
-                raise ValidationError({
-                    '__all__': f"El plato '{plato.nombre}' ya está disponible el {dict(DisponibilidadPlato.DIAS_SEMANA)[dia]}."
-                })
+            if existing_qs.exists():
+                dia_nombre = dict(DisponibilidadPlato.DIAS_SEMANA).get(dia, dia)
+                raise ValidationError(
+                    f"El plato '{plato.nombre}' ya está disponible el {dia_nombre}. "
+                    f"Cada plato solo puede estar disponible una vez por día."
+                )
 
         return cleaned_data
 
