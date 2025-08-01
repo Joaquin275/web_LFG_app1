@@ -6,7 +6,7 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
 from django.contrib.auth import login, logout, authenticate
 from django.db import IntegrityError
-from .forms import Cliente_creacion
+from .forms import ClienteForm
 from .models import Plato, DisponibilidadPlato, CarritoItem, Cliente,  Recibo, ReciboItem, Empresa, PedidoHistorico
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
@@ -78,18 +78,18 @@ def create_cliente(request):
 
     if request.method == 'GET':
         return render(request, 'cliente.html', {
-            'form': Cliente_creacion
+            'form': ClienteForm
         })
     else:
         try:
-            form = Cliente_creacion(request.POST)
+            form = ClienteForm(request.POST)
             new_cliente = form.save(commit=False)
             new_cliente.usuario =request.user
             new_cliente.save()
             return redirect('main')
         except ValueError:
             return render(request, 'cliente.html', {
-                'form': Cliente_creacion,
+                'form': ClienteForm,
                 'error': 'Ingrese valores validos'
             })
 

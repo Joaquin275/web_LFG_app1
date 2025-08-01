@@ -1,289 +1,41 @@
 {% extends "admin/base.html" %}
-{% load static %}
+{% load i18n admin_urls static %}
 
-{% block title %}Dashboard - Familia Gastro{% endblock %}
+{% block title %}Dashboard Principal - {{ site_title|default:"Django Admin" }}{% endblock %}
 
-{% block extrahead %}
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<style>
-    .dashboard-card {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        border: none;
-        border-radius: 15px;
-        color: white;
-        transition: transform 0.3s ease;
-    }
-    
-    .dashboard-card:hover {
-        transform: translateY(-5px);
-    }
-    
-    .stat-icon {
-        font-size: 2.5rem;
-        opacity: 0.8;
-    }
-    
-    .chart-container {
-        background: white;
-        border-radius: 15px;
-        padding: 20px;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        margin-bottom: 20px;
-    }
-    
-    .dashboard-header {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
-        padding: 30px 0;
-        margin-bottom: 30px;
-        border-radius: 0 0 20px 20px;
-    }
-</style>
-{% endblock %}
+{% block content_title %}<h1>Dashboard Principal</h1>{% endblock %}
 
 {% block content %}
-<div class="content-header">
-    <div class="container-fluid">
-        <div class="row mb-2">
-            <div class="col-sm-6">
-                <h1 class="m-0">
-                    <i class="fas fa-chart-line me-3"></i>
-                    Dashboard - Familia Gastro
-                </h1>
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Bienvenido al Panel de Control</h3>
             </div>
-            <div class="col-sm-6">
-                <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item"><a href="/admin/">Inicio</a></li>
-                    <li class="breadcrumb-item active">Dashboard</li>
-                </ol>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-12">
-                <div class="alert alert-info">
-                    <i class="fas fa-info-circle me-2"></i>
-                    <strong>Panel de control y análisis de tu negocio</strong>
-                    <div class="mt-2">
-                        <a href="/admin/production-dashboard/" class="btn btn-primary btn-sm me-2">
-                            <i class="fas fa-industry me-1"></i>
-                            Dashboard de Producción
-                        </a>
-                        <a href="/admin/" class="btn btn-secondary btn-sm">
-                            <i class="fas fa-cog me-1"></i>
-                            Administración
-                        </a>
+            <div class="card-body">
+                <p>Este es el dashboard principal de Familia Gastro.</p>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="info-box">
+                            <span class="info-box-icon bg-info"><i class="fas fa-users"></i></span>
+                            <div class="info-box-content">
+                                <span class="info-box-text">Clientes Activos</span>
+                                <span class="info-box-number">{{ total_clientes|default:0 }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="info-box">
+                            <span class="info-box-icon bg-success"><i class="fas fa-utensils"></i></span>
+                            <div class="info-box-content">
+                                <span class="info-box-text">Platos Disponibles</span>
+                                <span class="info-box-number">{{ total_platos|default:0 }}</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-
-<div class="container-fluid">
-    <!-- Tarjetas de estadísticas -->
-    <div class="row mb-4">
-        <div class="col-lg-3 col-6">
-            <div class="small-box bg-info">
-                <div class="inner">
-                    <h3 id="total-pedidos">-</h3>
-                    <p>Total Pedidos</p>
-                </div>
-                <div class="icon">
-                    <i class="fas fa-shopping-cart"></i>
-                </div>
-            </div>
-        </div>
-        
-        <div class="col-lg-3 col-6">
-            <div class="small-box bg-success">
-                <div class="inner">
-                    <h3 id="total-ventas">-</h3>
-                    <p>Total Ventas</p>
-                </div>
-                <div class="icon">
-                    <i class="fas fa-euro-sign"></i>
-                </div>
-            </div>
-        </div>
-        
-        <div class="col-lg-3 col-6">
-            <div class="small-box bg-warning">
-                <div class="inner">
-                    <h3 id="pedidos-pendientes">-</h3>
-                    <p>Pedidos Pendientes</p>
-                </div>
-                <div class="icon">
-                    <i class="fas fa-clock"></i>
-                </div>
-            </div>
-        </div>
-        
-        <div class="col-lg-3 col-6">
-            <div class="small-box bg-danger">
-                <div class="inner">
-                    <h3 id="clientes-activos">-</h3>
-                    <p>Clientes Activos</p>
-                </div>
-                <div class="icon">
-                    <i class="fas fa-users"></i>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    <!-- Gráficos -->
-    <div class="row">
-        <div class="col-xl-8 col-lg-7">
-            <div class="chart-container">
-                <h4 class="mb-3">
-                    <i class="fas fa-chart-area me-2 text-primary"></i>
-                    Ventas de los últimos 7 días
-                </h4>
-                <canvas id="ventasChart" height="100"></canvas>
-            </div>
-        </div>
-        
-        <div class="col-xl-4 col-lg-5">
-            <div class="chart-container">
-                <h4 class="mb-3">
-                    <i class="fas fa-chart-pie me-2 text-success"></i>
-                    Platos más vendidos
-                </h4>
-                <canvas id="platosChart" height="200"></canvas>
-            </div>
-        </div>
-    </div>
-    
-    <!-- Gráfico de ventas mensuales -->
-    <div class="row">
-        <div class="col-12">
-            <div class="chart-container">
-                <h4 class="mb-3">
-                    <i class="fas fa-chart-line me-2 text-info"></i>
-                    Evolución de ventas mensuales
-                </h4>
-                <canvas id="ventasMensualesChart" height="80"></canvas>
-            </div>
-        </div>
-    </div>
-</div>
-
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    // Cargar estadísticas
-    fetch('/api/dashboard/estadisticas/')
-        .then(response => response.json())
-        .then(data => {
-            document.getElementById('total-pedidos').textContent = data.total_pedidos.toLocaleString();
-            document.getElementById('total-ventas').textContent = '€' + data.total_ventas.toLocaleString();
-            document.getElementById('pedidos-pendientes').textContent = data.pedidos_pendientes.toLocaleString();
-            document.getElementById('clientes-activos').textContent = data.clientes_activos.toLocaleString();
-            
-            // Gráfico de ventas diarias
-            const ventasCtx = document.getElementById('ventasChart').getContext('2d');
-            new Chart(ventasCtx, {
-                type: 'line',
-                data: {
-                    labels: data.ventas_por_dia.map(v => new Date(v.fecha).toLocaleDateString()),
-                    datasets: [{
-                        label: 'Ventas (€)',
-                        data: data.ventas_por_dia.map(v => v.ventas),
-                        borderColor: 'rgb(75, 192, 192)',
-                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                        tension: 0.4,
-                        fill: true
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: {
-                            display: false
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            ticks: {
-                                callback: function(value) {
-                                    return '€' + value.toLocaleString();
-                                }
-                            }
-                        }
-                    }
-                }
-            });
-            
-            // Gráfico de platos más vendidos
-            const platosCtx = document.getElementById('platosChart').getContext('2d');
-            new Chart(platosCtx, {
-                type: 'doughnut',
-                data: {
-                    labels: data.platos_mas_vendidos.map(p => p.plato__nombre),
-                    datasets: [{
-                        data: data.platos_mas_vendidos.map(p => p.total),
-                        backgroundColor: [
-                            '#FF6384',
-                            '#36A2EB',
-                            '#FFCE56',
-                            '#4BC0C0',
-                            '#9966FF'
-                        ]
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: {
-                            position: 'bottom'
-                        }
-                    }
-                }
-            });
-        })
-        .catch(error => console.error('Error:', error));
-    
-    // Cargar ventas mensuales
-    fetch('/api/dashboard/ventas_mensuales/')
-        .then(response => response.json())
-        .then(data => {
-            const ventasMensualesCtx = document.getElementById('ventasMensualesChart').getContext('2d');
-            new Chart(ventasMensualesCtx, {
-                type: 'bar',
-                data: {
-                    labels: data.map(v => {
-                        const date = new Date(v.mes + '-01');
-                        return date.toLocaleDateString('es-ES', { year: 'numeric', month: 'short' });
-                    }),
-                    datasets: [{
-                        label: 'Ventas Mensuales (€)',
-                        data: data.map(v => v.ventas),
-                        backgroundColor: 'rgba(54, 162, 235, 0.8)',
-                        borderColor: 'rgba(54, 162, 235, 1)',
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: {
-                            display: false
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            ticks: {
-                                callback: function(value) {
-                                    return '€' + value.toLocaleString();
-                                }
-                            }
-                        }
-                    }
-                }
-            });
-        })
-        .catch(error => console.error('Error:', error));
-});
-</script>
 {% endblock %}

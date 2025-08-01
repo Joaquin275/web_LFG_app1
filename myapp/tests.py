@@ -6,7 +6,7 @@ from decimal import Decimal
 from rest_framework.test import APITestCase
 from rest_framework import status
 from .models import Cliente, Empresa, Plato, CarritoItem, Recibo, ReciboItem, DisponibilidadPlato
-from .forms import Cliente_creacion, DisponibilidadPlatoForm
+from .forms import ClienteForm, DisponibilidadPlatoForm
 
 
 class EmpresaModelTest(TestCase):
@@ -210,7 +210,7 @@ class ClienteCreacionFormTest(TestCase):
             'dni': '12345678Z',
             'correo': 'juan@test.com'
         }
-        form = Cliente_creacion(data=form_data)
+        form = ClienteForm(data=form_data)
         self.assertTrue(form.is_valid())
         
     def test_form_valid_empresa(self):
@@ -223,7 +223,7 @@ class ClienteCreacionFormTest(TestCase):
             'dni': '87654321Y',
             'correo': 'maria@empresa.com'
         }
-        form = Cliente_creacion(data=form_data)
+        form = ClienteForm(data=form_data)
         self.assertTrue(form.is_valid())
 
 
