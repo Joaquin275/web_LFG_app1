@@ -11,7 +11,7 @@
 <body>
     <nav>
         <div class="logo">
-            <img src="../static/img/logo.flg.png" alt="la Familia">
+            <img src="{% static 'img/logo.flg.png' %}" alt="la Familia">
         </div>
         <div class="auth-buttons">
             <a href="signin/" class="login-btn">Ingresa</a>
@@ -33,7 +33,7 @@
 <div class="steps-container">
     <div class="step">
         <div class="step-icon">
-            <img src="../static/img/tutorial-step-1.png" alt="Elegir">
+            <img src="{% static 'img/tutorial-step-1.png' %}" alt="Elegir">
         </div>
         <h3>Elige en 1 minuto</h3>
         <p>Pide solo un plato o programa toda tu semana. Hay opciones para todos.</p>
@@ -41,7 +41,7 @@
     
     <div class="step">
         <div class="step-icon">
-            <img src="../static/img/tutorial-step-3.png" alt="Entrega">
+            <img src="{% static 'img/tutorial-step-3.png' %}" alt="Entrega">
         </div>
         <h3>Recibe tu almuerzo</h3>
         <p>Lo cocinamos a diario y te lo entregamos en bici entre 9:00 a.m y 12:30 m.</p>
@@ -49,7 +49,7 @@
     
     <div class="step">
         <div class="step-icon">
-            <img src="../static/img/tutorial-step-2.png" alt="Disfrutar">
+            <img src="{% static 'img/tutorial-step-2.png' %}" alt="Disfrutar">
         </div>
         <h3>Disfruta</h3>
         <p>Nuestros platos son diseñados por chefs y aprobados por nutricionistas. Caliéntalos en horno microondas.</p>
@@ -57,7 +57,7 @@
     
     <div class="step">
         <div class="step-icon">
-            <img src="../static/img/tutorial-step-4.png" alt="Repetir">
+            <img src="{% static 'img/tutorial-step-4.png' %}" alt="Repetir">
         </div>
         <h3>Repite</h3>
         <p>Nuestro empaque biodegradable es amigable con el medio ambiente.</p>
@@ -65,7 +65,7 @@
 </div>
     
    
-<div class="cta-section" style="background-image: url('../static/img/footer-dsk.png');">
+    <div class="cta-section" style="background-image: url('{% static 'img/footer-dsk.jpg' %}');">
     <div class="cta-overlay"></div>
     <p>Conoce todos los productos que tenemos para ti</p>
     <a href="menu.html" class="cta-button">Ver menú</a>

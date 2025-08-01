@@ -32,7 +32,7 @@ router.register(r'recibos', ReciboViewSet, basename='recibo')
 router.register(r'dashboard', DashboardViewSet, basename='dashboard')
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path(settings.ADMIN_URL, admin.site.urls),
     path('api/', include(router.urls)),
     path('api-auth/', include('rest_framework.urls')),
     path('', views.helloword, name='home'),
@@ -50,7 +50,8 @@ urlpatterns = [
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-    import debug_toolbar
-    urlpatterns = [
-        path('__debug__/', include(debug_toolbar.urls)),
-    ] + urlpatterns
+    # Temporalmente deshabilitado para pruebas
+    # import debug_toolbar
+    # urlpatterns = [
+    #     path('__debug__/', include(debug_toolbar.urls)),
+    # ] + urlpatterns

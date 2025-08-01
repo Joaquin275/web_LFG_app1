@@ -124,18 +124,33 @@ def main(request):
 
         return redirect(f"{request.path}?dia={dia_actual}&grupo={grupo_actual}")
 
-    # 4. Obtener platos disponibles para el día
-    disponibles = DisponibilidadPlato.objects.filter(dia=dia_actual).select_related('plato')
+    # 4. Obtener platos disponibles para el día (OPTIMIZADO)
+    disponibles = DisponibilidadPlato.objects.filter(
+        dia=dia_actual
+    ).select_related('plato')
 
     if grupo_actual:
         disponibles = disponibles.filter(plato__grupo=grupo_actual)
 
-    # 5. Obtener carrito del usuario
-    carrito_items = CarritoItem.objects.filter(usuario=request.user)
-    total_carrito = sum(item.subtotal() for item in carrito_items)
+    # 5. Obtener carrito del usuario (OPTIMIZADO)
+    carrito_items = CarritoItem.objects.filter(
+        usuario=request.user
+    ).select_related('plato', 'usuario')
+    
+    # Usar agregación para calcular el total más eficientemente
+    from django.db.models import Sum, F
+    total_carrito = CarritoItem.objects.filter(
+        usuario=request.user
+    ).aggregate(
+        total=Sum(F('cantidad') * F('plato__precio'))
+    )['total'] or 0
 
-    # 6. Grupos únicos ordenados
-    grupos = sorted(set(Plato.objects.values_list('grupo', flat=True)))
+    # 6. Grupos únicos ordenados (OPTIMIZADO con cache)
+    from django.core.cache import cache
+    grupos = cache.get('platos_grupos')
+    if grupos is None:
+        grupos = sorted(set(Plato.objects.values_list('grupo', flat=True)))
+        cache.set('platos_grupos', grupos, 3600)  # Cache por 1 hora
 
     return render(request, 'main.html', {
         'dias_semana': dias_semana,

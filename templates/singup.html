@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -11,7 +12,7 @@
     <main class="container d-flex align-items-center justify-content-center min-vh-100">
         <div class="card shadow p-4" style="max-width: 400px; width: 100%;">
             <div class="text-center mb-4">
-                <img src="/static/img/logo.flg.png" alt="foody logo" width="150">
+                <img src="{% static 'img/logo.flg.png' %}" alt="foody logo" width="150">
             </div>
 
             {{ error }}
