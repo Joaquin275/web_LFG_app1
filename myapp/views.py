@@ -135,7 +135,7 @@ def main(request):
     # 5. Obtener carrito del usuario (OPTIMIZADO)
     carrito_items = CarritoItem.objects.filter(
         usuario=request.user
-    ).select_related('plato', 'cliente')
+    ).select_related('plato', 'usuario')
     
     # Usar agregación para calcular el total más eficientemente
     from django.db.models import Sum, F

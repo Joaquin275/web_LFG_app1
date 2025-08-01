@@ -153,13 +153,11 @@ class DisponibilidadPlatoModelTest(TestCase):
         """Test creación de disponibilidad"""
         disponibilidad = DisponibilidadPlato.objects.create(
             plato=self.plato,
-            dia='LUNES',
-            cantidad_disponible=10
+            dia='LUN'
         )
         
         self.assertEqual(disponibilidad.plato, self.plato)
-        self.assertEqual(disponibilidad.dia, 'LUNES')
-        self.assertEqual(disponibilidad.cantidad_disponible, 10)
+        self.assertEqual(disponibilidad.dia, 'LUN')
 
 
 class CarritoItemModelTest(TestCase):
@@ -181,15 +179,15 @@ class CarritoItemModelTest(TestCase):
     def test_carrito_item_creation(self):
         """Test creación de item de carrito"""
         item = CarritoItem.objects.create(
-            cliente=self.cliente,
+            usuario=self.user,
             plato=self.plato,
             cantidad=2,
-            dia_semana='LUNES'
+            dia_semana='LUN'
         )
         
         self.assertEqual(item.cantidad, 2)
         self.assertEqual(item.plato, self.plato)
-        self.assertEqual(item.cliente, self.cliente)
+        self.assertEqual(item.usuario, self.user)
 
 
 class ClienteCreacionFormTest(TestCase):
@@ -243,8 +241,7 @@ class DisponibilidadPlatoFormTest(TestCase):
         """Test formulario válido"""
         form_data = {
             'plato': self.plato.id,
-            'dia': 'LUNES',
-            'cantidad_disponible': 10
+            'dia': 'LUN'
         }
         form = DisponibilidadPlatoForm(data=form_data)
         self.assertTrue(form.is_valid())
@@ -254,15 +251,13 @@ class DisponibilidadPlatoFormTest(TestCase):
         # Crear primera disponibilidad
         DisponibilidadPlato.objects.create(
             plato=self.plato,
-            dia='LUNES',
-            cantidad_disponible=10
+            dia='LUN'
         )
         
         # Intentar crear duplicado
         form_data = {
             'plato': self.plato.id,
-            'dia': 'LUNES',
-            'cantidad_disponible': 5
+            'dia': 'LUN'
         }
         form = DisponibilidadPlatoForm(data=form_data)
         self.assertFalse(form.is_valid())
@@ -431,14 +426,14 @@ class IntegrationTest(TestCase):
         
         # 3. Agregar item al carrito (simulado)
         CarritoItem.objects.create(
-            cliente=self.cliente,
+            usuario=self.user,
             plato=self.plato,
             cantidad=2,
-            dia_semana='LUNES'
+            dia_semana='LUN'
         )
         
         # 4. Verificar que el item existe
-        items = CarritoItem.objects.filter(cliente=self.cliente)
+        items = CarritoItem.objects.filter(usuario=self.user)
         self.assertEqual(items.count(), 1)
         self.assertEqual(items.first().cantidad, 2)
 

@@ -91,10 +91,11 @@ MIDDLEWARE = [
 ]
 
 # Django Debug Toolbar (solo en desarrollo)
-if DEBUG:
-    INSTALLED_APPS += ['debug_toolbar']
-    MIDDLEWARE += ['debug_toolbar.middleware.DebugToolbarMiddleware']
-    INTERNAL_IPS = ['127.0.0.1']
+# Temporalmente deshabilitado para pruebas
+# if DEBUG:
+#     INSTALLED_APPS += ['debug_toolbar']
+#     MIDDLEWARE += ['debug_toolbar.middleware.DebugToolbarMiddleware']
+#     INTERNAL_IPS = ['127.0.0.1']
 
 # ✅ IMPROVED: CORS settings with better security
 CORS_ALLOWED_ORIGINS = config(
