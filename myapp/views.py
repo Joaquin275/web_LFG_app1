@@ -310,3 +310,8 @@ def procesar_pago(request):
     request.session['recibo_id'] = recibo.id
 
     return redirect('pago')
+
+def test_images(request):
+    """Vista de prueba para verificar que las imágenes funcionan"""
+    platos = Plato.objects.all()
+    return render(request, 'test_images.html', {'platos': platos})

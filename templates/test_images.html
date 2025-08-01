@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test de Imágenes - Familia Gastro</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1>Test de Imágenes de Platos</h1>
+        <div class="row">
+            {% for plato in platos %}
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    {% if plato.imagen %}
+                        <img src="{{ plato.imagen.url }}" class="card-img-top" alt="{{ plato.nombre }}" style="height: 200px; object-fit: cover;">
+                    {% else %}
+                        <div class="card-img-top d-flex align-items-center justify-content-center bg-light" style="height: 200px;">
+                            <span>Sin imagen</span>
+                        </div>
+                    {% endif %}
+                    <div class="card-body">
+                        <h5 class="card-title">{{ plato.nombre }}</h5>
+                        <p class="card-text">Precio: €{{ plato.precio }}</p>
+                        <p class="card-text">Imagen: {{ plato.imagen.name|default:"Sin asignar" }}</p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        
+        <hr class="my-5">
+        <h2>Test Directo de URLs</h2>
+        <div class="row">
+            <div class="col-12">
+                <h4>Enlaces directos a las imágenes:</h4>
+                <ul>
+                    <li><a href="/media/platos/paella_valenciana.jpg" target="_blank">Paella Valenciana</a></li>
+                    <li><a href="/media/platos/tortilla_espanola.jpg" target="_blank">Tortilla Española</a></li>
+                    <li><a href="/media/platos/pollo_ajillo.jpg" target="_blank">Pollo al Ajillo</a></li>
+                    <li><a href="/media/platos/ensalada_cesar.jpg" target="_blank">Ensalada César</a></li>
+                    <li><a href="/media/platos/salmon_plancha.jpg" target="_blank">Salmón a la Plancha</a></li>
+                    <li><a href="/media/platos/crema_calabaza.jpg" target="_blank">Crema de Calabaza</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
