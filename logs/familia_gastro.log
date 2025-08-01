@@ -674,3 +674,33 @@ Traceback (most recent call last):
   File "/home/ubuntu/.local/lib/python3.13/site-packages/django/template/base.py", line 615, in find_filter
     raise TemplateSyntaxError("Invalid filter: '%s'" % filter_name)
 django.template.exceptions.TemplateSyntaxError: Invalid filter: 'length_is'
+INFO 2025-08-01 11:55:57,015 autoreload 8688 139919427342592 /workspace/myapp/admin.py changed, reloading.
+INFO 2025-08-01 11:55:57,482 autoreload 12088 140682586525952 Watching for file changes with StatReloader
+INFO 2025-08-01 11:56:01,689 autoreload 12088 140682586525952 /workspace/myapp/admin.py changed, reloading.
+INFO 2025-08-01 11:56:02,144 autoreload 12157 140001741893888 Watching for file changes with StatReloader
+INFO 2025-08-01 11:56:09,375 autoreload 12157 140001741893888 /workspace/myapp/forms.py changed, reloading.
+INFO 2025-08-01 11:56:09,804 autoreload 12239 139830963798272 Watching for file changes with StatReloader
+INFO 2025-08-01 11:56:19,065 autoreload 12239 139830963798272 /workspace/myapp/forms.py changed, reloading.
+INFO 2025-08-01 11:56:19,489 autoreload 12363 140431471948032 Watching for file changes with StatReloader
+INFO 2025-08-01 11:56:25,706 autoreload 12363 140431471948032 /workspace/myapp/admin.py changed, reloading.
+INFO 2025-08-01 11:56:26,137 autoreload 12428 139917613183232 Watching for file changes with StatReloader
+INFO 2025-08-01 11:56:31,349 autoreload 12428 139917613183232 /workspace/myapp/admin.py changed, reloading.
+INFO 2025-08-01 11:56:31,805 autoreload 12479 140541355745536 Watching for file changes with StatReloader
+INFO 2025-08-01 11:56:41,079 autoreload 12479 140541355745536 /workspace/myapp/admin.py changed, reloading.
+INFO 2025-08-01 11:56:41,532 autoreload 12552 140283718058240 Watching for file changes with StatReloader
+INFO 2025-08-01 11:56:59,180 autoreload 12972 140167939260672 Watching for file changes with StatReloader
+INFO 2025-08-01 11:57:24,642 autoreload 12972 140167939260672 /workspace/myapp/admin.py changed, reloading.
+INFO 2025-08-01 11:57:25,082 autoreload 13258 140505031389440 Watching for file changes with StatReloader
+INFO 2025-08-01 11:57:52,494 autoreload 13258 140505031389440 /workspace/myapp/forms.py changed, reloading.
+INFO 2025-08-01 11:57:52,785 autoreload 13441 140588410949888 Watching for file changes with StatReloader
+INFO 2025-08-01 11:57:57,950 autoreload 13441 140588410949888 /workspace/myapp/forms.py changed, reloading.
+INFO 2025-08-01 11:57:58,367 autoreload 13525 140137489928448 Watching for file changes with StatReloader
+INFO 2025-08-01 11:58:03,586 autoreload 13525 140137489928448 /workspace/myapp/admin.py changed, reloading.
+INFO 2025-08-01 11:58:04,026 autoreload 13590 140434643681536 Watching for file changes with StatReloader
+INFO 2025-08-01 11:58:07,215 autoreload 13590 140434643681536 /workspace/myapp/admin.py changed, reloading.
+INFO 2025-08-01 11:58:07,646 autoreload 13623 140355910988032 Watching for file changes with StatReloader
+INFO 2025-08-01 11:58:10,840 autoreload 13623 140355910988032 /workspace/myapp/admin.py changed, reloading.
+INFO 2025-08-01 11:58:11,282 autoreload 13693 140292784013568 Watching for file changes with StatReloader
+INFO 2025-08-01 11:58:15,483 autoreload 13693 140292784013568 /workspace/myapp/admin.py changed, reloading.
+INFO 2025-08-01 11:58:15,915 autoreload 13774 140587171066112 Watching for file changes with StatReloader
+INFO 2025-08-01 11:58:30,259 autoreload 14096 139874552885504 Watching for file changes with StatReloader

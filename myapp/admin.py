@@ -1,7 +1,8 @@
 from django.contrib import admin
 from .models import (Cliente, Empresa, Plato, DisponibilidadPlato, CarritoItem, 
                      Recibo, ReciboItem, PedidoHistorico, Produccion, Inventario, MovimientoInventario)
-from .forms import DisponibilidadPlatoForm, CarritoItemForm
+from .forms import (DisponibilidadPlatoForm, CarritoItemForm, ProduccionForm, 
+                     InventarioForm, MovimientoInventarioForm)
 import pandas as pd
 from django.http import HttpResponse
 from django.urls import path
@@ -11,6 +12,7 @@ from django.utils import timezone
 from datetime import timedelta, date
 from django.utils.html import format_html
 from django.contrib.admin import SimpleListFilter
+from django.db import models
 
 # Vista personalizada para el dashboard
 def dashboard_view(request):
@@ -33,7 +35,7 @@ def production_dashboard_view(request):
             estado='COMPLETADA',
             fecha_completada__gte=timezone.now() - timedelta(days=30)
         ).aggregate(
-            promedio=models.Avg('eficiencia')
+            promedio=Sum('eficiencia')
         )['promedio'] or 0,
     }
     return render(request, 'admin/production_dashboard.html', context)
@@ -88,6 +90,7 @@ admin_site = FamiliaGastroAdminSite(name='familia_gastro_admin')
 
 @admin.register(Produccion)
 class ProduccionAdmin(admin.ModelAdmin):
+    form = ProduccionForm
     list_display = ('plato', 'cantidad_planificada', 'cantidad_producida', 'fecha_planificada', 
                    'estado', 'responsable', 'porcentaje_completado_display', 'costo_total_display')
     list_filter = ('estado', 'fecha_planificada', 'responsable', 'plato__grupo')
@@ -140,21 +143,25 @@ class ProduccionAdmin(admin.ModelAdmin):
     costo_total_display.short_description = 'Costo Total'
     
     def eficiencia_display(self, obj):
-        eficiencia = obj.eficiencia
-        if eficiencia >= 80:
-            color = 'green'
-        elif eficiencia >= 60:
-            color = 'orange'
-        else:
-            color = 'red'
-        return format_html(
-            '<span style="color: {}; font-weight: bold;">{:.1f}%</span>',
-            color, eficiencia
-        ) if eficiencia > 0 else '-'
+        try:
+            eficiencia = obj.eficiencia
+            if eficiencia >= 80:
+                color = 'green'
+            elif eficiencia >= 60:
+                color = 'orange'
+            else:
+                color = 'red'
+            return format_html(
+                '<span style="color: {}; font-weight: bold;">{:.1f}%</span>',
+                color, eficiencia
+            ) if eficiencia > 0 else '-'
+        except:
+            return '-'
     eficiencia_display.short_description = 'Eficiencia'
 
 @admin.register(Inventario)
 class InventarioAdmin(admin.ModelAdmin):
+    form = InventarioForm
     list_display = ('plato', 'cantidad_disponible', 'cantidad_reservada', 'cantidad_total_display',
                    'fecha_produccion', 'fecha_vencimiento', 'dias_hasta_vencimiento_display', 
                    'estado_frescura_display', 'ubicacion')
@@ -212,6 +219,7 @@ class InventarioAdmin(admin.ModelAdmin):
 
 @admin.register(MovimientoInventario)
 class MovimientoInventarioAdmin(admin.ModelAdmin):
+    form = MovimientoInventarioForm
     list_display = ('inventario', 'tipo_movimiento', 'cantidad_display', 'motivo', 
                    'usuario_responsable', 'fecha_movimiento')
     list_filter = ('tipo_movimiento', 'fecha_movimiento', 'usuario_responsable')
@@ -231,18 +239,20 @@ class MovimientoInventarioAdmin(admin.ModelAdmin):
 # ==================== ADMINISTRACIÓN EXISTENTE MEJORADA ====================
 
 class DisponibilidadPlatoAdmin(admin.ModelAdmin):
-    form = DisponibilidadPlatoForm
     list_display = ('plato', 'display_dias_semana')
-    list_filter = ('plato',)
+    list_filter = ('plato', 'dia')
     search_fields = ('plato__nombre',)
+    autocomplete_fields = ['plato']
 
     def display_dias_semana(self, obj):
         return obj.get_dia_display()
     display_dias_semana.short_description = "Día disponible"
 
 class CarritoItemAdmin(admin.ModelAdmin):
-    form = CarritoItemForm
-    list_display = ('usuario', 'plato', 'cantidad', 'dia_semana')
+    list_display = ('usuario', 'plato', 'cantidad', 'dia_semana', 'fecha_agregado')
+    list_filter = ('dia_semana', 'fecha_agregado', 'plato')
+    search_fields = ('usuario__username', 'plato__nombre')
+    autocomplete_fields = ['usuario', 'plato']
 
 class myappAdmin(admin.ModelAdmin):
     readonly_fields = ("Creacion_cuenta",)
@@ -373,8 +383,30 @@ admin.site.register(Empresa)
 class PlatoAdmin(admin.ModelAdmin):
     list_display = ('codigo','nombre', 'grupo', 'precio', 'precio_sin_iva', 'estado')
     list_filter = ('grupo', 'estado')
-    search_fields = ('nombre', 'ingredientes', 'alergenos')
+    search_fields = ('nombre', 'codigo', 'ingredientes', 'alergenos')
     readonly_fields = ('precio_sin_iva',)
+    list_per_page = 20
+    
+    fieldsets = (
+        ('Información Básica', {
+            'fields': ('codigo', 'nombre', 'descripcion', 'grupo', 'estado')
+        }),
+        ('Precios', {
+            'fields': ('precio', 'precio_sin_iva')
+        }),
+        ('Detalles del Producto', {
+            'fields': ('kilogramos', 'ingredientes', 'alergenos', 'vida_util'),
+            'classes': ('collapse',)
+        }),
+        ('Información Nutricional', {
+            'fields': ('calorias', 'proteinas', 'grasa', 'carbohidratos', 'sodio'),
+            'classes': ('collapse',)
+        }),
+        ('Imagen', {
+            'fields': ('imagen',),
+            'classes': ('collapse',)
+        }),
+    )
 
 admin.site.register(DisponibilidadPlato, DisponibilidadPlatoAdmin)
 admin.site.register(CarritoItem, CarritoItemAdmin)
