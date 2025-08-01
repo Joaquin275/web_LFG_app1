@@ -10,7 +10,7 @@
   <!-- Fuentes modernas -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   
   <!-- CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -18,17 +18,163 @@
   <link rel="stylesheet" href="{% static 'styles.css' %}">
   
   <style>
-    body { padding-top: 80px; }
-    
+    /* =================================== 
+       CSS Variables Corporativas
+       =================================== */
+    :root {
+      --color-primary: #b71c1c;
+      --color-primary-dark: #8d1313;
+      --color-primary-light: #d32f2f;
+      --color-secondary: #4d1515;
+      --color-accent: #ff6b6b;
+      
+      --color-white: #ffffff;
+      --color-black: #000000;
+      --color-gray-50: #f9fafb;
+      --color-gray-100: #f3f4f6;
+      --color-gray-200: #e5e7eb;
+      --color-gray-300: #d1d5db;
+      --color-gray-400: #9ca3af;
+      --color-gray-500: #6b7280;
+      --color-gray-600: #4b5563;
+      --color-gray-700: #374151;
+      --color-gray-800: #1f2937;
+      --color-gray-900: #111827;
+      
+      --font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --font-size-xs: 0.75rem;
+      --font-size-sm: 0.875rem;
+      --font-size-base: 1rem;
+      --font-size-lg: 1.125rem;
+      --font-size-xl: 1.25rem;
+      --font-size-2xl: 1.5rem;
+      --font-size-3xl: 1.875rem;
+      --font-size-4xl: 2.25rem;
+      --font-size-5xl: 3rem;
+      
+      --spacing-1: 0.25rem;
+      --spacing-2: 0.5rem;
+      --spacing-3: 0.75rem;
+      --spacing-4: 1rem;
+      --spacing-5: 1.25rem;
+      --spacing-6: 1.5rem;
+      --spacing-8: 2rem;
+      --spacing-10: 2.5rem;
+      --spacing-12: 3rem;
+      --spacing-16: 4rem;
+      
+      --radius-sm: 0.375rem;
+      --radius-md: 0.5rem;
+      --radius-lg: 0.75rem;
+      --radius-xl: 1rem;
+      --radius-2xl: 1.5rem;
+      
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+      
+      --transition-fast: 150ms ease-in-out;
+      --transition-normal: 250ms ease-in-out;
+    }
+
+    /* =================================== 
+       Global Styles & Box Model Fix
+       =================================== */
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box !important;
+    }
+
+    html {
+      font-size: 16px;
+      line-height: 1.15;
+      -webkit-text-size-adjust: 100%;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: var(--font-family);
+      background: linear-gradient(135deg, var(--color-gray-50) 0%, var(--color-gray-100) 100%);
+      color: var(--color-gray-800);
+      margin: 0 !important;
+      padding: 0 !important;
+      box-sizing: border-box !important;
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+
+    /* =================================== 
+       Header Responsive
+       =================================== */
+    .navbar {
+      background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%) !important;
+      box-shadow: var(--shadow-lg);
+      padding: var(--spacing-4) 0;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      min-height: 70px;
+      box-sizing: border-box !important;
+    }
+
+    .navbar-brand {
+      font-weight: 700;
+      font-size: var(--font-size-2xl);
+      color: var(--color-white) !important;
+      text-decoration: none !important;
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-2);
+    }
+
+    .navbar-nav .nav-link {
+      color: var(--color-white) !important;
+      font-weight: 500;
+      padding: var(--spacing-2) var(--spacing-4) !important;
+      border-radius: var(--radius-md);
+      transition: var(--transition-fast);
+      margin: 0 var(--spacing-1);
+    }
+
+    .navbar-nav .nav-link:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+      transform: translateY(-1px);
+    }
+
+    /* =================================== 
+       Main Content Container
+       =================================== */
+    .main-container {
+      margin-top: 70px;
+      padding: var(--spacing-8) 0;
+      min-height: calc(100vh - 70px);
+      box-sizing: border-box !important;
+    }
+
+    .container-fluid {
+      padding-right: var(--spacing-4);
+      padding-left: var(--spacing-4);
+      box-sizing: border-box !important;
+    }
+
+    /* =================================== 
+       Hero Section
+       =================================== */
     .hero-section {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: white;
-      padding: 4rem 0;
-      margin-bottom: 3rem;
+      background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-light) 100%);
+      color: var(--color-white);
+      padding: var(--spacing-16) 0 var(--spacing-12) 0;
+      margin-bottom: var(--spacing-12);
       position: relative;
       overflow: hidden;
+      border-radius: 0 0 var(--radius-2xl) var(--radius-2xl);
+      box-sizing: border-box !important;
     }
-    
+
     .hero-section::before {
       content: '';
       position: absolute;
@@ -39,565 +185,832 @@
       background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E") repeat;
       animation: float 20s ease-in-out infinite;
     }
-    
+
     @keyframes float {
       0%, 100% { transform: translateY(0px); }
       50% { transform: translateY(-20px); }
     }
-    
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      max-width: 800px;
+      margin: 0 auto;
+      box-sizing: border-box !important;
+    }
+
+    .hero-title {
+      font-size: var(--font-size-5xl);
+      font-weight: 800;
+      margin-bottom: var(--spacing-6);
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+      line-height: 1.2;
+    }
+
+    .hero-subtitle {
+      font-size: var(--font-size-xl);
+      opacity: 0.9;
+      margin-bottom: var(--spacing-8);
+      font-weight: 400;
+    }
+
+    /* =================================== 
+       Section Titles
+       =================================== */
     .section-title {
       position: relative;
       display: inline-block;
-      margin-bottom: 3rem;
+      font-size: var(--font-size-3xl);
+      font-weight: 700;
+      color: var(--color-primary);
+      margin-bottom: var(--spacing-8);
+      padding-bottom: var(--spacing-3);
+      border-bottom: 3px solid var(--color-primary);
     }
-    
-    .section-title::after {
-      content: '';
-      position: absolute;
-      bottom: -10px;
-      left: 0;
-      width: 60px;
-      height: 4px;
-      background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
-      border-radius: 2px;
-    }
-    
-    .platos-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-      gap: 2rem;
-      margin-bottom: 3rem;
-    }
-    
-    .empty-state {
+
+    .section-subtitle {
+      font-size: var(--font-size-lg);
+      color: var(--color-gray-600);
+      margin-bottom: var(--spacing-8);
       text-align: center;
-      padding: 4rem 2rem;
-      color: var(--medium-gray);
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
     }
-    
-    .empty-state i {
-      font-size: 4rem;
-      margin-bottom: 1rem;
-      opacity: 0.5;
+
+    /* =================================== 
+       Dish Containers - Responsive Grid
+       =================================== */
+    .dishes-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--spacing-8);
+      margin-bottom: var(--spacing-12);
+      box-sizing: border-box !important;
     }
-    
-    .stats-bar {
-      background: rgba(255, 255, 255, 0.9);
-      backdrop-filter: blur(10px);
-      padding: 1rem;
-      border-radius: var(--border-radius);
-      margin-bottom: 2rem;
-      box-shadow: var(--shadow-light);
+
+    .dish-container {
+      background: var(--color-white);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-lg);
+      overflow: hidden;
+      transition: var(--transition-normal);
+      border: 1px solid var(--color-gray-200);
+      box-sizing: border-box !important;
     }
+
+    .dish-container:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-xl);
+    }
+
+    .dish-header {
+      background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-light) 100%);
+      color: var(--color-white);
+      padding: var(--spacing-6);
+      text-align: center;
+      position: relative;
+      box-sizing: border-box !important;
+    }
+
+    .dish-header h3 {
+      font-size: var(--font-size-2xl);
+      font-weight: 700;
+      margin: 0;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    }
+
+    .dish-header .icon {
+      font-size: var(--font-size-4xl);
+      margin-bottom: var(--spacing-3);
+      opacity: 0.9;
+    }
+
+    .dish-content {
+      padding: var(--spacing-6);
+      box-sizing: border-box !important;
+    }
+
+    /* =================================== 
+       Dish Cards - Responsive
+       =================================== */
+    .dish-cards-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: var(--spacing-4);
+      box-sizing: border-box !important;
+    }
+
+    .dish-card {
+      background: var(--color-gray-50);
+      border-radius: var(--radius-lg);
+      padding: var(--spacing-5);
+      border: 1px solid var(--color-gray-200);
+      transition: var(--transition-fast);
+      box-sizing: border-box !important;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .dish-card:hover {
+      background: var(--color-white);
+      border-color: var(--color-primary);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .dish-image {
+      width: 80px;
+      height: 80px;
+      border-radius: var(--radius-lg);
+      object-fit: cover;
+      margin-bottom: var(--spacing-3);
+      box-shadow: var(--shadow-sm);
+      float: right;
+      margin-left: var(--spacing-4);
+    }
+
+    .dish-name {
+      font-size: var(--font-size-lg);
+      font-weight: 600;
+      color: var(--color-gray-800);
+      margin-bottom: var(--spacing-2);
+      line-height: 1.3;
+    }
+
+    .dish-description {
+      font-size: var(--font-size-sm);
+      color: var(--color-gray-600);
+      margin-bottom: var(--spacing-3);
+      line-height: 1.5;
+    }
+
+    .dish-price {
+      font-size: var(--font-size-xl);
+      font-weight: 700;
+      color: var(--color-primary);
+      margin-bottom: var(--spacing-3);
+    }
+
+    .dish-day {
+      display: inline-block;
+      background: var(--color-primary);
+      color: var(--color-white);
+      padding: var(--spacing-1) var(--spacing-3);
+      border-radius: var(--radius-md);
+      font-size: var(--font-size-xs);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    /* =================================== 
+       Action Buttons
+       =================================== */
+    .btn-primary-custom {
+      background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-light) 100%);
+      border: none;
+      color: var(--color-white);
+      padding: var(--spacing-3) var(--spacing-6);
+      border-radius: var(--radius-md);
+      font-weight: 600;
+      font-size: var(--font-size-sm);
+      transition: var(--transition-fast);
+      box-shadow: var(--shadow-sm);
+      text-decoration: none !important;
+      display: inline-flex;
+      align-items: center;
+      gap: var(--spacing-2);
+      min-height: 44px;
+      justify-content: center;
+      box-sizing: border-box !important;
+    }
+
+    .btn-primary-custom:hover {
+      background: linear-gradient(135deg, var(--color-primary-dark) 0%, var(--color-primary) 100%);
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-md);
+      color: var(--color-white) !important;
+    }
+
+    .btn-secondary-custom {
+      background: var(--color-white);
+      border: 2px solid var(--color-primary);
+      color: var(--color-primary);
+      padding: var(--spacing-3) var(--spacing-6);
+      border-radius: var(--radius-md);
+      font-weight: 600;
+      font-size: var(--font-size-sm);
+      transition: var(--transition-fast);
+      text-decoration: none !important;
+      display: inline-flex;
+      align-items: center;
+      gap: var(--spacing-2);
+      min-height: 44px;
+      justify-content: center;
+      box-sizing: border-box !important;
+    }
+
+    .btn-secondary-custom:hover {
+      background: var(--color-primary);
+      color: var(--color-white) !important;
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-md);
+    }
+
+    /* =================================== 
+       Cart Section
+       =================================== */
+    .cart-section {
+      background: var(--color-white);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-lg);
+      padding: var(--spacing-8);
+      margin-bottom: var(--spacing-12);
+      border: 1px solid var(--color-gray-200);
+      box-sizing: border-box !important;
+    }
+
+    .cart-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: var(--spacing-4);
+      border-bottom: 1px solid var(--color-gray-200);
+      transition: var(--transition-fast);
+      box-sizing: border-box !important;
+    }
+
+    .cart-item:hover {
+      background: var(--color-gray-50);
+    }
+
+    .cart-item:last-child {
+      border-bottom: none;
+    }
+
+    .cart-total {
+      background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-light) 100%);
+      color: var(--color-white);
+      padding: var(--spacing-5);
+      border-radius: var(--radius-lg);
+      text-align: center;
+      margin-top: var(--spacing-6);
+      box-sizing: border-box !important;
+    }
+
+    .cart-total h4 {
+      font-size: var(--font-size-2xl);
+      font-weight: 700;
+      margin: 0;
+    }
+
+    /* =================================== 
+       Footer
+       =================================== */
+    .footer {
+      background: linear-gradient(135deg, var(--color-gray-800) 0%, var(--color-gray-900) 100%);
+      color: var(--color-white);
+      padding: var(--spacing-12) 0 var(--spacing-8) 0;
+      margin-top: var(--spacing-16);
+      box-sizing: border-box !important;
+    }
+
+    .footer-content {
+      text-align: center;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .footer h4 {
+      font-size: var(--font-size-2xl);
+      font-weight: 700;
+      margin-bottom: var(--spacing-4);
+      color: var(--color-white);
+    }
+
+    .footer p {
+      font-size: var(--font-size-base);
+      opacity: 0.8;
+      margin-bottom: var(--spacing-6);
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: var(--spacing-6);
+      flex-wrap: wrap;
+      margin-bottom: var(--spacing-6);
+    }
+
+    .footer-links a {
+      color: var(--color-white);
+      text-decoration: none;
+      font-weight: 500;
+      transition: var(--transition-fast);
+      padding: var(--spacing-2) var(--spacing-4);
+      border-radius: var(--radius-md);
+    }
+
+    .footer-links a:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+      transform: translateY(-1px);
+    }
+
+    /* =================================== 
+       Mobile Responsive Breakpoints
+       =================================== */
     
-    .loading-skeleton {
-      background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-      background-size: 200% 100%;
-      animation: loading 1.5s infinite;
+    /* Extra Small devices (phones, less than 576px) */
+    @media (max-width: 575.98px) {
+      .hero-title {
+        font-size: var(--font-size-3xl);
+      }
+      
+      .hero-subtitle {
+        font-size: var(--font-size-lg);
+      }
+      
+      .dishes-grid {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-6);
+      }
+      
+      .dish-header {
+        padding: var(--spacing-4);
+      }
+      
+      .dish-header h3 {
+        font-size: var(--font-size-xl);
+      }
+      
+      .dish-content {
+        padding: var(--spacing-4);
+      }
+      
+      .dish-image {
+        width: 60px;
+        height: 60px;
+        float: none;
+        margin: 0 0 var(--spacing-3) 0;
+      }
+      
+      .section-title {
+        font-size: var(--font-size-2xl);
+        text-align: center;
+        display: block;
+      }
+      
+      .cart-section {
+        padding: var(--spacing-4);
+      }
+      
+      .navbar-brand {
+        font-size: var(--font-size-xl);
+      }
+      
+      .container-fluid {
+        padding-right: var(--spacing-2);
+        padding-left: var(--spacing-2);
+      }
+      
+      .hero-section {
+        padding: var(--spacing-8) 0 var(--spacing-6) 0;
+        margin-bottom: var(--spacing-8);
+      }
+      
+      .btn-primary-custom,
+      .btn-secondary-custom {
+        width: 100%;
+        margin-bottom: var(--spacing-2);
+      }
+    }
+
+    /* Small devices (landscape phones, 576px and up) */
+    @media (min-width: 576px) and (max-width: 767.98px) {
+      .dishes-grid {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-6);
+      }
+      
+      .hero-title {
+        font-size: var(--font-size-4xl);
+      }
+    }
+
+    /* Medium devices (tablets, 768px and up) */
+    @media (min-width: 768px) and (max-width: 991.98px) {
+      .dishes-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--spacing-6);
+      }
+      
+      .dish-cards-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Large devices (desktops, 992px and up) */
+    @media (min-width: 992px) {
+      .dish-cards-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .dishes-grid {
+        gap: var(--spacing-8);
+      }
+    }
+
+    /* Extra large devices (large desktops, 1200px and up) */
+    @media (min-width: 1200px) {
+      .dishes-grid {
+        gap: var(--spacing-10);
+      }
+      
+      .container-fluid {
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+    }
+
+    /* =================================== 
+       Touch Friendly for Mobile
+       =================================== */
+    @media (pointer: coarse) {
+      .btn-primary-custom,
+      .btn-secondary-custom {
+        min-height: 48px;
+        padding: var(--spacing-4) var(--spacing-6);
+      }
+      
+      .dish-card {
+        padding: var(--spacing-6);
+      }
+      
+      .navbar-nav .nav-link {
+        min-height: 44px;
+        display: flex;
+        align-items: center;
+      }
+    }
+
+    /* =================================== 
+       Loading Animations
+       =================================== */
+    .dish-container {
+      animation: fadeInUp 0.6s ease-out;
+    }
+
+    .dish-container:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* =================================== 
+       Accessibility Improvements
+       =================================== */
+    .btn-primary-custom:focus,
+    .btn-secondary-custom:focus {
+      outline: 2px solid var(--color-primary);
+      outline-offset: 2px;
+    }
+
+    .dish-card:focus-within {
+      border-color: var(--color-primary);
+      box-shadow: 0 0 0 2px rgba(183, 28, 28, 0.2);
+    }
+
+    /* =================================== 
+       Print Styles
+       =================================== */
+    @media print {
+      .navbar,
+      .hero-section,
+      .footer {
+        display: none;
+      }
+      
+      .dish-container {
+        box-shadow: none;
+        border: 1px solid #000;
+      }
     }
   </style>
 </head>
-
 <body>
-  <!-- NAVBAR MODERNA -->
-  <nav class="navbar navbar-expand-lg navbar-custom fixed-top transition-navbar">
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg">
     <div class="container-fluid">
-      <a class="navbar-brand" href="/">
-        <i class='bx bx-arrow-back' style='font-size: 1.5rem;'></i>
-        <img src="{% static 'img/imagen1-removebg-preview.png' %}" alt="Familia Gastro">
-        <span>Familia Gastro</span>
+      <a class="navbar-brand" href="{% url 'main' %}">
+        🍽️ Familia Gastro
       </a>
-      
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-        <span class="navbar-toggler-icon"></span>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" style="border: none; color: white;">
+        <i class='bx bx-menu' style="font-size: 24px; color: white;"></i>
       </button>
-      
       <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav ms-auto align-items-center">
+        <ul class="navbar-nav ms-auto">
           <li class="nav-item">
-            <span class="nav-link">¡Hola, {{ user.username }}!</span>
+            <a class="nav-link" href="{% url 'main' %}">🏠 Inicio</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'logout' %}">
-              <i class='bx bx-log-out'></i> Salir
-            </a>
+            <a class="nav-link" href="#menu">🍽️ Menú</a>
           </li>
+          {% if user.is_authenticated %}
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'carrito' %}">🛒 Carrito ({{ item_count }})</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'logout' %}">👋 Cerrar Sesión</a>
+            </li>
+            {% if user.is_staff %}
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'admin:index' %}">⚙️ Admin</a>
+              </li>
+            {% endif %}
+          {% else %}
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'login' %}">🔐 Iniciar Sesión</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'registro' %}">📝 Registro</a>
+            </li>
+          {% endif %}
         </ul>
       </div>
     </div>
   </nav>
 
-  <!-- HERO SECTION -->
-  <section class="hero-section">
-    <div class="container text-center">
-      <h1 class="display-4 fw-bold mb-3 fade-in-up">
-        <i class='bx bx-restaurant'></i>
-        Crea tu menú semanal
-      </h1>
-      <p class="lead mb-4 fade-in-up" style="animation-delay: 0.2s;">
-        Selecciona tus platos favoritos para cada día de la semana
-      </p>
-      <div class="stats-bar fade-in-up" style="animation-delay: 0.4s;">
-        <div class="row text-center">
-          <div class="col-md-4">
-            <h5 class="mb-1">{{ disponibles|length }}</h5>
-            <small>Platos disponibles hoy</small>
-          </div>
-          <div class="col-md-4">
-            <h5 class="mb-1">{{ carrito_items|length }}</h5>
-            <small>En tu carrito</small>
-          </div>
-          <div class="col-md-4">
-            <h5 class="mb-1">€{{ total_carrito|floatformat:2 }}</h5>
-            <small>Total</small>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- FILTRO DE DÍAS -->
-  <section class="sticky-top dias-scroll-wrapper" style="top: 80px; z-index: 1020;">
-    <div class="container-fluid">
-      <div class="dias-scroll">
-        {% for codigo, nombre in dias_semana.items %}
-          <form method="get" action="{% url 'main' %}" class="d-inline">
-            <input type="hidden" name="dia" value="{{ codigo }}">
-            {% if grupo_actual %}
-              <input type="hidden" name="grupo" value="{{ grupo_actual }}">
-            {% endif %}
-            <button type="submit" class="btn btn-outline-primary {% if dia_actual == codigo %}active{% endif %}">
-              <i class='bx bx-calendar'></i>
-              {{ nombre }}
-            </button>
-          </form>
-        {% endfor %}
-      </div>
-    </div>
-  </section>
-
-  <!-- CONTENIDO PRINCIPAL -->
-  <div class="container my-5">
-    
-    <!-- TÍTULO DE SECCIÓN -->
-    <h2 class="section-title text-gradient">
-      Platos disponibles el {{ dia_actual_nombre }}
-    </h2>
-
-    <!-- FILTROS DE GRUPO -->
-    {% if grupos %}
-    <div class="mb-4">
-      <div class="d-flex flex-wrap gap-2">
-        <a href="?dia={{ dia_actual }}" 
-           class="btn btn-sm {% if not grupo_actual %}btn-primary{% else %}btn-outline-primary{% endif %}">
-          <i class='bx bx-grid-alt'></i> Todos
-        </a>
-        {% for grupo in grupos %}
-          <a href="?dia={{ dia_actual }}&grupo={{ grupo }}" 
-             class="btn btn-sm {% if grupo_actual == grupo %}btn-primary{% else %}btn-outline-primary{% endif %}">
-            {{ grupo }}
+  <!-- Main Content -->
+  <main class="main-container">
+    <!-- Hero Section -->
+    <section class="hero-section">
+      <div class="container-fluid">
+        <div class="hero-content">
+          <h1 class="hero-title">Bienvenido a Familia Gastro</h1>
+          <p class="hero-subtitle">Descubre nuestro delicioso menú semanal preparado con amor y los mejores ingredientes</p>
+          <a href="#menu" class="btn-primary-custom">
+            <i class='bx bx-restaurant'></i>
+            Ver Menú Semanal
           </a>
-        {% endfor %}
-      </div>
-    </div>
-    {% endif %}
-
-    <!-- GRID DE PLATOS -->
-    {% if disponibles %}
-      <div class="platos-grid">
-        {% for disp in disponibles %}
-          <div class="col fade-in-up" style="animation-delay: {{ forloop.counter0|floatformat:1|add:'0.1' }}s">
-            <div class="card h-100 clickable-card hover-lift"
-                 data-nombre="{{ disp.plato.nombre|escapejs }}"
-                 data-descripcion="{{ disp.plato.descripcion|escapejs }}"
-                 data-precio="{{ disp.plato.precio }}"
-                 {% if disp.plato.imagen %}data-imagen="{{ disp.plato.imagen.url }}"{% endif %}
-                 data-grupo="{{ disp.plato.get_grupo_display|escapejs }}"
-                 data-kilogramos="{{ disp.plato.kilogramos }}"
-                 data-vida-util="{{ disp.plato.vida_util|escapejs }}"
-                 data-calorias="{{ disp.plato.calorias|default:'' }}"
-                 data-proteinas="{{ disp.plato.proteinas|default:'' }}"
-                 data-grasa="{{ disp.plato.grasa|default:'' }}"
-                 data-carbohidratos="{{ disp.plato.carbohidratos|default:'' }}"
-                 data-sodio="{{ disp.plato.sodio|default:'' }}"
-                 data-ingredientes="{{ disp.plato.ingredientes|escapejs }}"
-                 data-alergenos="{{ disp.plato.alergenos|escapejs }}"
-                 style="cursor: pointer;">
-              
-              <!-- Badge de estado -->
-              {% if disp.plato.estado != "COMUN" %}
-                <div class="estado-badge {{ disp.plato.estado|lower|cut:' ' }}">
-                  {{ disp.plato.get_estado_display }}
-                </div>
-              {% endif %}
-              
-              <!-- Imagen del plato -->
-              {% if disp.plato.imagen %}
-                <img src="{{ disp.plato.imagen.url }}" class="card-img-top" alt="{{ disp.plato.nombre }}">
-              {% else %}
-                <div class="card-img-top d-flex align-items-center justify-content-center bg-light">
-                  <i class='bx bx-dish' style="font-size: 3rem; color: var(--medium-gray);"></i>
-                </div>
-              {% endif %}
-              
-              <!-- Contenido de la card -->
-              <div class="card-body d-flex flex-column">
-                <h5 class="card-title">{{ disp.plato.nombre }}</h5>
-                <p class="card-text flex-grow-1">{{ disp.plato.descripcion|truncatechars:100 }}</p>
-                
-                <!-- Información adicional -->
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                  <div class="precio">{{ disp.plato.precio }}</div>
-                  <div class="text-muted small">
-                    <i class='bx bx-weight'></i> {{ disp.plato.kilogramos }}g
-                  </div>
-                </div>
-                
-                <!-- Formulario de agregar al carrito -->
-                <form method="post" action="" class="mt-auto">
-                  {% csrf_token %}
-                  <input type="hidden" name="plato_id" value="{{ disp.plato.id }}">
-                  <input type="hidden" name="dia_semana" value="{{ dia_actual }}">
-                  
-                  <div class="d-flex align-items-center gap-2 mb-3">
-                    <label class="form-label mb-0 fw-semibold small">Cantidad:</label>
-                    <input type="number" name="cantidad" value="1" min="1" max="10" 
-                           class="form-control cantidad-input-custom">
-                  </div>
-                  
-                  <button type="submit" class="btn btn-primary w-100">
-                    <i class='bx bx-cart-add'></i>
-                    Agregar al carrito
-                  </button>
-                </form>
-              </div>
-            </div>
-          </div>
-        {% endfor %}
-      </div>
-    {% else %}
-      <!-- Estado vacío -->
-      <div class="empty-state">
-        <i class='bx bx-dish'></i>
-        <h4>No hay platos disponibles</h4>
-        <p>No tenemos platos disponibles para el {{ dia_actual_nombre }}.</p>
-        <p>Prueba seleccionando otro día de la semana.</p>
-      </div>
-    {% endif %}
-  </div>
-
-  <!-- BOTÓN FLOTANTE DEL CARRITO -->
-  {% if carrito_items %}
-    <button class="btn-carrito" data-bs-toggle="modal" data-bs-target="#carritoModal" 
-            title="Ver carrito ({{ carrito_items|length }} items)">
-      <i class='bx bx-cart'></i>
-      <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning text-dark">
-        {{ carrito_items|length }}
-      </span>
-    </button>
-  {% endif %}
-
-  <!-- MODAL DEL CARRITO MEJORADO -->
-  {% if carrito_items %}
-  <div class="modal fade" id="carritoModal" tabindex="-1" aria-labelledby="carritoModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-scrollable">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="carritoModalLabel">
-            <i class='bx bx-cart'></i>
-            Tu carrito de compras
-          </h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
         </div>
-        
-        <div class="modal-body">
-          <div class="row g-3">
-            {% for item in carrito_items %}
-              <div class="col-12">
-                <div class="card">
-                  <div class="card-body">
-                    <div class="row align-items-center">
-                      <div class="col-md-6">
-                        <h6 class="mb-1">{{ item.plato.nombre }}</h6>
-                        <small class="text-muted">
-                          <i class='bx bx-calendar'></i> {{ item.get_dia_semana_display }}
-                        </small>
-                      </div>
-                      <div class="col-md-3 text-center">
-                        <span class="badge bg-primary rounded-pill">
-                          {{ item.cantidad }}x
-                        </span>
-                      </div>
-                      <div class="col-md-2 text-end">
-                        <strong>€{{ item.subtotal|floatformat:2 }}</strong>
-                      </div>
-                      <div class="col-md-1">
-                        <form action="{% url 'eliminar_item' item.id %}" method="post" class="d-inline">
-                          {% csrf_token %}
-                          <button type="submit" class="btn btn-sm btn-outline-danger" 
-                                  title="Eliminar item">
-                            <i class='bx bx-trash'></i>
-                          </button>
-                        </form>
-                      </div>
-                    </div>
+      </div>
+    </section>
+
+    <!-- Menu Section -->
+    <section id="menu" class="container-fluid">
+      <div class="text-center mb-5">
+        <h2 class="section-title">🍽️ Menú Semanal</h2>
+        <p class="section-subtitle">
+          Explora nuestros platos disponibles organizados por categorías. 
+          Cada plato está preparado con ingredientes frescos y recetas tradicionales.
+        </p>
+      </div>
+
+      <!-- Two Dish Containers -->
+      <div class="dishes-grid">
+        <!-- Container 1: Platos Principales -->
+        <div class="dish-container">
+          <div class="dish-header">
+            <div class="icon">🍖</div>
+            <h3>Platos Principales</h3>
+          </div>
+          <div class="dish-content">
+            <div class="dish-cards-grid">
+              {% for plato in platos_principales %}
+                <div class="dish-card">
+                  {% if plato.imagen %}
+                    <img src="{{ plato.imagen.url }}" alt="{{ plato.nombre }}" class="dish-image">
+                  {% endif %}
+                  <div class="dish-name">{{ plato.nombre }}</div>
+                  {% if plato.descripcion %}
+                    <div class="dish-description">{{ plato.descripcion|truncatechars:100 }}</div>
+                  {% endif %}
+                  <div class="dish-price">€{{ plato.precio }}</div>
+                  {% for disponibilidad in plato.disponibilidades.all %}
+                    <span class="dish-day">{{ disponibilidad.get_dia_display }}</span>
+                  {% endfor %}
+                  <div class="mt-3">
+                    {% if user.is_authenticated %}
+                      <form method="post" action="{% url 'agregar_carrito' %}" class="d-inline">
+                        {% csrf_token %}
+                        <input type="hidden" name="plato_id" value="{{ plato.id }}">
+                        <input type="hidden" name="cantidad" value="1">
+                        <button type="submit" class="btn-primary-custom">
+                          <i class='bx bx-cart-add'></i>
+                          Agregar al Carrito
+                        </button>
+                      </form>
+                    {% else %}
+                      <a href="{% url 'login' %}" class="btn-secondary-custom">
+                        <i class='bx bx-log-in'></i>
+                        Inicia Sesión para Ordenar
+                      </a>
+                    {% endif %}
                   </div>
                 </div>
-              </div>
-            {% endfor %}
-          </div>
-          
-          <!-- Resumen del pedido -->
-          <div class="card mt-3 bg-light">
-            <div class="card-body">
-              <div class="d-flex justify-content-between align-items-center">
-                <h5 class="mb-0">Total del pedido:</h5>
-                <h4 class="mb-0 text-primary">€{{ total_carrito|floatformat:2 }}</h4>
-              </div>
+              {% empty %}
+                <div class="text-center py-5">
+                  <i class='bx bx-dish' style="font-size: 4rem; color: var(--color-gray-400); margin-bottom: 1rem;"></i>
+                  <p style="color: var(--color-gray-500);">No hay platos principales disponibles en este momento.</p>
+                </div>
+              {% endfor %}
             </div>
           </div>
         </div>
-        
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-            Seguir comprando
-          </button>
-          <form action="{% url 'procesar_pago' %}" method="post" class="d-inline">
-            {% csrf_token %}
-            <button type="submit" class="btn btn-success btn-lg">
+
+        <!-- Container 2: Platos Complementarios -->
+        <div class="dish-container">
+          <div class="dish-header">
+            <div class="icon">🥗</div>
+            <h3>Complementarios</h3>
+          </div>
+          <div class="dish-content">
+            <div class="dish-cards-grid">
+              {% for plato in platos_complementarios %}
+                <div class="dish-card">
+                  {% if plato.imagen %}
+                    <img src="{{ plato.imagen.url }}" alt="{{ plato.nombre }}" class="dish-image">
+                  {% endif %}
+                  <div class="dish-name">{{ plato.nombre }}</div>
+                  {% if plato.descripcion %}
+                    <div class="dish-description">{{ plato.descripcion|truncatechars:100 }}</div>
+                  {% endif %}
+                  <div class="dish-price">€{{ plato.precio }}</div>
+                  {% for disponibilidad in plato.disponibilidades.all %}
+                    <span class="dish-day">{{ disponibilidad.get_dia_display }}</span>
+                  {% endfor %}
+                  <div class="mt-3">
+                    {% if user.is_authenticated %}
+                      <form method="post" action="{% url 'agregar_carrito' %}" class="d-inline">
+                        {% csrf_token %}
+                        <input type="hidden" name="plato_id" value="{{ plato.id }}">
+                        <input type="hidden" name="cantidad" value="1">
+                        <button type="submit" class="btn-primary-custom">
+                          <i class='bx bx-cart-add'></i>
+                          Agregar al Carrito
+                        </button>
+                      </form>
+                    {% else %}
+                      <a href="{% url 'login' %}" class="btn-secondary-custom">
+                        <i class='bx bx-log-in'></i>
+                        Inicia Sesión para Ordenar
+                      </a>
+                    {% endif %}
+                  </div>
+                </div>
+              {% empty %}
+                <div class="text-center py-5">
+                  <i class='bx bx-dish' style="font-size: 4rem; color: var(--color-gray-400); margin-bottom: 1rem;"></i>
+                  <p style="color: var(--color-gray-500);">No hay platos complementarios disponibles en este momento.</p>
+                </div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Cart Summary -->
+      {% if user.is_authenticated and carrito_items %}
+        <div class="cart-section">
+          <h3 class="text-center mb-4" style="color: var(--color-primary); font-weight: 700;">🛒 Tu Carrito</h3>
+          {% for item in carrito_items %}
+            <div class="cart-item">
+              <div>
+                <strong>{{ item.plato.nombre }}</strong>
+                <small class="d-block text-muted">Cantidad: {{ item.cantidad }}</small>
+              </div>
+              <div>
+                <span class="fw-bold" style="color: var(--color-primary);">€{{ item.subtotal }}</span>
+                <a href="{% url 'eliminar_item' item.id %}" class="btn btn-sm btn-outline-danger ms-2">
+                  <i class='bx bx-trash'></i>
+                </a>
+              </div>
+            </div>
+          {% endfor %}
+          <div class="cart-total">
+            <h4>Total: €{{ total_carrito }}</h4>
+            <a href="{% url 'carrito' %}" class="btn btn-light btn-lg mt-3">
               <i class='bx bx-credit-card'></i>
-              Proceder al pago
-            </button>
-          </form>
-        </div>
-      </div>
-    </div>
-  </div>
-  {% endif %}
-
-  <!-- MODAL DETALLE PLATO MEJORADO -->
-  <div class="modal fade" id="infoPlatoModal" tabindex="-1" aria-labelledby="infoPlatoModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="infoPlatoModalLabel">Información del plato</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-        </div>
-        
-        <div class="modal-body">
-          <div class="row g-4">
-            <div class="col-md-5">
-              <img id="infoPlatoImagen" src="" alt="" class="img-fluid rounded shadow">
-            </div>
-            
-            <div class="col-md-7">
-              <!-- Tabs de información -->
-              <ul class="nav nav-pills mb-3" id="platoTabs" role="tablist">
-                <li class="nav-item" role="presentation">
-                  <button class="nav-link active" id="desc-tab" data-bs-toggle="pill" 
-                          data-bs-target="#desc" type="button" role="tab">
-                    <i class='bx bx-info-circle'></i> Descripción
-                  </button>
-                </li>
-                <li class="nav-item" role="presentation">
-                  <button class="nav-link" id="nutri-tab" data-bs-toggle="pill" 
-                          data-bs-target="#nutri" type="button" role="tab">
-                    <i class='bx bx-health'></i> Nutricional
-                  </button>
-                </li>
-                <li class="nav-item" role="presentation">
-                  <button class="nav-link" id="ing-tab" data-bs-toggle="pill" 
-                          data-bs-target="#ing" type="button" role="tab">
-                    <i class='bx bx-list-ul'></i> Ingredientes
-                  </button>
-                </li>
-              </ul>
-              
-              <!-- Contenido de tabs -->
-              <div class="tab-content" id="platoTabsContent">
-                <div class="tab-pane fade show active" id="desc" role="tabpanel">
-                  <p id="infoPlatoDescripcion" class="mb-3"></p>
-                  <div class="d-flex justify-content-between align-items-center">
-                    <div class="precio" id="infoPlatoPrecio"></div>
-                    <div class="text-muted">
-                      <small><i class='bx bx-weight'></i> <span id="infoPlatoKg"></span>g</small>
-                    </div>
-                  </div>
-                </div>
-                
-                <div class="tab-pane fade" id="nutri" role="tabpanel">
-                  <div class="row g-3">
-                    <div class="col-6">
-                      <div class="card text-center">
-                        <div class="card-body py-2">
-                          <h6 class="card-title mb-1">Calorías</h6>
-                          <p class="card-text"><span id="infoPlatoCalorias">-</span> kcal</p>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-6">
-                      <div class="card text-center">
-                        <div class="card-body py-2">
-                          <h6 class="card-title mb-1">Proteínas</h6>
-                          <p class="card-text"><span id="infoPlatoProteinas">-</span> g</p>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-6">
-                      <div class="card text-center">
-                        <div class="card-body py-2">
-                          <h6 class="card-title mb-1">Grasas</h6>
-                          <p class="card-text"><span id="infoPlatoGrasa">-</span> g</p>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-6">
-                      <div class="card text-center">
-                        <div class="card-body py-2">
-                          <h6 class="card-title mb-1">Carbohidratos</h6>
-                          <p class="card-text"><span id="infoPlatoCarbohidratos">-</span> g</p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                
-                <div class="tab-pane fade" id="ing" role="tabpanel">
-                  <div class="mb-3">
-                    <h6><i class='bx bx-list-ul'></i> Ingredientes:</h6>
-                    <p id="infoPlatoIngredientes" class="text-muted"></p>
-                  </div>
-                  <div>
-                    <h6><i class='bx bx-error'></i> Alérgenos:</h6>
-                    <p id="infoPlatoAlergenos" class="text-muted"></p>
-                  </div>
-                </div>
-              </div>
-              
-              <!-- Información adicional -->
-              <div class="mt-3">
-                <div class="d-flex flex-wrap gap-2">
-                  <span class="badge bg-secondary">
-                    <i class='bx bx-category'></i> <span id="infoPlatoGrupo"></span>
-                  </span>
-                  <span class="badge bg-info">
-                    <i class='bx bx-time'></i> <span id="infoPlatoVidaUtil"></span>
-                  </span>
-                </div>
-              </div>
-            </div>
+              Proceder al Pago
+            </a>
           </div>
         </div>
+      {% endif %}
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container-fluid">
+      <div class="footer-content">
+        <h4>🍽️ Familia Gastro</h4>
+        <p>Deliciosa comida casera preparada con amor y los mejores ingredientes. Tradición y sabor en cada plato.</p>
+        <div class="footer-links">
+          <a href="{% url 'main' %}">Inicio</a>
+          <a href="#menu">Menú</a>
+          {% if user.is_staff %}
+            <a href="{% url 'admin:index' %}">Panel Admin</a>
+          {% endif %}
+          <a href="mailto:info@familiacastro.com">Contacto</a>
+        </div>
+        <p style="margin-bottom: 0; opacity: 0.6; font-size: var(--font-size-sm);">
+          © 2025 Familia Gastro. Todos los derechos reservados.
+        </p>
       </div>
     </div>
-  </div>
+  </footer>
 
-  <!-- SCRIPTS -->
+  <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"></script>
+  
   <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      // Efecto navbar shrink
-      window.addEventListener('scroll', function () {
-        const navbar = document.querySelector('.transition-navbar');
-        if (window.scrollY > 10) {
-          navbar.classList.add('navbar-shrink');
-        } else {
-          navbar.classList.remove('navbar-shrink');
-        }
-      });
-
-      // Modal de información del plato
-      const cards = document.querySelectorAll('.clickable-card');
-      const modal = new bootstrap.Modal(document.getElementById('infoPlatoModal'));
+    document.addEventListener('DOMContentLoaded', function() {
+      console.log('🍽️ Familia Gastro - Sitio web cargado');
       
-      cards.forEach(card => {
-        card.addEventListener('click', function (event) {
-          if (event.target.closest('form')) return;
-          
-          // Obtener datos del plato
-          const data = {
-            nombre: this.getAttribute('data-nombre'),
-            descripcion: this.getAttribute('data-descripcion'),
-            precio: this.getAttribute('data-precio'),
-            imagen: this.getAttribute('data-imagen'),
-            grupo: this.getAttribute('data-grupo'),
-            kilogramos: this.getAttribute('data-kilogramos'),
-            vida_util: this.getAttribute('data-vida-util'),
-            calorias: this.getAttribute('data-calorias'),
-            proteinas: this.getAttribute('data-proteinas'),
-            grasa: this.getAttribute('data-grasa'),
-            carbohidratos: this.getAttribute('data-carbohidratos'),
-            sodio: this.getAttribute('data-sodio'),
-            ingredientes: this.getAttribute('data-ingredientes'),
-            alergenos: this.getAttribute('data-alergenos')
-          };
-          
-          // Llenar modal
-          document.getElementById('infoPlatoModalLabel').textContent = data.nombre;
-          document.getElementById('infoPlatoDescripcion').textContent = data.descripcion || "Sin descripción disponible";
-          document.getElementById('infoPlatoPrecio').textContent = data.precio;
-          document.getElementById('infoPlatoGrupo').textContent = data.grupo || "-";
-          document.getElementById('infoPlatoKg').textContent = data.kilogramos || "-";
-          document.getElementById('infoPlatoVidaUtil').textContent = data.vida_util || "-";
-          document.getElementById('infoPlatoCalorias').textContent = data.calorias || "-";
-          document.getElementById('infoPlatoProteinas').textContent = data.proteinas || "-";
-          document.getElementById('infoPlatoGrasa').textContent = data.grasa || "-";
-          document.getElementById('infoPlatoCarbohidratos').textContent = data.carbohidratos || "-";
-          document.getElementById('infoPlatoIngredientes').textContent = data.ingredientes || "No disponible";
-          document.getElementById('infoPlatoAlergenos').textContent = data.alergenos || "No disponible";
-          
-          const imagen = document.getElementById('infoPlatoImagen');
-          if (data.imagen) {
-            imagen.src = data.imagen;
-            imagen.style.display = 'block';
-          } else {
-            imagen.style.display = 'none';
+      // Smooth scroll para navegación
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+          e.preventDefault();
+          const target = document.querySelector(this.getAttribute('href'));
+          if (target) {
+            target.scrollIntoView({
+              behavior: 'smooth',
+              block: 'start'
+            });
           }
-          
-          // Resetear tabs
-          document.querySelector('#platoTabs .nav-link.active').classList.remove('active');
-          document.querySelector('#platoTabsContent .tab-pane.show.active').classList.remove('show', 'active');
-          document.getElementById('desc-tab').classList.add('active');
-          document.getElementById('desc').classList.add('show', 'active');
-          
-          modal.show();
         });
       });
-
-      // Animación de elementos al hacer scroll
+      
+      // Animación de aparición para las tarjetas de platos
       const observerOptions = {
         threshold: 0.1,
         rootMargin: '0px 0px -50px 0px'
       };
-
-      const observer = new IntersectionObserver(function(entries) {
+      
+      const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
           if (entry.isIntersecting) {
-            entry.target.classList.add('fade-in-up');
+            entry.target.style.opacity = '1';
+            entry.target.style.transform = 'translateY(0)';
           }
         });
       }, observerOptions);
-
-      // Observar cards que no tienen animación inicial
-      document.querySelectorAll('.card:not(.fade-in-up)').forEach(card => {
+      
+      document.querySelectorAll('.dish-card').forEach(card => {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(20px)';
+        card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
         observer.observe(card);
       });
-
-      // Feedback visual al agregar al carrito
-      document.querySelectorAll('form[method="post"]').forEach(form => {
-        form.addEventListener('submit', function(e) {
-          const btn = this.querySelector('button[type="submit"]');
-          const originalText = btn.innerHTML;
-          
-          btn.innerHTML = '<i class="bx bx-check"></i> ¡Agregado!';
-          btn.classList.add('btn-success');
-          btn.disabled = true;
+      
+      // Feedback visual para botones de agregar al carrito
+      document.querySelectorAll('button[type="submit"]').forEach(button => {
+        button.addEventListener('click', function() {
+          const originalText = this.innerHTML;
+          this.innerHTML = '<i class="bx bx-check"></i> ¡Agregado!';
+          this.disabled = true;
           
           setTimeout(() => {
-            btn.innerHTML = originalText;
-            btn.classList.remove('btn-success');
-            btn.disabled = false;
+            this.innerHTML = originalText;
+            this.disabled = false;
           }, 1500);
+        });
+      });
+      
+      // Auto-collapse navbar en móviles al hacer click en un enlace
+      const navLinks = document.querySelectorAll('.navbar-nav .nav-link');
+      const navbarCollapse = document.querySelector('.navbar-collapse');
+      
+      navLinks.forEach(link => {
+        link.addEventListener('click', () => {
+          if (window.innerWidth < 992) {
+            const bsCollapse = new bootstrap.Collapse(navbarCollapse, {
+              toggle: false
+            });
+            bsCollapse.hide();
+          }
+        });
+      });
+      
+      // Indicador de carga para formularios
+      document.querySelectorAll('form').forEach(form => {
+        form.addEventListener('submit', function() {
+          const submitBtn = this.querySelector('button[type="submit"]');
+          if (submitBtn) {
+            submitBtn.innerHTML = '<i class="bx bx-loader bx-spin"></i> Procesando...';
+            submitBtn.disabled = true;
+          }
         });
       });
     });

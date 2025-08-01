@@ -50,7 +50,77 @@ def register(request):
 
 
 def main(request):
-    return render(request, 'main.html')    
+    # Obtener parámetros de la URL
+    dia_filtro = request.GET.get('dia', None)
+    grupo_filtro = request.GET.get('grupo', None)
+    
+    # Obtener disponibilidades
+    disponibilidades = DisponibilidadPlato.objects.select_related('plato').all()
+    
+    # Aplicar filtros si existen
+    if dia_filtro:
+        disponibilidades = disponibilidades.filter(dia=dia_filtro)
+    if grupo_filtro:
+        disponibilidades = disponibilidades.filter(plato__grupo=grupo_filtro)
+    
+    # Obtener platos únicos y separarlos por categorías
+    platos_principales = []
+    platos_complementarios = []
+    
+    # Obtener todos los platos únicos con sus disponibilidades
+    platos_ids_procesados = set()
+    
+    for disponibilidad in disponibilidades:
+        plato = disponibilidad.plato
+        if plato.id not in platos_ids_procesados:
+            # Agregar todas las disponibilidades para este plato
+            plato.disponibilidades = DisponibilidadPlato.objects.filter(plato=plato)
+            
+            # Clasificar por grupo
+            if plato.grupo in ['PRINCIPAL', 'CARNE', 'PESCADO', 'GUISO']:
+                platos_principales.append(plato)
+            else:
+                platos_complementarios.append(plato)
+            
+            platos_ids_procesados.add(plato.id)
+    
+    # Obtener información del carrito si el usuario está autenticado
+    carrito_items = []
+    total_carrito = 0
+    item_count = 0
+    
+    if request.user.is_authenticated:
+        carrito_items = CarritoItem.objects.filter(usuario=request.user).select_related('plato')
+        total_carrito = sum(item.subtotal() for item in carrito_items)
+        item_count = carrito_items.count()
+    
+    # Lista de días para el filtro
+    dias_semana = {
+        'LUN': 'Lunes',
+        'MAR': 'Martes', 
+        'MIE': 'Miércoles',
+        'JUE': 'Jueves',
+        'VIE': 'Viernes',
+        'SAB': 'Sábado',
+        'DOM': 'Domingo'
+    }
+    
+    # Obtener grupos disponibles
+    grupos_disponibles = list(DisponibilidadPlato.objects.values_list('plato__grupo', flat=True).distinct())
+    
+    context = {
+        'platos_principales': platos_principales,
+        'platos_complementarios': platos_complementarios,
+        'carrito_items': carrito_items,
+        'total_carrito': total_carrito,
+        'item_count': item_count,
+        'dias_semana': dias_semana,
+        'grupos_disponibles': grupos_disponibles,
+        'dia_actual': dia_filtro,
+        'grupo_actual': grupo_filtro,
+    }
+    
+    return render(request, 'main.html', context)
 
 def signout(request):
     logout(request)

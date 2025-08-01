@@ -79,6 +79,14 @@
   --transition-fast: 150ms ease-in-out;
   --transition-normal: 250ms ease-in-out;
   --transition-slow: 350ms ease-in-out;
+  
+  /* Container Sizes */
+  --container-xs: 100%;
+  --container-sm: 540px;
+  --container-md: 720px;
+  --container-lg: 960px;
+  --container-xl: 1140px;
+  --container-xxl: 1320px;
 }
 
 /* =================================== 
@@ -89,8 +97,17 @@
 /* =================================== 
    Global Styles & Reset
    =================================== */
-* {
-  box-sizing: border-box;
+*,
+*::before,
+*::after {
+  box-sizing: border-box !important;
+}
+
+html {
+  font-size: 16px;
+  line-height: 1.15;
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 
 body {
@@ -99,9 +116,23 @@ body {
   color: var(--color-gray-800) !important;
   line-height: var(--line-height-normal);
   font-size: var(--font-size-base);
-  margin: 0;
-  padding: 0;
+  margin: 0 !important;
+  padding: 0 !important;
   min-height: 100vh;
+  box-sizing: border-box !important;
+  overflow-x: hidden;
+}
+
+/* =================================== 
+   Responsive Container System
+   =================================== */
+.container-responsive {
+  width: 100%;
+  padding-right: var(--spacing-4);
+  padding-left: var(--spacing-4);
+  margin-right: auto;
+  margin-left: auto;
+  box-sizing: border-box !important;
 }
 
 /* =================================== 
@@ -117,6 +148,8 @@ body {
   left: 0 !important;
   right: 0 !important;
   z-index: 1000 !important;
+  width: 100vw !important;
+  box-sizing: border-box !important;
 }
 
 #branding {
@@ -124,6 +157,7 @@ body {
   height: 70px !important;
   display: flex !important;
   align-items: center !important;
+  box-sizing: border-box !important;
 }
 
 #branding h1 {
@@ -132,6 +166,9 @@ body {
   font-size: var(--font-size-2xl) !important;
   margin: 0 !important;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3) !important;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 #branding h1 a:link,
@@ -153,6 +190,9 @@ body {
   height: 70px !important;
   display: flex !important;
   align-items: center !important;
+  flex-wrap: wrap;
+  gap: var(--spacing-2);
+  box-sizing: border-box !important;
 }
 
 #user-tools a {
@@ -162,7 +202,8 @@ body {
   padding: var(--spacing-2) var(--spacing-4) !important;
   border-radius: var(--radius-md) !important;
   transition: var(--transition-fast) !important;
-  margin-left: var(--spacing-2) !important;
+  white-space: nowrap;
+  box-sizing: border-box !important;
 }
 
 #user-tools a:hover {
@@ -175,19 +216,23 @@ body {
    =================================== */
 #content {
   margin-top: 70px !important;
-  padding: var(--spacing-8) var(--spacing-6) !important;
-  max-width: 1400px !important;
+  padding: var(--spacing-8) var(--spacing-4) !important;
+  width: 100%;
+  max-width: var(--container-xxl);
   margin-left: auto !important;
   margin-right: auto !important;
+  box-sizing: border-box !important;
 }
 
 #content-main {
   background: var(--color-white) !important;
   border-radius: var(--radius-xl) !important;
   box-shadow: var(--shadow-lg) !important;
-  padding: var(--spacing-8) !important;
+  padding: var(--spacing-6) !important;
   margin-bottom: var(--spacing-8) !important;
   border: 1px solid var(--color-gray-200) !important;
+  width: 100%;
+  box-sizing: border-box !important;
 }
 
 /* =================================== 
@@ -200,6 +245,7 @@ body {
   margin-bottom: var(--spacing-6) !important;
   padding-bottom: var(--spacing-4) !important;
   border-bottom: 3px solid var(--color-primary) !important;
+  word-wrap: break-word;
 }
 
 .module {
@@ -210,6 +256,8 @@ body {
   box-shadow: var(--shadow-md) !important;
   overflow: hidden !important;
   transition: var(--transition-normal) !important;
+  width: 100%;
+  box-sizing: border-box !important;
 }
 
 .module:hover {
@@ -225,20 +273,26 @@ body {
   padding: var(--spacing-4) var(--spacing-6) !important;
   margin: 0 !important;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2) !important;
+  word-wrap: break-word;
+  box-sizing: border-box !important;
 }
 
 .module table {
   width: 100% !important;
   border-collapse: collapse !important;
   margin: 0 !important;
+  table-layout: auto;
+  box-sizing: border-box !important;
 }
 
 .module th,
 .module td {
-  padding: var(--spacing-4) var(--spacing-6) !important;
+  padding: var(--spacing-3) var(--spacing-4) !important;
   border-bottom: 1px solid var(--color-gray-200) !important;
   text-align: left !important;
   font-size: var(--font-size-sm) !important;
+  word-wrap: break-word;
+  box-sizing: border-box !important;
 }
 
 .module th {
@@ -260,6 +314,7 @@ body {
   text-decoration: none !important;
   font-weight: var(--font-weight-medium) !important;
   transition: var(--transition-fast) !important;
+  word-wrap: break-word;
 }
 
 .module a:hover {
@@ -286,11 +341,14 @@ a.button {
   text-decoration: none !important;
   display: inline-flex !important;
   align-items: center !important;
+  justify-content: center !important;
   gap: var(--spacing-2) !important;
   transition: var(--transition-fast) !important;
   box-shadow: var(--shadow-sm) !important;
   min-height: 44px !important;
   line-height: 1 !important;
+  box-sizing: border-box !important;
+  white-space: nowrap;
 }
 
 .button:hover,
@@ -354,6 +412,8 @@ a.button:hover {
   padding: var(--spacing-4) !important;
   border-radius: var(--radius-md) !important;
   background-color: var(--color-gray-50) !important;
+  box-sizing: border-box !important;
+  width: 100%;
 }
 
 .form-row:last-child {
@@ -366,6 +426,7 @@ a.button:hover {
   color: var(--color-gray-700) !important;
   margin-bottom: var(--spacing-2) !important;
   font-size: var(--font-size-sm) !important;
+  word-wrap: break-word;
 }
 
 input[type="text"],
@@ -386,6 +447,7 @@ select {
   color: var(--color-gray-800) !important;
   transition: var(--transition-fast) !important;
   min-height: 44px !important;
+  box-sizing: border-box !important;
 }
 
 input[type="text"]:focus,
@@ -413,6 +475,8 @@ fieldset {
   padding: var(--spacing-6) !important;
   margin-bottom: var(--spacing-6) !important;
   background-color: var(--color-white) !important;
+  width: 100%;
+  box-sizing: border-box !important;
 }
 
 fieldset h2 {
@@ -423,6 +487,7 @@ fieldset h2 {
   border-radius: var(--radius-lg) var(--radius-lg) 0 0 !important;
   font-size: var(--font-size-lg) !important;
   font-weight: var(--font-weight-semibold) !important;
+  box-sizing: border-box !important;
 }
 
 /* =================================== 
@@ -434,6 +499,8 @@ fieldset h2 {
   border-radius: var(--radius-lg) !important;
   overflow: hidden !important;
   box-shadow: var(--shadow-md) !important;
+  width: 100%;
+  box-sizing: border-box !important;
 }
 
 #result_list thead th {
@@ -445,6 +512,7 @@ fieldset h2 {
   text-transform: uppercase !important;
   font-size: var(--font-size-xs) !important;
   letter-spacing: 0.05em !important;
+  box-sizing: border-box !important;
 }
 
 #result_list tbody tr {
@@ -465,6 +533,8 @@ fieldset h2 {
   padding: var(--spacing-4) var(--spacing-6) !important;
   font-size: var(--font-size-sm) !important;
   vertical-align: middle !important;
+  word-wrap: break-word;
+  box-sizing: border-box !important;
 }
 
 /* Edit Links Styling */
@@ -495,6 +565,7 @@ fieldset h2 {
   display: inline-flex !important;
   align-items: center !important;
   gap: var(--spacing-1) !important;
+  box-sizing: border-box !important;
 }
 
 .field-editar_link a:hover {
@@ -513,6 +584,8 @@ fieldset h2 {
   margin-bottom: var(--spacing-6) !important;
   box-shadow: var(--shadow-sm) !important;
   border: 1px solid var(--color-gray-200) !important;
+  word-wrap: break-word;
+  box-sizing: border-box !important;
 }
 
 .breadcrumbs a {
@@ -536,6 +609,7 @@ fieldset h2 {
   box-shadow: var(--shadow-sm) !important;
   border: 1px solid var(--color-gray-200) !important;
   text-align: center !important;
+  box-sizing: border-box !important;
 }
 
 .paginator a {
@@ -545,6 +619,8 @@ fieldset h2 {
   margin: 0 var(--spacing-1) !important;
   border-radius: var(--radius-sm) !important;
   transition: var(--transition-fast) !important;
+  display: inline-block;
+  box-sizing: border-box !important;
 }
 
 .paginator a:hover {
@@ -569,6 +645,7 @@ fieldset h2 {
   display: flex !important;
   align-items: center !important;
   gap: var(--spacing-3) !important;
+  box-sizing: border-box !important;
 }
 
 .messagelist .success {
@@ -610,11 +687,14 @@ fieldset h2 {
 .object-tools {
   float: right !important;
   margin-bottom: var(--spacing-6) !important;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-3);
 }
 
 .object-tools li {
   display: inline-block !important;
-  margin-left: var(--spacing-3) !important;
+  margin: 0 !important;
 }
 
 .object-tools a {
@@ -627,6 +707,8 @@ fieldset h2 {
   font-size: var(--font-size-sm) !important;
   transition: var(--transition-fast) !important;
   box-shadow: var(--shadow-sm) !important;
+  white-space: nowrap;
+  box-sizing: border-box !important;
 }
 
 .object-tools a:hover {
@@ -636,20 +718,49 @@ fieldset h2 {
 }
 
 /* =================================== 
-   Responsive Design
+   Responsive Design Breakpoints
    =================================== */
-@media (max-width: 768px) {
+
+/* Extra Small devices (phones, less than 576px) */
+@media (max-width: 575.98px) {
+  :root {
+    --spacing-4: 0.75rem;
+    --spacing-6: 1rem;
+    --spacing-8: 1.5rem;
+  }
+  
+  #header {
+    height: 60px !important;
+  }
+  
+  #branding {
+    padding: var(--spacing-3) var(--spacing-4) !important;
+    height: 60px !important;
+  }
+  
+  #branding h1 {
+    font-size: var(--font-size-lg) !important;
+  }
+  
+  #user-tools {
+    padding: var(--spacing-3) var(--spacing-4) !important;
+    height: 60px !important;
+    font-size: var(--font-size-xs) !important;
+  }
+  
   #content {
-    padding: var(--spacing-4) var(--spacing-3) !important;
-    margin-top: 70px !important;
+    margin-top: 60px !important;
+    padding: var(--spacing-4) var(--spacing-2) !important;
   }
   
   #content-main {
     padding: var(--spacing-4) !important;
+    border-radius: var(--radius-md) !important;
   }
   
   #content h1 {
-    font-size: var(--font-size-2xl) !important;
+    font-size: var(--font-size-xl) !important;
+    padding-bottom: var(--spacing-2) !important;
   }
   
   .module h2 {
@@ -666,11 +777,96 @@ fieldset h2 {
   .object-tools {
     float: none !important;
     margin-bottom: var(--spacing-4) !important;
+    justify-content: center;
   }
   
   .object-tools li {
     display: block !important;
     margin: var(--spacing-2) 0 !important;
+    width: 100%;
+  }
+  
+  .object-tools a {
+    display: block !important;
+    width: 100% !important;
+    text-align: center !important;
+  }
+  
+  .button,
+  input[type="submit"],
+  input[type="button"],
+  .submit-row input,
+  a.button {
+    width: 100% !important;
+    margin-bottom: var(--spacing-2) !important;
+  }
+  
+  .form-row {
+    padding: var(--spacing-3) !important;
+  }
+  
+  .breadcrumbs {
+    padding: var(--spacing-3) var(--spacing-4) !important;
+    font-size: var(--font-size-xs) !important;
+  }
+}
+
+/* Small devices (landscape phones, 576px and up) */
+@media (min-width: 576px) and (max-width: 767.98px) {
+  .container-responsive {
+    max-width: var(--container-sm);
+    padding-right: var(--spacing-6);
+    padding-left: var(--spacing-6);
+  }
+  
+  #content {
+    padding: var(--spacing-6) var(--spacing-4) !important;
+  }
+  
+  .object-tools {
+    justify-content: flex-start;
+  }
+}
+
+/* Medium devices (tablets, 768px and up) */
+@media (min-width: 768px) and (max-width: 991.98px) {
+  .container-responsive {
+    max-width: var(--container-md);
+    padding-right: var(--spacing-6);
+    padding-left: var(--spacing-6);
+  }
+  
+  #content {
+    padding: var(--spacing-8) var(--spacing-6) !important;
+  }
+  
+  #content-main {
+    padding: var(--spacing-6) !important;
+  }
+}
+
+/* Large devices (desktops, 992px and up) */
+@media (min-width: 992px) and (max-width: 1199.98px) {
+  .container-responsive {
+    max-width: var(--container-lg);
+  }
+  
+  #content {
+    padding: var(--spacing-8) var(--spacing-6) !important;
+  }
+}
+
+/* Extra large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) and (max-width: 1399.98px) {
+  .container-responsive {
+    max-width: var(--container-xl);
+  }
+}
+
+/* Extra extra large devices (larger desktops, 1400px and up) */
+@media (min-width: 1400px) {
+  .container-responsive {
+    max-width: var(--container-xxl);
   }
 }
 
@@ -732,6 +928,71 @@ fieldset h2 {
   }
   100% {
     left: 100%;
+  }
+}
+
+/* =================================== 
+   Grid Systems for Mobile
+   =================================== */
+.responsive-grid {
+  display: grid;
+  gap: var(--spacing-4);
+  width: 100%;
+  box-sizing: border-box !important;
+}
+
+.responsive-grid-1 {
+  grid-template-columns: 1fr;
+}
+
+.responsive-grid-2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.responsive-grid-3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.responsive-grid-4 {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+/* Mobile grid adjustments */
+@media (max-width: 767.98px) {
+  .responsive-grid-2,
+  .responsive-grid-3,
+  .responsive-grid-4 {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Tablet grid adjustments */
+@media (min-width: 768px) and (max-width: 991.98px) {
+  .responsive-grid-3,
+  .responsive-grid-4 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* =================================== 
+   Touch Friendly Elements
+   =================================== */
+@media (pointer: coarse) {
+  .button,
+  input[type="submit"],
+  input[type="button"],
+  .submit-row input,
+  a.button,
+  .object-tools a {
+    min-height: 48px !important;
+    padding: var(--spacing-4) var(--spacing-6) !important;
+  }
+  
+  .module a,
+  .field-plato_link a,
+  .field-editar_link a {
+    min-height: 44px !important;
+    padding: var(--spacing-3) var(--spacing-4) !important;
   }
 }
 
