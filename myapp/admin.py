@@ -12,6 +12,7 @@ from .models import (
     Cliente, Empresa, Plato, DisponibilidadPlato, CarritoItem, 
     Recibo, ReciboItem, PedidoHistorico, Produccion, Inventario, MovimientoInventario
 )
+from .forms import DisponibilidadPlatoForm, CarritoItemForm
 
 # ==================== VISTAS PERSONALIZADAS ====================
 
@@ -36,63 +37,26 @@ def production_dashboard_view(request):
 
 # ==================== ADMINISTRACIÓN DE MODELOS BÁSICOS ====================
 
-@admin.register(Cliente)
 class ClienteAdmin(admin.ModelAdmin):
     list_display = ('Nombre_Completo', 'usuario', 'empresa', 'es_particular', 'celular', 'correo')
     list_filter = ('es_particular', 'empresa', 'importante')
     search_fields = ('Nombre_Completo', 'usuario__username', 'celular', 'dni', 'correo')
     readonly_fields = ('Creacion_cuenta',)
-    
-    fieldsets = (
-        ('Información Personal', {
-            'fields': ('Nombre_Completo', 'usuario', 'celular', 'dni', 'correo')
-        }),
-        ('Tipo de Cliente', {
-            'fields': ('es_particular', 'empresa', 'direccion_particular')
-        }),
-        ('Configuración', {
-            'fields': ('importante', 'Creacion_cuenta'),
-            'classes': ('collapse',)
-        }),
-    )
 
-@admin.register(Empresa)
 class EmpresaAdmin(admin.ModelAdmin):
     list_display = ('codigo', 'nombre', 'cif', 'direccion')
     search_fields = ('codigo', 'nombre', 'cif')
     ordering = ('codigo',)
 
-@admin.register(Plato)
 class PlatoAdmin(admin.ModelAdmin):
     list_display = ('codigo', 'nombre', 'grupo', 'precio', 'precio_sin_iva', 'estado')
     list_filter = ('grupo', 'estado')
     search_fields = ('codigo', 'nombre', 'ingredientes', 'alergenos')
     readonly_fields = ('precio_sin_iva',)
     list_per_page = 20
-    
-    fieldsets = (
-        ('Información Básica', {
-            'fields': ('codigo', 'nombre', 'descripcion', 'grupo', 'estado')
-        }),
-        ('Precios', {
-            'fields': ('precio', 'precio_sin_iva')
-        }),
-        ('Detalles del Producto', {
-            'fields': ('kilogramos', 'ingredientes', 'alergenos', 'vida_util'),
-            'classes': ('collapse',)
-        }),
-        ('Información Nutricional', {
-            'fields': ('calorias', 'proteinas', 'grasa', 'carbohidratos', 'sodio'),
-            'classes': ('collapse',)
-        }),
-        ('Imagen', {
-            'fields': ('imagen',),
-            'classes': ('collapse',)
-        }),
-    )
 
-@admin.register(DisponibilidadPlato)
 class DisponibilidadPlatoAdmin(admin.ModelAdmin):
+    form = DisponibilidadPlatoForm
     list_display = ('plato', 'dia_display')
     list_filter = ('dia', 'plato__grupo')
     search_fields = ('plato__nombre', 'plato__codigo')
@@ -101,20 +65,18 @@ class DisponibilidadPlatoAdmin(admin.ModelAdmin):
         return obj.get_dia_display()
     dia_display.short_description = 'Día'
 
-@admin.register(CarritoItem)
 class CarritoItemAdmin(admin.ModelAdmin):
+    form = CarritoItemForm
     list_display = ('usuario', 'plato', 'cantidad', 'dia_semana', 'fecha_agregado')
     list_filter = ('dia_semana', 'fecha_agregado')
     search_fields = ('usuario__username', 'plato__nombre')
 
-@admin.register(Recibo)
 class ReciboAdmin(admin.ModelAdmin):
     list_display = ('id', 'usuario', 'empresa', 'total', 'pagado', 'estado_pago', 'fecha_compra')
     list_filter = ('pagado', 'estado_pago', 'fecha_compra')
     search_fields = ('usuario__username', 'empresa__nombre')
     readonly_fields = ('fecha_compra',)
 
-@admin.register(ReciboItem)
 class ReciboItemAdmin(admin.ModelAdmin):
     list_display = ('recibo', 'plato', 'cantidad', 'precio_unitario', 'subtotal_display')
     search_fields = ('recibo__id', 'plato__nombre')
@@ -125,7 +87,6 @@ class ReciboItemAdmin(admin.ModelAdmin):
 
 # ==================== ADMINISTRACIÓN DE PRODUCCIÓN ====================
 
-@admin.register(Produccion)
 class ProduccionAdmin(admin.ModelAdmin):
     list_display = ('plato', 'cantidad_planificada', 'cantidad_producida', 'fecha_planificada', 
                    'estado', 'responsable', 'costo_total_display')
@@ -133,28 +94,10 @@ class ProduccionAdmin(admin.ModelAdmin):
     search_fields = ('plato__nombre', 'plato__codigo', 'responsable__username')
     date_hierarchy = 'fecha_planificada'
     
-    fieldsets = (
-        ('Información General', {
-            'fields': ('plato', 'cantidad_planificada', 'cantidad_producida', 'estado', 'responsable')
-        }),
-        ('Fechas', {
-            'fields': ('fecha_planificada', 'fecha_inicio', 'fecha_completada')
-        }),
-        ('Costos', {
-            'fields': ('costo_ingredientes', 'costo_mano_obra', 'otros_costos'),
-            'classes': ('collapse',)
-        }),
-        ('Notas', {
-            'fields': ('notas',),
-            'classes': ('collapse',)
-        }),
-    )
-    
     def costo_total_display(self, obj):
         return format_html('€{:.2f}', obj.costo_total)
     costo_total_display.short_description = 'Costo Total'
 
-@admin.register(Inventario)
 class InventarioAdmin(admin.ModelAdmin):
     list_display = ('plato', 'cantidad_disponible', 'cantidad_reservada', 'fecha_produccion', 
                    'fecha_vencimiento', 'estado_frescura_display', 'ubicacion')
@@ -176,7 +119,6 @@ class InventarioAdmin(admin.ModelAdmin):
         )
     estado_frescura_display.short_description = 'Estado'
 
-@admin.register(MovimientoInventario)
 class MovimientoInventarioAdmin(admin.ModelAdmin):
     list_display = ('inventario', 'tipo_movimiento', 'cantidad_display', 'motivo', 
                    'usuario_responsable', 'fecha_movimiento')
@@ -218,7 +160,6 @@ def exportar_pedidos_excel(modeladmin, request, queryset):
 
 exportar_pedidos_excel.short_description = "Exportar pedidos seleccionados a Excel"
 
-@admin.register(PedidoHistorico)
 class PedidoHistoricoAdmin(admin.ModelAdmin):
     list_display = ('usuario', 'plato', 'cantidad', 'dia_semana', 'fecha_emision')
     list_filter = ('dia_semana', 'fecha_emision', 'plato__grupo')
@@ -240,5 +181,16 @@ class FamiliaGastroAdminSite(admin.AdminSite):
         ]
         return custom_urls + urls
 
-# Crear instancia personalizada del admin (opcional, Jazzmin maneja esto)
-# admin_site = FamiliaGastroAdminSite(name='familia_gastro_admin')
+# ==================== REGISTROS ====================
+
+admin.site.register(Cliente, ClienteAdmin)
+admin.site.register(Empresa, EmpresaAdmin)
+admin.site.register(Plato, PlatoAdmin)
+admin.site.register(DisponibilidadPlato, DisponibilidadPlatoAdmin)
+admin.site.register(CarritoItem, CarritoItemAdmin)
+admin.site.register(Recibo, ReciboAdmin)
+admin.site.register(ReciboItem, ReciboItemAdmin)
+admin.site.register(PedidoHistorico, PedidoHistoricoAdmin)
+admin.site.register(Produccion, ProduccionAdmin)
+admin.site.register(Inventario, InventarioAdmin)
+admin.site.register(MovimientoInventario, MovimientoInventarioAdmin)

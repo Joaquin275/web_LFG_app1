@@ -28,37 +28,15 @@ LOGOUT_REDIRECT_URL = '/'
 SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = config('DEBUG', default=False, cast=bool)
+DEBUG = config('DEBUG', default=True, cast=bool)
 
 # More restrictive default hosts
 ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost,127.0.0.1', cast=lambda v: [s.strip() for s in v.split(',')])
 
-# Security Headers
-SECURE_BROWSER_XSS_FILTER = True
-SECURE_CONTENT_TYPE_NOSNIFF = True
-X_FRAME_OPTIONS = 'DENY'
-SECURE_HSTS_SECONDS = config('SECURE_HSTS_SECONDS', default=31536000, cast=int) if not DEBUG else 0
-SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-SECURE_HSTS_PRELOAD = True
-
-# HTTPS Settings (for production)
-if not DEBUG:
-    SECURE_SSL_REDIRECT = config('SECURE_SSL_REDIRECT', default=True, cast=bool)
-    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-    SESSION_COOKIE_SECURE = True
-    CSRF_COOKIE_SECURE = True
-
-# Session Security
-SESSION_COOKIE_AGE = 86400  # 24 hours
-SESSION_EXPIRE_AT_BROWSER_CLOSE = True
-SESSION_COOKIE_HTTPONLY = True
-SESSION_COOKIE_SAMESITE = 'Lax'
-CSRF_COOKIE_HTTPONLY = True
-CSRF_COOKIE_SAMESITE = 'Lax'
-
 # Application definition
 INSTALLED_APPS = [
-    'jazzmin',
+    'admin_interface',
+    'colorfield',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -88,7 +66,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-# CORS settings with better security
+# CORS settings
 CORS_ALLOWED_ORIGINS = config(
     'CORS_ALLOWED_ORIGINS',
     default="http://localhost:3000,http://127.0.0.1:3000",
@@ -250,125 +228,3 @@ PAYCOMET_LANGUAGE = config('PAYCOMET_LANGUAGE', default='001')
 
 # Admin Security
 ADMIN_URL = config('ADMIN_URL', default='admin/')
-
-# ==================== JAZZMIN CONFIGURATION ====================
-
-JAZZMIN_SETTINGS = {
-    "site_title": "Familia Gastro Admin",
-    "site_header": "Familia Gastro",
-    "site_brand": "Familia Gastro",
-    "site_logo": None,
-    "login_logo": None,
-    "login_logo_dark": None,
-    "site_logo_classes": "img-circle",
-    "site_icon": None,
-    "welcome_sign": "Bienvenido a Familia Gastro",
-    "copyright": "Familia Gastro",
-    "search_model": ["auth.User", "myapp.Cliente", "myapp.Plato", "myapp.Empresa"],
-    "user_avatar": None,
-
-    # Top Menu
-    "topmenu_links": [
-        {"name": "Inicio", "url": "admin:index", "permissions": ["auth.view_user"]},
-        {"name": "Dashboard Principal", "url": "/admin/dashboard/", "new_window": False},
-        {"name": "Dashboard Producción", "url": "/admin/production-dashboard/", "new_window": False},
-        {"model": "auth.User"},
-        {"app": "myapp"},
-    ],
-
-    # User Menu
-    "usermenu_links": [
-        {"name": "Sitio Web", "url": "/", "new_window": True},
-        {"model": "auth.user"}
-    ],
-
-    # Side Menu
-    "show_sidebar": True,
-    "navigation_expanded": True,
-    "hide_apps": [],
-    "hide_models": [],
-    "order_with_respect_to": ["auth", "myapp"],
-
-    # Custom links
-    "custom_links": {
-        "myapp": [{
-            "name": "Dashboard Principal", 
-            "url": "/admin/dashboard/", 
-            "icon": "fas fa-chart-line",
-            "permissions": ["myapp.view_cliente"]
-        },
-        {
-            "name": "Dashboard Producción", 
-            "url": "/admin/production-dashboard/", 
-            "icon": "fas fa-industry",
-            "permissions": ["myapp.view_produccion"]
-        }]
-    },
-
-    # Icons
-    "icons": {
-        "auth": "fas fa-users-cog",
-        "auth.user": "fas fa-user",
-        "auth.Group": "fas fa-users",
-        "myapp.Cliente": "fas fa-user-tie",
-        "myapp.Empresa": "fas fa-building",
-        "myapp.Plato": "fas fa-utensils",
-        "myapp.DisponibilidadPlato": "fas fa-calendar-check",
-        "myapp.CarritoItem": "fas fa-shopping-cart",
-        "myapp.Recibo": "fas fa-receipt",
-        "myapp.ReciboItem": "fas fa-list",
-        "myapp.PedidoHistorico": "fas fa-history",
-        "myapp.Produccion": "fas fa-industry",
-        "myapp.Inventario": "fas fa-boxes",
-        "myapp.MovimientoInventario": "fas fa-exchange-alt",
-    },
-    "default_icon_parents": "fas fa-chevron-circle-right",
-    "default_icon_children": "fas fa-circle",
-
-    # Related Modal
-    "related_modal_active": False,
-
-    # UI Tweaks
-    "custom_css": None,
-    "custom_js": None,
-    "use_google_fonts_cdn": True,
-    "show_ui_builder": False,
-
-    # Change view
-    "changeform_format": "horizontal_tabs",
-    "changeform_format_overrides": {"auth.user": "collapsible", "auth.group": "vertical_tabs"},
-    "language_chooser": False,
-}
-
-JAZZMIN_UI_TWEAKS = {
-    "navbar_small_text": False,
-    "footer_small_text": False,
-    "body_small_text": False,
-    "brand_small_text": False,
-    "brand_colour": "navbar-primary",
-    "accent": "accent-primary",
-    "navbar": "navbar-primary navbar-dark",
-    "no_navbar_border": False,
-    "navbar_fixed": False,
-    "layout_boxed": False,
-    "footer_fixed": False,
-    "sidebar_fixed": False,
-    "sidebar": "sidebar-dark-primary",
-    "sidebar_nav_small_text": False,
-    "sidebar_disable_expand": False,
-    "sidebar_nav_child_indent": False,
-    "sidebar_nav_compact_style": False,
-    "sidebar_nav_legacy_style": False,
-    "sidebar_nav_flat_style": False,
-    "theme": "default",
-    "dark_mode_theme": None,
-    "button_classes": {
-        "primary": "btn-primary",
-        "secondary": "btn-secondary",
-        "info": "btn-info",
-        "warning": "btn-warning",
-        "danger": "btn-danger",
-        "success": "btn-success"
-    },
-    "actions_sticky_top": False
-}

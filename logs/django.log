@@ -563,3 +563,12 @@ Traceback (most recent call last):
     raise TemplateSyntaxError("Invalid filter: '%s'" % filter_name)
 django.template.exceptions.TemplateSyntaxError: Invalid filter: 'length_is'
 ERROR 2025-08-01 12:34:15,159 basehttp 28831 140574981093056 "GET /admin/myapp/plato/5/change/ HTTP/1.1" 500 661560
+INFO 2025-08-01 12:38:43,667 autoreload 34953 140648095559936 Watching for file changes with StatReloader
+INFO 2025-08-01 12:38:47,575 basehttp 34953 140647778428608 "HEAD /admin/myapp/disponibilidadplato/add/ HTTP/1.1" 302 0
+INFO 2025-08-01 12:38:52,904 basehttp 34953 140647778428608 "HEAD /admin/myapp/plato/add/ HTTP/1.1" 302 0
+INFO 2025-08-01 12:38:57,599 basehttp 34953 140647696692928 "HEAD /admin/myapp/cliente/add/ HTTP/1.1" 302 0
+INFO 2025-08-01 12:39:37,727 basehttp 34953 140647688300224 "GET /main/ HTTP/1.1" 302 0
+INFO 2025-08-01 12:39:42,141 basehttp 34953 140647679907520 "HEAD /main/ HTTP/1.1" 302 0
+INFO 2025-08-01 12:39:47,503 basehttp 34953 140647671514816 "HEAD / HTTP/1.1" 200 0
+INFO 2025-08-01 12:40:09,046 basehttp 34953 140647671514816 "HEAD /admin/myapp/plato/add/ HTTP/1.1" 302 0
+INFO 2025-08-01 12:40:09,053 basehttp 34953 140647679907520 "HEAD /admin/myapp/disponibilidadplato/add/ HTTP/1.1" 302 0
