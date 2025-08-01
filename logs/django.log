@@ -1165,3 +1165,13 @@ INFO 2025-08-01 13:25:02,541 autoreload 57595 140220039758080 Watching for file 
 INFO 2025-08-01 13:25:06,283 basehttp 57595 140219722618560 "HEAD /test_admin_links/ HTTP/1.1" 200 0
 INFO 2025-08-01 13:25:14,263 basehttp 57595 140219722618560 "GET /test_admin_links/ HTTP/1.1" 200 12653
 INFO 2025-08-01 13:25:35,158 basehttp 57595 140219713177280 "HEAD /admin/myapp/disponibilidadplato/1/change/ HTTP/1.1" 302 0
+INFO 2025-08-01 13:35:43,537 autoreload 57595 140220039758080 /workspace/mysitio/settings.py changed, reloading.
+INFO 2025-08-01 13:35:44,066 autoreload 61868 139687166443776 Watching for file changes with StatReloader
+INFO 2025-08-01 13:36:31,224 autoreload 62105 139663517384960 Watching for file changes with StatReloader
+INFO 2025-08-01 13:36:35,281 basehttp 62105 139663133112000 "HEAD /admin/ HTTP/1.1" 302 0
+INFO 2025-08-01 13:36:40,609 basehttp 62105 139663133112000 "GET /admin/ HTTP/1.1" 302 0
+INFO 2025-08-01 13:36:50,685 autoreload 62105 139663517384960 /workspace/myapp/views.py changed, reloading.
+INFO 2025-08-01 13:36:51,140 autoreload 62377 140377037967616 Watching for file changes with StatReloader
+INFO 2025-08-01 13:38:28,358 autoreload 62377 140377037967616 /workspace/mysitio/urls.py changed, reloading.
+INFO 2025-08-01 13:38:28,818 autoreload 63070 140364813758720 Watching for file changes with StatReloader
+INFO 2025-08-01 13:38:32,546 basehttp 63070 140364429129408 "HEAD /design_demo/ HTTP/1.1" 200 0

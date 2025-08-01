@@ -311,6 +311,23 @@ def procesar_pago(request):
 
     return redirect('pago')
 
+def design_demo(request):
+    """Vista para mostrar el diseño corporativo actualizado"""
+    from .models import Plato, DisponibilidadPlato, Cliente, Recibo
+    from datetime import date
+    
+    # Obtener datos de muestra
+    context = {
+        'platos_count': Plato.objects.count(),
+        'disponibilidades_count': DisponibilidadPlato.objects.count(),
+        'clientes_count': Cliente.objects.count(),
+        'pedidos_hoy': Recibo.objects.filter(fecha_compra__date=date.today()).count(),
+        'platos_sample': Plato.objects.all()[:6],
+        'disponibilidades_sample': DisponibilidadPlato.objects.select_related('plato')[:8]
+    }
+    
+    return render(request, 'design_demo.html', context)
+
 def test_admin_links(request):
     """Vista para probar que los enlaces del admin funcionan"""
     from django.urls import reverse

@@ -1,0 +1,45 @@
+{% extends "admin/base.html" %}
+{% load static %}
+
+{% block title %}{{ title }} | {{ site_title|default:_('Familia Gastro Admin') }}{% endblock %}
+
+{% block branding %}
+<h1 id="site-name">
+    <a href="{% url 'admin:index' %}">🍽️ Familia Gastro</a>
+</h1>
+{% endblock %}
+
+{% block extrahead %}
+    {{ block.super }}
+    <!-- Custom Admin Styling with Corporate Colors -->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/admin-custom.css' %}">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🍽️</text></svg>">
+    
+    <!-- Meta tags for better UX -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#b71c1c">
+    
+    <!-- Preload critical fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+{% endblock %}
+
+{% block footer %}
+<div id="footer" style="
+    background: linear-gradient(135deg, var(--color-gray-800) 0%, var(--color-gray-900) 100%);
+    color: var(--color-white);
+    text-align: center;
+    padding: var(--spacing-6);
+    margin-top: var(--spacing-8);
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    box-shadow: var(--shadow-lg);
+">
+    <p style="margin: 0; font-size: var(--font-size-sm); opacity: 0.8;">
+        © 2025 <strong>Familia Gastro</strong> - Panel de Administración
+        <span style="margin: 0 var(--spacing-2);">•</span>
+        <span style="color: var(--color-accent);">❤️ Hecho con amor para la gastronomía</span>
+    </p>
+</div>
+{% endblock %}

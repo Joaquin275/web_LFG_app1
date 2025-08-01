@@ -60,6 +60,7 @@ urlpatterns = [
     path('test_images/', views.test_images, name='test_images'),
     path('admin_test/', views.admin_test, name='admin_test'),
     path('test_admin_links/', views.test_admin_links, name='test_admin_links'),
+    path('design_demo/', views.design_demo, name='design_demo'),
     path('pago/', views.pago, name='pago'),
     path('eliminar-item/<int:item_id>/', views.eliminar_carrito_item, name='eliminar_item'),
 ] 
