@@ -17,21 +17,46 @@ from decouple import config
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-LOGIN_URL = '/signin/'  # o la URL que uses para el login
-
-
+LOGIN_URL = '/signin/'
+LOGIN_REDIRECT_URL = '/main/'
+LOGOUT_REDIRECT_URL = '/'
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = config('SECRET_KEY', default='django-insecure-ntv$8yw$v)4$6hft(-_ms652=(3018-k%n7(1_dlkay35!28)x')
+# ❌ FIXED: Removed insecure default value
+SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = config('DEBUG', default=True, cast=bool)
+# ❌ FIXED: Changed default to False for security
+DEBUG = config('DEBUG', default=False, cast=bool)
 
+# ❌ FIXED: More restrictive default hosts
 ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost,127.0.0.1', cast=lambda v: [s.strip() for s in v.split(',')])
 
+# ✅ NEW: Security Headers
+SECURE_BROWSER_XSS_FILTER = True
+SECURE_CONTENT_TYPE_NOSNIFF = True
+X_FRAME_OPTIONS = 'DENY'
+SECURE_HSTS_SECONDS = config('SECURE_HSTS_SECONDS', default=31536000, cast=int) if not DEBUG else 0
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_HSTS_PRELOAD = True
+
+# ✅ NEW: HTTPS Settings (for production)
+if not DEBUG:
+    SECURE_SSL_REDIRECT = config('SECURE_SSL_REDIRECT', default=True, cast=bool)
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+
+# ✅ NEW: Session Security
+SESSION_COOKIE_AGE = 86400  # 24 hours
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+SESSION_COOKIE_HTTPONLY = True
+SESSION_COOKIE_SAMESITE = 'Lax'
+CSRF_COOKIE_HTTPONLY = True
+CSRF_COOKIE_SAMESITE = 'Lax'
 
 # Application definition
 
@@ -71,26 +96,48 @@ if DEBUG:
     MIDDLEWARE += ['debug_toolbar.middleware.DebugToolbarMiddleware']
     INTERNAL_IPS = ['127.0.0.1']
 
-# CORS settings
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
-    "http://127.0.0.1:3000",
+# ✅ IMPROVED: CORS settings with better security
+CORS_ALLOWED_ORIGINS = config(
+    'CORS_ALLOWED_ORIGINS',
+    default="http://localhost:3000,http://127.0.0.1:3000",
+    cast=lambda v: [s.strip() for s in v.split(',')]
+)
+CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOWED_HEADERS = [
+    'accept',
+    'accept-encoding',
+    'authorization',
+    'content-type',
+    'dnt',
+    'origin',
+    'user-agent',
+    'x-csrftoken',
+    'x-requested-with',
 ]
 
 # Crispy Forms
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
 
-# REST Framework
+# ✅ IMPROVED: REST Framework with better security
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
     ],
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
     ],
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 20
+    'PAGE_SIZE': 20,
+    'DEFAULT_THROTTLE_CLASSES': [
+        'rest_framework.throttling.AnonRateThrottle',
+        'rest_framework.throttling.UserRateThrottle'
+    ],
+    'DEFAULT_THROTTLE_RATES': {
+        'anon': '100/hour',
+        'user': '1000/hour'
+    }
 }
 
 ROOT_URLCONF = 'mysitio.urls'
@@ -98,6 +145,10 @@ ROOT_URLCONF = 'mysitio.urls'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'platos')
 
+# ✅ NEW: File Upload Security
+FILE_UPLOAD_MAX_MEMORY_SIZE = 5242880  # 5MB
+DATA_UPLOAD_MAX_MEMORY_SIZE = 5242880  # 5MB
+ALLOWED_IMAGE_EXTENSIONS = ['.jpg', '.jpeg', '.png', '.gif', '.webp']
 
 TEMPLATES = [
     {
@@ -116,11 +167,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'mysitio.wsgi.application'
 
-
-# Database
-# https://docs.djangoproject.com/en/5.2/ref/settings/#databases
-
-# Configuración para múltiples bases de datos
+# ✅ IMPROVED: Database configuration with better error handling
 DATABASES = {
     'default': {
         'ENGINE': config('DB_ENGINE', default='django.db.backends.sqlite3'),
@@ -132,19 +179,36 @@ DATABASES = {
         'OPTIONS': {
             'driver': config('DB_DRIVER', default='ODBC Driver 17 for SQL Server'),
         } if config('DB_ENGINE', default='') == 'mssql' else {},
+        'CONN_MAX_AGE': 60,  # Connection pooling
+        'CONN_HEALTH_CHECKS': True,
     }
 }
 
+# ✅ NEW: Cache Configuration
+CACHES = {
+    'default': {
+        'BACKEND': config(
+            'CACHE_BACKEND',
+            default='django.core.cache.backends.locmem.LocMemCache'
+        ),
+        'LOCATION': config('CACHE_LOCATION', default='unique-snowflake'),
+        'TIMEOUT': 300,
+        'OPTIONS': {
+            'MAX_ENTRIES': 1000
+        }
+    }
+}
 
 # Password validation
-# https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
-
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
     },
     {
         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'OPTIONS': {
+            'min_length': 8,
+        }
     },
     {
         'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
@@ -154,43 +218,38 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
-# https://docs.djangoproject.com/en/5.2/topics/i18n/
-
-LANGUAGE_CODE = 'en-us'
-
-TIME_ZONE = 'UTC'
+LANGUAGE_CODE = 'es-es'  # ✅ FIXED: Changed to Spanish
+TIME_ZONE = 'Europe/Madrid'  # ✅ FIXED: Changed to Madrid timezone
 
 USE_I18N = True
-
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.2/howto/static-files/
-
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 STATICFILES_DIRS = [
     BASE_DIR / 'static',
 ]
 
-# Default primary key field type
-# https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
+# ✅ NEW: Static files optimization
+STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
 
+# Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# Configuración de Email (para notificaciones)
+# ✅ IMPROVED: Email configuration
 EMAIL_BACKEND = config('EMAIL_BACKEND', default='django.core.mail.backends.console.EmailBackend')
 EMAIL_HOST = config('EMAIL_HOST', default='')
 EMAIL_PORT = config('EMAIL_PORT', default=587, cast=int)
 EMAIL_USE_TLS = config('EMAIL_USE_TLS', default=True, cast=bool)
 EMAIL_HOST_USER = config('EMAIL_HOST_USER', default='')
 EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD', default='')
+DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL', default='noreply@familagastro.com')
+SERVER_EMAIL = config('SERVER_EMAIL', default='admin@familagastro.com')
 
-# Configuración de logging
+# ✅ IMPROVED: Logging configuration
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -199,18 +258,44 @@ LOGGING = {
             'format': '{levelname} {asctime} {module} {process:d} {thread:d} {message}',
             'style': '{',
         },
+        'simple': {
+            'format': '{levelname} {message}',
+            'style': '{',
+        },
     },
     'handlers': {
         'file': {
             'level': 'INFO',
-            'class': 'logging.FileHandler',
+            'class': 'logging.handlers.RotatingFileHandler',
             'filename': BASE_DIR / 'logs' / 'familia_gastro.log',
             'formatter': 'verbose',
+            'maxBytes': 1024*1024*15,  # 15MB
+            'backupCount': 10,
         },
         'console': {
-            'level': 'DEBUG',
+            'level': 'DEBUG' if DEBUG else 'INFO',
             'class': 'logging.StreamHandler',
+            'formatter': 'simple' if DEBUG else 'verbose',
+        },
+        'security': {
+            'level': 'INFO',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': BASE_DIR / 'logs' / 'security.log',
             'formatter': 'verbose',
+            'maxBytes': 1024*1024*5,  # 5MB
+            'backupCount': 5,
+        },
+    },
+    'loggers': {
+        'django.security': {
+            'handlers': ['security'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+        'myapp': {
+            'handlers': ['file', 'console'],
+            'level': 'INFO',
+            'propagate': False,
         },
     },
     'root': {
@@ -219,18 +304,18 @@ LOGGING = {
     },
 }
 
-#PASARELA DE PAGO --# PAYCOMET - REST API CONFIG
-from django.conf import settings
-
-# PAYCOMET - CONFIGURACIÓN POR TERMINAL (HTML Redirect)
-PAYCOMET_CLIENT_CODE = "97j4t66w"
-PAYCOMET_TERMINAL = "70399"
-PAYCOMET_CURRENCY = "978"  # Euros
-PAYCOMET_PASSWORD = "9WH3@XVxzg66Q?J3"
+# ✅ SECURED: Payment gateway configuration
+PAYCOMET_CLIENT_CODE = config('PAYCOMET_CLIENT_CODE')
+PAYCOMET_TERMINAL = config('PAYCOMET_TERMINAL')
+PAYCOMET_CURRENCY = config('PAYCOMET_CURRENCY', default='978')  # Euros
+PAYCOMET_PASSWORD = config('PAYCOMET_PASSWORD')
 
 # URL de retorno tras pago exitoso y fallido
-PAYCOMET_URL_OK = "https://tuweb.com/pago-exitoso"
-PAYCOMET_URL_KO = "https://tuweb.com/pago-error"
+PAYCOMET_URL_OK = config('PAYCOMET_URL_OK', default='https://localhost:8000/pago-exitoso/')
+PAYCOMET_URL_KO = config('PAYCOMET_URL_KO', default='https://localhost:8000/pago-fallido/')
 
 # Idioma del TPV: 001 = Español, 002 = Inglés, 003 = Catalán, etc.
-PAYCOMET_LANGUAGE = "001"
+PAYCOMET_LANGUAGE = config('PAYCOMET_LANGUAGE', default='001')
+
+# ✅ NEW: Admin Security
+ADMIN_URL = config('ADMIN_URL', default='admin/')

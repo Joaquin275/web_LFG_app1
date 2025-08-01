@@ -32,7 +32,7 @@ router.register(r'recibos', ReciboViewSet, basename='recibo')
 router.register(r'dashboard', DashboardViewSet, basename='dashboard')
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path(settings.ADMIN_URL, admin.site.urls),
     path('api/', include(router.urls)),
     path('api-auth/', include('rest_framework.urls')),
     path('', views.helloword, name='home'),
